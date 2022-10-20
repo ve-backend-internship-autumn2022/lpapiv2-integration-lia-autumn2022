@@ -10,8 +10,6 @@ IConfiguration config = host.Services.GetRequiredService<IConfiguration>();
 
 ApiSettings apiSettings = config.GetRequiredSection("ApiSettings").Get<ApiSettings>();
 
-Console.WriteLine(apiSettings.ClientSecret);
-
 
 // Application code should start here.
 
