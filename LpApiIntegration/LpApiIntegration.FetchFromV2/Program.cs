@@ -2,6 +2,8 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using LpApiIntegration.FetchFromV2;
+using LpApiIntegration.FetchFromV2.StudentModels;
+using LpApiIntegration.FetchFromV2.GroupModels;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
