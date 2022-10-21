@@ -2,6 +2,8 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using LpApiIntegration.FetchFromV2;
+using LpApiIntegration.FetchFromV2.StudentModels;
+using LpApiIntegration.FetchFromV2.GroupModels;
 using System.Text;
 using System.Text.Json;
 
@@ -42,12 +44,9 @@ var client = new HttpClient
 client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
 
 string jsonStudents = client.GetStringAsync($"/bulkapi/v2/{apiSettings.TenantIdentifier}/students").Result;
-Console.WriteLine(jsonStudents);
 
 string jsonGroups = client.GetStringAsync($"/bulkapi/v2/{apiSettings.TenantIdentifier}/groups").Result;
-Console.WriteLine(jsonGroups);
 
 string jsonStaffMembers = client.GetStringAsync($"/bulkapi/v2/{apiSettings.TenantIdentifier}/staffmembers").Result;
-Console.WriteLine(jsonStaffMembers);
 
 await host.RunAsync();
