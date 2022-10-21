@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace LpApiIntegration.FetchFromV2.GroupModel
 {
-    public class FullGroup
+    public class Group
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -16,9 +17,6 @@ namespace LpApiIntegration.FetchFromV2.GroupModel
         public GroupCategory Category { get; set; }
         public ParentGroupReference ParentGroup { get; set; }
         public ExtendedProperty ExtendedProperties { get; set; }
-        public CourseDefinition Course { get; set; }
-        public GroupStaffMember[] StaffGroupMembers { get; set; }
-        //public GroupStudent[] StudentGroupMembers { get; set; }
 
 
     }

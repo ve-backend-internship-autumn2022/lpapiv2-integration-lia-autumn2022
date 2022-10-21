@@ -10,6 +10,6 @@ namespace LpApiIntegration.FetchFromV2.GroupModel
     {
         public string ApiVersion { get; set; }
         public GroupsData Data { get; set; }
-        public ApiError Error { get; set; }
+        //public ApiError Error { get; set; }
     }
 }

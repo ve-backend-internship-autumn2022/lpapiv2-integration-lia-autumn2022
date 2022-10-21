@@ -6,16 +6,13 @@ using LpApiIntegration.FetchFromV2.StudentModels;
 using LpApiIntegration.FetchFromV2.GroupModels;
 using System.Text;
 using System.Text.Json;
-using System.Text.Json.Nodes;
-using Microsoft.Extensions.Options;
-using System.Text.Encodings.Web;
-using System.Text.Unicode;
-using LpApiIntegration.FetchFromV2.GroupModel;
 
 using IHost host = Host.CreateDefaultBuilder(args).Build();
 IConfiguration config = host.Services.GetRequiredService<IConfiguration>();
 
 ApiSettings apiSettings = config.GetRequiredSection("ApiSettings").Get<ApiSettings>();
+
+Console.WriteLine(apiSettings.ClientSecret);
 
 
 // Application code should start here.
