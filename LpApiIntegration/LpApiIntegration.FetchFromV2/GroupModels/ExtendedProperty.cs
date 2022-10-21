@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LpApiIntegration.FetchFromV2.GroupModel
 {
-    public class ExtendedProperty
+    internal class ExtendedProperty
     {
         public string Name { get; set; }
         public string Value { get; set; }

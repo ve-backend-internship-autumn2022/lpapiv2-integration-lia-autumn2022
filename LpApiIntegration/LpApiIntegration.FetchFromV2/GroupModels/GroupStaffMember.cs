@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace LpApiIntegration.FetchFromV2.GroupModel
 {
-    public class GroupStaffMember
+    internal class GroupStaffMember
     {
         //public StaffMemberReference StaffMember { get; set; }
-        public bool? IsGroupManager { get; set; }
+        public bool IsGroupManager { get; set; }
         public GroupRoleReference[] GroupRoles { get; set; }
     }
 }

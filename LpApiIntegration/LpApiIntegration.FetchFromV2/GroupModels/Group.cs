@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LpApiIntegration.FetchFromV2.GroupModel
 {
-    public class Group
+    internal class Group
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -17,7 +17,6 @@ namespace LpApiIntegration.FetchFromV2.GroupModel
         public GroupCategory Category { get; set; }
         public ParentGroupReference ParentGroup { get; set; }
         public ExtendedProperty ExtendedProperties { get; set; }
-
 
     }
 }

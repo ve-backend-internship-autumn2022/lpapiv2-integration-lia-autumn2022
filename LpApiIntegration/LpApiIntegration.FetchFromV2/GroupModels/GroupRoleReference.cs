@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LpApiIntegration.FetchFromV2.GroupModel
 {
-    public class GroupRoleReference
+    internal class GroupRoleReference
     {
         public int Id { get; set; }
     }

@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace LpApiIntegration.FetchFromV2.GroupModel
 {
-    public class GroupsApiResponse
+    internal class GroupsApiResponse
     {
         public string ApiVersion { get; set; }
         public GroupsData Data { get; set; }
-        //public ApiError Error { get; set; }
+        public ApiError Error { get; set; }
     }
 }

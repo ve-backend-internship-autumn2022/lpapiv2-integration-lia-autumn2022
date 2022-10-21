@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LpApiIntegration.FetchFromV2.GroupModel
 {
-    public class FullGroup
+    internal class FullGroup
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -16,7 +16,7 @@ namespace LpApiIntegration.FetchFromV2.GroupModel
         public GroupCategory Category { get; set; }
         public ParentGroupReference ParentGroup { get; set; }
         public ExtendedProperty ExtendedProperties { get; set; }
-        //public CourseDefinitionReference? CourseDefinition { get; set; }
+        //public CourseDefinitionReference CourseDefinition { get; set; }
         public GroupStaffMember[] StaffGroupMembers { get; set; }
         public GroupStudent[] StudentGroupMembers { get; set; }
 
