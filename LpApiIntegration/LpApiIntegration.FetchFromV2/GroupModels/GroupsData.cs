@@ -10,7 +10,7 @@ namespace LpApiIntegration.FetchFromV2.GroupModel
     {
         public FullGroup[] Groups { get; set; }
         public FullGroup[] ParentGroups { get; set; }
-        public GroupsReferenceData? ReferenceData { get; set; }
+        public GroupsReferenceData ReferenceData { get; set; }
 
     }
 }
