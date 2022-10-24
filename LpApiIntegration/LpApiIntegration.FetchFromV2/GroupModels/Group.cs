@@ -16,7 +16,7 @@ namespace LpApiIntegration.FetchFromV2.GroupModel
         public DateTime? LifespanUntil { get; set; }
         public GroupCategory Category { get; set; }
         public ParentGroupReference ParentGroup { get; set; }
-        public ExtendedProperty ExtendedProperties { get; set; }
+        public ExtendedProperty[] ExtendedProperties { get; set; }
 
     }
 }

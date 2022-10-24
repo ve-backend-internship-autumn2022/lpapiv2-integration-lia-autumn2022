@@ -11,7 +11,6 @@ namespace LpApiIntegration.FetchFromV2.GroupModel
     {
         public StudentReference Student { get; set; }
 
-        public GroupRoleReference GroupRoles { get; set; }
-
+        public GroupRoleReference[] GroupRoles { get; set; }
     }
 }

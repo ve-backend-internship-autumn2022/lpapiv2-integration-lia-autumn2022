@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using LpApiIntegration.FetchFromV2;
 using LpApiIntegration.FetchFromV2.StudentModels;
-using LpApiIntegration.FetchFromV2.GroupModels;
+using LpApiIntegration.FetchFromV2.GroupModel;
 using System.Text;
 using System.Text.Json;
 
@@ -11,8 +11,6 @@ using IHost host = Host.CreateDefaultBuilder(args).Build();
 IConfiguration config = host.Services.GetRequiredService<IConfiguration>();
 
 ApiSettings apiSettings = config.GetRequiredSection("ApiSettings").Get<ApiSettings>();
-
-Console.WriteLine(apiSettings.ClientSecret);
 
 
 // Application code should start here.
@@ -43,10 +41,25 @@ var client = new HttpClient
 };
 client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
 
+// Students
 string jsonStudents = client.GetStringAsync($"/bulkapi/v2/{apiSettings.TenantIdentifier}/students").Result;
 
+// Testing Deserializing json to object
+//var studentResponse = JsonSerializer.Deserialize<StudentsApiResponse>(jsonStudents);
+//Console.WriteLine(studentResponse.ApiVersion);
+
+// Groups
 string jsonGroups = client.GetStringAsync($"/bulkapi/v2/{apiSettings.TenantIdentifier}/groups").Result;
 
+// Testing Deserializing json to object
+//var groupResponse = JsonSerializer.Deserialize<GroupsApiResponse>(jsonGroups);
+//Console.WriteLine(groupResponse.ApiVersion);
+
+// Staff
 string jsonStaffMembers = client.GetStringAsync($"/bulkapi/v2/{apiSettings.TenantIdentifier}/staffmembers").Result;
+
+// Testing Deserializing json to object
+var staffResponse = JsonSerializer.Deserialize<GroupsApiResponse>(jsonStaffMembers);
+Console.WriteLine(staffResponse.ApiVersion);
 
 await host.RunAsync();

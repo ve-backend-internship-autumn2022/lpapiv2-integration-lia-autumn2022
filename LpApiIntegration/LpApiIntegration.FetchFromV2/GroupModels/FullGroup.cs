@@ -1,4 +1,5 @@
-﻿using LpApiIntegration.FetchFromV2.GroupModels;
+﻿using LpApiIntegration.FetchFromV2.GroupModel;
+using LpApiIntegration.FetchFromV2.StaffMemberModles;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,8 +17,8 @@ namespace LpApiIntegration.FetchFromV2.GroupModel
         public DateTime? LifespanUntil { get; set; }
         public GroupCategory Category { get; set; }
         public ParentGroupReference ParentGroup { get; set; }
-        public ExtendedProperty ExtendedProperties { get; set; }
-        //public CourseDefinitionReference CourseDefinition { get; set; }
+        public ExtendedProperty[] ExtendedProperties { get; set; }
+        public CourseDefinitionReference CourseDefinition { get; set; }
         public GroupStaffMember[] StaffGroupMembers { get; set; }
         public GroupStudent[] StudentGroupMembers { get; set; }
 
