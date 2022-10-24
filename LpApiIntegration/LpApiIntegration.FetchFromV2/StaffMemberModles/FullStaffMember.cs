@@ -21,6 +21,6 @@ namespace LpApiIntegration.FetchFromV2.StaffMemberModles
         public string? Phone2 { get; set; }
         public bool MayExposeMobilePhone2ToStudent { get; set; }
         public string[] StaffFunctions { get; set; }
-        public StaffMemberGroup Groups { get; set; }
+        public StaffMemberGroup[] Groups { get; set; }
     }
 }

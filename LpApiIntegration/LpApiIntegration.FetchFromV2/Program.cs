@@ -6,6 +6,7 @@ using LpApiIntegration.FetchFromV2.StudentModels;
 using LpApiIntegration.FetchFromV2.GroupModel;
 using System.Text;
 using System.Text.Json;
+using LpApiIntegration.FetchFromV2.StaffMemberModles;
 
 using IHost host = Host.CreateDefaultBuilder(args).Build();
 IConfiguration config = host.Services.GetRequiredService<IConfiguration>();
@@ -45,8 +46,19 @@ client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.Authent
 string jsonStudents = client.GetStringAsync($"/bulkapi/v2/{apiSettings.TenantIdentifier}/students").Result;
 
 // Testing Deserializing json to object
-//var studentResponse = JsonSerializer.Deserialize<StudentsApiResponse>(jsonStudents);
-//Console.WriteLine(studentResponse.ApiVersion);
+var studentResponse = JsonSerializer.Deserialize<StudentsApiResponse>(jsonStudents);
+
+//foreach (var item in studentResponse.Data.ReferenceData.Groups)
+//{
+//    if (item.ExtendedProperties != null)
+//    {
+//        Console.WriteLine($"\n{item.Name} {item.Code}");
+//        for (int groupNumber = 0; groupNumber < item.ExtendedProperties.Length; groupNumber++)
+//        {
+//            Console.WriteLine(item.ExtendedProperties[groupNumber].Value);
+//        }
+//    }
+//}
 
 // Groups
 string jsonGroups = client.GetStringAsync($"/bulkapi/v2/{apiSettings.TenantIdentifier}/groups").Result;
@@ -55,11 +67,28 @@ string jsonGroups = client.GetStringAsync($"/bulkapi/v2/{apiSettings.TenantIdent
 //var groupResponse = JsonSerializer.Deserialize<GroupsApiResponse>(jsonGroups);
 //Console.WriteLine(groupResponse.ApiVersion);
 
+//foreach (var item in groupResponse.Data.ParentGroups)
+//{
+//    Console.WriteLine($"\n{item.Name} {item.Code}\n");
+//    for (int groupNumber = 0; groupNumber < item.Groups.Length; groupNumber++)
+//    {
+//        Console.WriteLine(item.Groups[groupNumber].IsGroupManager);
+//    }
+//}
+
 // Staff
 string jsonStaffMembers = client.GetStringAsync($"/bulkapi/v2/{apiSettings.TenantIdentifier}/staffmembers").Result;
 
 // Testing Deserializing json to object
-var staffResponse = JsonSerializer.Deserialize<GroupsApiResponse>(jsonStaffMembers);
-Console.WriteLine(staffResponse.ApiVersion);
+var staffResponse = JsonSerializer.Deserialize<StaffMembersApiResponse>(jsonStaffMembers);
+
+//foreach (var item in staffResponse.Data.StaffMembers)
+//{
+//    Console.WriteLine($"\n{item.FirstName} {item.LastName}\n");
+//    for (int groupNumber = 0; groupNumber < item.Groups.Length; groupNumber++)
+//    {
+//        Console.WriteLine(item.Groups[groupNumber].IsGroupManager);
+//    }
+//}
 
 await host.RunAsync();
