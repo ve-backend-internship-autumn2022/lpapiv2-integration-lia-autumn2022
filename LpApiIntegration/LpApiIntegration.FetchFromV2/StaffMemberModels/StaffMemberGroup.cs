@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LpApiIntegration.FetchFromV2.StaffMemberModles
+namespace LpApiIntegration.FetchFromV2.StaffMemberModels
 {
     internal class StaffMemberGroup
     {
