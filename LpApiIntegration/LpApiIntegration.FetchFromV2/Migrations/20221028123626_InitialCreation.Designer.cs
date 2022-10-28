@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LpApiIntegration.FetchFromV2.Migrations
 {
     [DbContext(typeof(LearnpointDbContext))]
-    [Migration("20221026114821_InitialCreation")]
+    [Migration("20221028123626_InitialCreation")]
     partial class InitialCreation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,7 +23,7 @@ namespace LpApiIntegration.FetchFromV2.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("LpApiIntegration.FetchFromV2.StudentModels.FullStudent", b =>
+            modelBuilder.Entity("LpApiIntegration.FetchFromV2.Db.Models.StudentModel", b =>
                 {
                     b.Property<int>("DbId")
                         .ValueGeneratedOnAdd()
@@ -45,6 +45,9 @@ namespace LpApiIntegration.FetchFromV2.Migrations
 
                     b.Property<int>("Id")
                         .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
                     b.Property<string>("MobilePhone")
                         .HasColumnType("nvarchar(max)");

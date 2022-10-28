@@ -1,4 +1,5 @@
-﻿using LpApiIntegration.FetchFromV2.StudentModels;
+﻿using LpApiIntegration.FetchFromV2.Db.Models;
+using LpApiIntegration.FetchFromV2.StudentModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -11,7 +12,7 @@ namespace LpApiIntegration.FetchFromV2.Db
 {
     internal class LearnpointDbContext : DbContext
     {
-        public DbSet<FullStudent> Students { get; set; }
+        public DbSet<StudentModel> Students { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

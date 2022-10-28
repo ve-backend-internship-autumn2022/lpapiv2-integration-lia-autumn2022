@@ -1,5 +1,5 @@
-﻿using LpApiIntegration.FetchFromV2.GroupModel;
-using LpApiIntegration.FetchFromV2.StaffMemberModels;
+﻿using LpApiIntegration.FetchFromV2.CourseModels;
+using LpApiIntegration.FetchFromV2.GroupModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
