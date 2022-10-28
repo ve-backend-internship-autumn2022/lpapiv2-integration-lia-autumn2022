@@ -21,7 +21,8 @@ namespace LpApiIntegration.FetchFromV2.Migrations
                     Email2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     MobilePhone = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     HomePhone = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    FullName = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    FullName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {

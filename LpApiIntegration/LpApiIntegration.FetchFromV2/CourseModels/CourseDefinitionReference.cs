@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LpApiIntegration.FetchFromV2.StaffMemberModels
+namespace LpApiIntegration.FetchFromV2.CourseModels
 {
     internal class CourseDefinitionReference
     {

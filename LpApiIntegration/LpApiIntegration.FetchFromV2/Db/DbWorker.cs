@@ -1,4 +1,5 @@
 ﻿using LpApiIntegration.FetchFromV2.StudentModels;
+using LpApiIntegration.FetchFromV2.Db.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -17,8 +18,9 @@ namespace LpApiIntegration.FetchFromV2.Db
             foreach (var apiStudent in studentResponse.Data.Students)
             {
                 if (!DbContext.Students.Any(s => s.Id == apiStudent.Id))
+                {
                     DbContext.Students.Add(
-                    new FullStudent()
+                    new StudentModel()
                     {
                         Id = apiStudent.Id,
                         NationalRegistrationNumber = apiStudent.NationalRegistrationNumber,
@@ -29,6 +31,7 @@ namespace LpApiIntegration.FetchFromV2.Db
                         HomePhone = apiStudent.HomePhone,
                         FullName = apiStudent.FirstName + " " + apiStudent.LastName
                     });
+                }
             }
             DbContext.SaveChanges();
         }
@@ -69,6 +72,10 @@ namespace LpApiIntegration.FetchFromV2.Db
                         {
                             dbStudent.FullName = apiStudent.FirstName + " " + apiStudent.LastName;
                         }
+                        //if (dbStudent.IsActive != apiStudent.HomePhone)
+                        //{
+
+                        //}
                     }
                 }
             }
