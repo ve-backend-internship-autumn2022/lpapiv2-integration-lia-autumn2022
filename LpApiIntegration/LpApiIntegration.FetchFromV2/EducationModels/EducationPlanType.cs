@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LpApiIntegration.FetchFromV2.StudentModels
+namespace LpApiIntegration.FetchFromV2.EducationModels
 {
     internal class EducationPlanType
     {

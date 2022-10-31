@@ -26,10 +26,8 @@ string jsonStudents = FetchFromApi.GetStudents(apiSettings);
 var studentResponse = JsonSerializer.Deserialize<StudentsApiResponse>(jsonStudents);
 
 //Checks if student exist and Adding Students
-DbWorker.AddStudents(studentResponse);
+DbManager.StudentManager(studentResponse);
 
-//Checks for student updates and Updating Students
-DbWorker.UpdateStudents(studentResponse);
 
 //foreach (var item in studentResponse.Data.ReferenceData.Groups)
 //{
