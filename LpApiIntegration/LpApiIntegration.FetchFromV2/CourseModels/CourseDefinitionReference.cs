@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LpApiIntegration.FetchFromV2.StudentModels
+namespace LpApiIntegration.FetchFromV2.CourseModels
 {
-    internal class EducationPlanType
+    internal class CourseDefinitionReference
     {
-        public string Code { get; set; }
+        public int Id { get; set; }
     }
 }

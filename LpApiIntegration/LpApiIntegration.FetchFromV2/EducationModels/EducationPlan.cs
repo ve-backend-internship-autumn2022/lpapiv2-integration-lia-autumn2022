@@ -4,14 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LpApiIntegration.FetchFromV2.StaffMemberModles
+namespace LpApiIntegration.FetchFromV2.EducationModels
 {
-    internal class CourseDefinition
+    internal class EducationPlan
     {
-        public int Id { get; set; }
         public string Code { get; set; }
         public string Name { get; set; }
-        public bool IsInternship { get; set; }
-        public int Points { get; set; }
+        public EducationPlanType Type { get; set; }
     }
 }
