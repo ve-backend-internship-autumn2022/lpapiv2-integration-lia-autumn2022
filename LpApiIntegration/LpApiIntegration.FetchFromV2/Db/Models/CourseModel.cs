@@ -14,7 +14,7 @@ namespace LpApiIntegration.FetchFromV2.Db.Models
         public string Name { get; set; }
         public string Code { get; set; } 
         public DateTime? LifespanFrom { get; set; }
-        public DateTime? LifespanUntil { get; set; }
-        //public int? Points { get; set; }
+        public DateTime? LifespanUntil { get; set; }        
+        public int? Points { get; set; }
     }
 }
