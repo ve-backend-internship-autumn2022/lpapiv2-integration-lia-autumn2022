@@ -58,7 +58,7 @@ namespace LpApiIntegration.FetchFromV2.Migrations
 
                     b.HasKey("DbId");
 
-                    b.ToTable("Students");
+                    b.ToTable("Students", (string)null);
                 });
 #pragma warning restore 612, 618
         }
