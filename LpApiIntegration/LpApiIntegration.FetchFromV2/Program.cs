@@ -20,7 +20,6 @@ ApiSettings apiSettings = config.GetRequiredSection("ApiSettings").Get<ApiSettin
 
 // Application code should start here.
 
-LearnpointDbContext DbContext = new();
 
 // Students //
 string jsonStudents = FetchFromApi.GetStudents(apiSettings);
@@ -28,47 +27,17 @@ string jsonStudents = FetchFromApi.GetStudents(apiSettings);
 //Deserializing json to object
 var studentResponse = JsonSerializer.Deserialize<StudentsApiResponse>(jsonStudents);
 
-var apiGroups = studentResponse.Data.ReferenceData.Groups.Where(c => c.Category.Name == "Kurs");
 // Groups //
 string jsonGroups = FetchFromApi.GetGroups(apiSettings);
+
+//Deserializing json to object
 var groupResponse = JsonSerializer.Deserialize<GroupsApiResponse>(jsonGroups);
-
-var apiGroups2 = groupResponse.Data.Groups.Where(i => i.Id == 312);
-
 
 
 //Checks if student exist and Adding Students
 DbManager.StudentManager(studentResponse);
-DbManager.CourseManager(studentResponse, groupResponse);
+DbManager.CourseManager(groupResponse);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//var apiGroups2 = groupResponse.Data.Groups.Where(i => i.Id == 312);
 
 //foreach (var item in studentResponse.Data.ReferenceData.Groups)
 //{
@@ -85,7 +54,7 @@ DbManager.CourseManager(studentResponse, groupResponse);
 
 
 // Groups //
-string jsonGroups = FetchFromApi.GetGroups(apiSettings);
+//string jsonGroups = FetchFromApi.GetGroups(apiSettings);
 
 // Testing Deserializing json to object
 //var groupResponse = JsonSerializer.Deserialize<GroupsApiResponse>(jsonGroups);
@@ -99,7 +68,6 @@ string jsonGroups = FetchFromApi.GetGroups(apiSettings);
 //        Console.WriteLine(item.Groups[groupNumber].IsGroupManager);
 //    }
 //}
-
 
 
 // Staff //
@@ -116,6 +84,5 @@ var staffResponse = JsonSerializer.Deserialize<StaffMembersApiResponse>(jsonStaf
 //        Console.WriteLine(item.Groups[groupNumber].IsGroupManager);
 //    }
 //}
-
 
 await host.RunAsync();

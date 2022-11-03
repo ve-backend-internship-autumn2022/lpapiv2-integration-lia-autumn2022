@@ -28,24 +28,29 @@ namespace LpApiIntegration.FetchFromV2.Db
             }
         }
 
-        public static void CourseManager(StudentsApiResponse studentResponse, GroupsApiResponse groupsResponse)
+        public static void CourseManager(GroupsApiResponse groupsResponse)
         {
-            var apiGroups = studentResponse.Data.ReferenceData.Groups.Where(c => c.Category.Name == "Kurs");
-            var apiGroups2 = groupsResponse.Data.Groups.Where(i => i.Id == 312);
-            var coursePoints = groupsResponse.Data.ReferenceData.CourseDefinitions.Where(n => n.IsInternship == false);
+            //Sökning på grupper med kategorikod som visar att det är en kurs
+            var apiCourses = groupsResponse.Data.Groups.Where(c => c.Category.Code == "CourseInstance");
 
-            foreach (var apiGroup in studentResponse.Data.ReferenceData.Groups)
+            //Sökning för att få points för kurserna
+            var coursePoints = groupsResponse.Data.ReferenceData.CourseDefinitions.Where(n => n.IsInternship == false);
+                       
+
+            foreach (var apiGroup in apiCourses)
             {
-                if (!DbContext.Courses.Any(c => c.Id == apiGroup.Id))
+                if (!DbContext.Courses.Any(c => c.ExternalId == apiGroup.Id))
                 {
-                    DbWorker.AddCourse(apiGroups, apiGroups2, coursePoints, DbContext);
+                    DbWorker.AddCourse(apiCourses, coursePoints, DbContext);
                 }
-                //else
-                //{
-                //    DbWorker.UpdateStudent(apiStudent, DbContext);
+                //    //else
+                //    //{
+                //    //    DbWorker.UpdateStudent(apiStudent, DbContext);
+                //    //}
+                //    //DbContext.SaveChanges();
                 //}
-                DbContext.SaveChanges();
             }
+
         }
     }
 }

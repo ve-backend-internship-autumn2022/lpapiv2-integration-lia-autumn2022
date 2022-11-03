@@ -21,7 +21,7 @@ namespace LpApiIntegration.FetchFromV2.Db.Models
         public string? HomePhone { get; set; }
         public string? FullName { get; set; }
         public bool IsActive { get; set; }
-        public List<StudentCourseRelationModel> CourseMemberships { get; set; }
+        public List<StudentCourseRelationModel> StudentMemberships { get; set; }
 
 
     }

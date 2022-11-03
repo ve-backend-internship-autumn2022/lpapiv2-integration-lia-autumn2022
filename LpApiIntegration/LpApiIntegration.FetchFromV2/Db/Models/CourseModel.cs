@@ -16,6 +16,6 @@ namespace LpApiIntegration.FetchFromV2.Db.Models
         public DateTime? LifespanFrom { get; set; }
         public DateTime? LifespanUntil { get; set; }        
         public int? Points { get; set; }
-        public  List<StudentCourseRelationModel> StudentMemberships { get; set; }
+        public List<StudentCourseRelationModel> CourseMemberships { get; set; }
     }
 }

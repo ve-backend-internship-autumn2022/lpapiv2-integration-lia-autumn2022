@@ -78,24 +78,10 @@ namespace LpApiIntegration.FetchFromV2.Db
             }
         }
 
-        public static void AddCourse(IEnumerable<Group> apiGroups , IEnumerable<FullGroup> apiGroups2, IEnumerable<CourseDefinition> coursePoints, LearnpointDbContext dbContext)
+        public static void AddCourse(IEnumerable<FullGroup> apiCourses, IEnumerable<CourseDefinition> coursePoints, LearnpointDbContext dbContext)
         {
-            foreach(var group in apiGroups)
-            {
-                dbContext.Courses.Add(
-                new CourseModel()
-                {
-                    ExternalId = group.Id,
-                    Name = group.Name,
-                    Code = group.Code,
-                    LifespanFrom = group.LifespanFrom,
-                    LifespanUntil = group.LifespanUntil,
-                    Points = null
-                    
-                });
-            }
 
-            foreach(var group in apiGroups2)
+            foreach (var group in apiCourses)
             {
                 dbContext.Courses.Add(
                 new CourseModel()
@@ -108,25 +94,30 @@ namespace LpApiIntegration.FetchFromV2.Db
                     Points = null
 
                 });
+
+                dbContext.SaveChanges();
+
+
             }
 
-            //foreach (var course in coursePoints)
-            //{
-            //    if (course.Name == "Accounting")
-            //    {
-            //        var result = dbContext.Courses.Where(n => n.Name == "Accounting").First();
+            foreach (var course in coursePoints)
+            {
+                if (course.Name == "Accounting")
+                {
+                    var result = dbContext.Courses.Where(n => n.Name == "Accounting").First();
 
-            //        result.Points = course.Points;
-            //    }
-            //    else if (course.Name == "Demenssjukdomar")
-            //    {
-            //        var result2 = dbContext.Courses.Where(n => n.Name == "Demenssjukdomar").First();
+                    result.Points = course.Points;
+                }
+                else if (course.Name == "Demenssjukdomar")
+                {
+                    var result2 = dbContext.Courses.Where(n => n.Name == "Demenssjukdomar").First();
 
-            //        result2.Points = course.Points;
+                    result2.Points = course.Points;
 
-            //    }
+                }
 
-            //}
+                dbContext.SaveChanges();
+            }
 
         }
     }
