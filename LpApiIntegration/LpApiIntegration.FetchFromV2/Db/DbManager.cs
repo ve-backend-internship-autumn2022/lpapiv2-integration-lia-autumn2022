@@ -30,22 +30,22 @@ namespace LpApiIntegration.FetchFromV2.Db
 
         public static void CourseManager(GroupsApiResponse groupsResponse)
         {
-            //Sökning på grupper med kategorikod som visar att det är en kurs
+            //Search for courses with category-code "CourseInstance"
             var apiCourses = groupsResponse.Data.Groups.Where(c => c.Category.Code == "CourseInstance");
 
-            //Sökning för att få points för kurserna
-            var coursePoints = groupsResponse.Data.ReferenceData.CourseDefinitions.Where(n => n.IsInternship == false);
+            //Search coursedefinitions
+            var courseDefinitions = groupsResponse.Data.ReferenceData.CourseDefinitions;
                        
 
             foreach (var apiGroup in apiCourses)
             {
                 if (!DbContext.Courses.Any(c => c.ExternalId == apiGroup.Id))
                 {
-                    DbWorker.AddCourse(apiCourses, coursePoints, DbContext);
+                    DbWorker.AddCourse(apiCourses, courseDefinitions, DbContext);
                 }
                 //    //else
                 //    //{
-                //    //    DbWorker.UpdateStudent(apiStudent, DbContext);
+                //    //    DbWorker.Update(apiStudent, DbContext);
                 //    //}
                 //    //DbContext.SaveChanges();
                 //}

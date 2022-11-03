@@ -78,7 +78,7 @@ namespace LpApiIntegration.FetchFromV2.Db
             }
         }
 
-        public static void AddCourse(IEnumerable<FullGroup> apiCourses, IEnumerable<CourseDefinition> coursePoints, LearnpointDbContext dbContext)
+        public static void AddCourse(IEnumerable<FullGroup> apiCourses, IEnumerable<CourseDefinition> courseDefinitions, LearnpointDbContext dbContext)
         {
 
             foreach (var group in apiCourses)
@@ -91,32 +91,13 @@ namespace LpApiIntegration.FetchFromV2.Db
                     Code = group.Code,
                     LifespanFrom = group.LifespanFrom,
                     LifespanUntil = group.LifespanUntil,
-                    Points = null
+                    Points = courseDefinitions.Where(c => c.Id == group.CourseDefinition.Id).ToList().SingleOrDefault().Points
 
                 });
 
                 dbContext.SaveChanges();
 
 
-            }
-
-            foreach (var course in coursePoints)
-            {
-                if (course.Name == "Accounting")
-                {
-                    var result = dbContext.Courses.Where(n => n.Name == "Accounting").First();
-
-                    result.Points = course.Points;
-                }
-                else if (course.Name == "Demenssjukdomar")
-                {
-                    var result2 = dbContext.Courses.Where(n => n.Name == "Demenssjukdomar").First();
-
-                    result2.Points = course.Points;
-
-                }
-
-                dbContext.SaveChanges();
             }
 
         }
