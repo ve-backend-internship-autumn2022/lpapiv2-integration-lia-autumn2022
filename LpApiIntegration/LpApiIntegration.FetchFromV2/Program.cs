@@ -10,6 +10,7 @@ using LpApiIntegration.FetchFromV2.StaffMemberModels;
 using LpApiIntegration.FetchFromV2.API;
 using Microsoft.EntityFrameworkCore;
 using LpApiIntegration.FetchFromV2.Db;
+using LpApiIntegration.FetchFromV2.Db.Models;
 
 using IHost host = Host.CreateDefaultBuilder(args).Build();
 IConfiguration config = host.Services.GetRequiredService<IConfiguration>();
@@ -19,15 +20,55 @@ ApiSettings apiSettings = config.GetRequiredSection("ApiSettings").Get<ApiSettin
 
 // Application code should start here.
 
+LearnpointDbContext DbContext = new();
+
 // Students //
 string jsonStudents = FetchFromApi.GetStudents(apiSettings);
 
 //Deserializing json to object
 var studentResponse = JsonSerializer.Deserialize<StudentsApiResponse>(jsonStudents);
 
+var apiGroups = studentResponse.Data.ReferenceData.Groups.Where(c => c.Category.Name == "Kurs");
+// Groups //
+string jsonGroups = FetchFromApi.GetGroups(apiSettings);
+var groupResponse = JsonSerializer.Deserialize<GroupsApiResponse>(jsonGroups);
+
+var apiGroups2 = groupResponse.Data.Groups.Where(i => i.Id == 312);
+
+
+
 //Checks if student exist and Adding Students
 DbManager.StudentManager(studentResponse);
+DbManager.CourseManager(studentResponse, groupResponse);
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//var apiGroups2 = groupResponse.Data.Groups.Where(i => i.Id == 312);
 
 //foreach (var item in studentResponse.Data.ReferenceData.Groups)
 //{

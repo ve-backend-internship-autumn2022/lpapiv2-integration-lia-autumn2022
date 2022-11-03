@@ -11,10 +11,10 @@ namespace LpApiIntegration.FetchFromV2.Db.Models
 {
     internal class StudentCourseRelationModel
     {
-        [Key] public int DbId { get; set; }
+        [Key] public int Id { get; set; }
 
-        [ForeignKey("DbId")] public int StudentId { get; set; }
+        public StudentModel Student { get; set; }
 
-        public int CourseId { get; set; }
+        public CourseModel Course { get; set; }
     }
 }

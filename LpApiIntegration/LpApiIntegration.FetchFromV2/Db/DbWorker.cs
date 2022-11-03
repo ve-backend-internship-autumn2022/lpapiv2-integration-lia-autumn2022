@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LpApiIntegration.FetchFromV2.GroupModel;
+using LpApiIntegration.FetchFromV2.CourseModels;
 
 namespace LpApiIntegration.FetchFromV2.Db
 {
@@ -16,7 +18,7 @@ namespace LpApiIntegration.FetchFromV2.Db
             dbContext.Students.Add(
             new StudentModel()
             {
-                Id = apiStudent.Id,
+                ExternalId = apiStudent.Id,
                 NationalRegistrationNumber = apiStudent.NationalRegistrationNumber,
                 Username = apiStudent.Username,
                 Email = apiStudent.Email,
@@ -74,6 +76,58 @@ namespace LpApiIntegration.FetchFromV2.Db
                     dbStudent.IsActive = false;
                 }
             }
+        }
+
+        public static void AddCourse(IEnumerable<Group> apiGroups , IEnumerable<FullGroup> apiGroups2, IEnumerable<CourseDefinition> coursePoints, LearnpointDbContext dbContext)
+        {
+            foreach(var group in apiGroups)
+            {
+                dbContext.Courses.Add(
+                new CourseModel()
+                {
+                    ExternalId = group.Id,
+                    Name = group.Name,
+                    Code = group.Code,
+                    LifespanFrom = group.LifespanFrom,
+                    LifespanUntil = group.LifespanUntil,
+                    Points = null
+                    
+                });
+            }
+
+            foreach(var group in apiGroups2)
+            {
+                dbContext.Courses.Add(
+                new CourseModel()
+                {
+                    ExternalId = group.Id,
+                    Name = group.Name,
+                    Code = group.Code,
+                    LifespanFrom = group.LifespanFrom,
+                    LifespanUntil = group.LifespanUntil,
+                    Points = null
+
+                });
+            }
+
+            //foreach (var course in coursePoints)
+            //{
+            //    if (course.Name == "Accounting")
+            //    {
+            //        var result = dbContext.Courses.Where(n => n.Name == "Accounting").First();
+
+            //        result.Points = course.Points;
+            //    }
+            //    else if (course.Name == "Demenssjukdomar")
+            //    {
+            //        var result2 = dbContext.Courses.Where(n => n.Name == "Demenssjukdomar").First();
+
+            //        result2.Points = course.Points;
+
+            //    }
+
+            //}
+
         }
     }
 }
