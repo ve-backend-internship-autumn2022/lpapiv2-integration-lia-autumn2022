@@ -17,72 +17,30 @@ IConfiguration config = host.Services.GetRequiredService<IConfiguration>();
 
 ApiSettings apiSettings = config.GetRequiredSection("ApiSettings").Get<ApiSettings>();
 
-
 // Application code should start here.
 
-
-// Students //
+// Fetching data from API
 string jsonStudents = FetchFromApi.GetStudents(apiSettings);
-
-//Deserializing json to object
-var studentResponse = JsonSerializer.Deserialize<StudentsApiResponse>(jsonStudents);
-
-// Groups //
 string jsonGroups = FetchFromApi.GetGroups(apiSettings);
-
-//Deserializing json to object
-var groupResponse = JsonSerializer.Deserialize<GroupsApiResponse>(jsonGroups);
-
-
-//Checks if student exist and Adding Students
-DbManager.StudentManager(studentResponse);
-DbManager.CourseManager(groupResponse);
-
-
-//foreach (var item in studentResponse.Data.ReferenceData.Groups)
-//{
-//    if (item.ExtendedProperties != null)
-//    {
-//        Console.WriteLine($"\n{item.Name} {item.Code}");
-//        for (int groupNumber = 0; groupNumber < item.ExtendedProperties.Length; groupNumber++)
-//        {
-//            Console.WriteLine(item.ExtendedProperties[groupNumber].Value);
-//        }
-//    }
-//}
-
-
-
-// Groups //
-//string jsonGroups = FetchFromApi.GetGroups(apiSettings);
-
-// Testing Deserializing json to object
-//var groupResponse = JsonSerializer.Deserialize<GroupsApiResponse>(jsonGroups);
-//Console.WriteLine(groupResponse.ApiVersion);
-
-//foreach (var item in groupResponse.Data.ParentGroups)
-//{
-//    Console.WriteLine($"\n{item.Name} {item.Code}\n");
-//    for (int groupNumber = 0; groupNumber < item.Groups.Length; groupNumber++)
-//    {
-//        Console.WriteLine(item.Groups[groupNumber].IsGroupManager);
-//    }
-//}
-
-
-// Staff //
 string jsonStaffMembers = FetchFromApi.GetStaffMembers(apiSettings);
 
-// Testing Deserializing json to object
+//Deserializing json to response object
+var studentResponse = JsonSerializer.Deserialize<StudentsApiResponse>(jsonStudents);
+var groupResponse = JsonSerializer.Deserialize<GroupsApiResponse>(jsonGroups);
 var staffResponse = JsonSerializer.Deserialize<StaffMembersApiResponse>(jsonStaffMembers);
 
-//foreach (var item in staffResponse.Data.StaffMembers)
-//{
-//    Console.WriteLine($"\n{item.FirstName} {item.LastName}\n");
-//    for (int groupNumber = 0; groupNumber < item.Groups.Length; groupNumber++)
-//    {
-//        Console.WriteLine(item.Groups[groupNumber].IsGroupManager);
-//    }
-//}
+//Saving json to file
+string fileName = "StudentsJson.json";
+File.WriteAllText(fileName, jsonStudents);
+
+string fileName2 = "GroupsJson.json";
+File.WriteAllText(fileName2, jsonGroups);
+
+string fileName3 = "StaffMembersJson.json";
+File.WriteAllText(fileName3, jsonGroups);
+
+// Database manager
+DbManager.StudentManager(studentResponse);
+DbManager.CourseManager(groupResponse);
 
 await host.RunAsync();

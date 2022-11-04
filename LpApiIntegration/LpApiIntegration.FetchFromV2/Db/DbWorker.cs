@@ -83,23 +83,23 @@ namespace LpApiIntegration.FetchFromV2.Db
 
             foreach (var group in apiCourses)
             {
-                dbContext.Courses.Add(
-                new CourseModel()
+                var points = courseDefinitions.Where(c => c.Id == group.CourseDefinition.Id).ToList().SingleOrDefault().Points;                
+
+                if(points != null)
                 {
+                    dbContext.Courses.Add(
+                    new CourseModel()
+                    {
                     ExternalId = group.Id,
                     Name = group.Name,
                     Code = group.Code,
                     LifespanFrom = group.LifespanFrom,
                     LifespanUntil = group.LifespanUntil,
-                    Points = courseDefinitions.Where(c => c.Id == group.CourseDefinition.Id).ToList().SingleOrDefault().Points
-
-                });
-
-                dbContext.SaveChanges();
-
-
+                    Points = points
+                    });
+                    
+                }           
             }
-
         }
     }
 }

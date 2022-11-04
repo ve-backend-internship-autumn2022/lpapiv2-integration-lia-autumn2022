@@ -43,14 +43,12 @@ namespace LpApiIntegration.FetchFromV2.Db
                 {
                     DbWorker.AddCourse(apiCourses, courseDefinitions, DbContext);
                 }
-                //    //else
-                //    //{
-                //    //    DbWorker.Update(apiStudent, DbContext);
-                //    //}
-                //    //DbContext.SaveChanges();
+                //else
+                //{
+                //    DbWorker.UpdateCourse(apiCourses, DbContext);
                 //}
+                DbContext.SaveChanges();
             }
-
-        }
+        }        
     }
 }

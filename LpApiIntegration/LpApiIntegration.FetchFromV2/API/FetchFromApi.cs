@@ -24,9 +24,11 @@ namespace LpApiIntegration.FetchFromV2.API
             return Client(apiSettings).GetStringAsync($"/bulkapi/v2/{apiSettings.TenantIdentifier}/students").Result;
         }
 
+        //?includecurrentandfuturegroupsonly=false
+
         public static string GetGroups(ApiSettings apiSettings)
         {
-            return Client(apiSettings).GetStringAsync($"/bulkapi/v2/{apiSettings.TenantIdentifier}/groups?includecurrentandfuturegroupsonly=false").Result;
+            return Client(apiSettings).GetStringAsync($"/bulkapi/v2/{apiSettings.TenantIdentifier}/groups").Result;
         }
 
         public static string GetStaffMembers(ApiSettings apiSettings)
