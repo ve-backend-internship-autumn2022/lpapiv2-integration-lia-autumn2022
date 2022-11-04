@@ -16,7 +16,7 @@ namespace LpApiIntegration.FetchFromV2.Db
         {
             foreach (var apiStudent in studentResponse.Data.Students)
             {
-                if (!DbContext.Students.Any(s => s.Id == apiStudent.Id))
+                if (!DbContext.Students.Any(s => s.ExternalId == apiStudent.Id))
                 {
                     DbWorker.AddStudent(apiStudent, DbContext);
                 }
