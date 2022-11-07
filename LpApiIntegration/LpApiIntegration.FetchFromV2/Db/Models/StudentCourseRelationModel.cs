@@ -13,6 +13,10 @@ namespace LpApiIntegration.FetchFromV2.Db.Models
     {
         [Key] public int Id { get; set; }
 
+        public int StudentId { get; set; }
+
+        public int CourseId { get; set; }
+
         public StudentModel Student { get; set; }
 
         public CourseModel Course { get; set; }

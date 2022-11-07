@@ -99,5 +99,31 @@ namespace LpApiIntegration.FetchFromV2.Db
                    });
             }            
         }
+
+        public static void AddCourseStudentRelation (GroupsApiResponse groupResponse, LearnpointDbContext DbContext)
+        {
+            var result = groupResponse.Data.Groups.Where(c => c.Category.Code == "CourseInstance");
+
+            foreach (var course in result)
+            {
+                var courseId = DbContext.Courses.Where(i => i.ExternalId == course.Id).SingleOrDefault().Id;
+
+                foreach (var student in course.StudentGroupMembers)
+                {
+                    foreach (var student2 in DbContext.Students)
+                    {
+                        if (student.Student.Id == student2.ExternalId)
+                        {
+                            DbContext.StudentCourseRelations.Add(
+                                     new StudentCourseRelationModel()
+                                     {
+                                         StudentId = student2.Id,
+                                         CourseId = courseId
+                                     });
+                        }
+                    }
+                }
+            }
+        }
     }
 }

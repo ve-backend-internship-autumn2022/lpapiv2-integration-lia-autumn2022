@@ -1,4 +1,5 @@
-﻿using LpApiIntegration.FetchFromV2.GroupModel;
+﻿using LpApiIntegration.FetchFromV2.Db.Models;
+using LpApiIntegration.FetchFromV2.GroupModel;
 using LpApiIntegration.FetchFromV2.StudentModels;
 using System;
 using System.Collections.Generic;
@@ -52,6 +53,13 @@ namespace LpApiIntegration.FetchFromV2.Db
                 
             }
             DbContext.SaveChanges();
-        }        
+        }
+
+        public static void RelationshipManager(GroupsApiResponse groupResponse)
+        {
+            DbWorker.AddCourseStudentRelation(groupResponse, DbContext);           
+           
+            DbContext.SaveChanges();
+        }           
     }
 }
