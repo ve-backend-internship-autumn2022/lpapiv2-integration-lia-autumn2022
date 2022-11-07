@@ -14,7 +14,8 @@ namespace LpApiIntegration.FetchFromV2.Db
 
         public static void StudentManager(StudentsApiResponse studentResponse)
         {
-            foreach (var apiStudent in studentResponse.Data.Students)
+            var apiStudents = studentResponse.Data.Students;
+            foreach (var apiStudent in apiStudents)
             {
                 if (!DbContext.Students.Any(s => s.ExternalId == apiStudent.Id))
                 {
@@ -24,8 +25,9 @@ namespace LpApiIntegration.FetchFromV2.Db
                 {
                     DbWorker.UpdateStudent(apiStudent, DbContext);
                 }
-                DbContext.SaveChanges();
             }
+            DbWorker.CheckForInactiveStudents(apiStudents, DbContext);
+            DbContext.SaveChanges();
         }
 
         public static void CourseManager(GroupsApiResponse groupsResponse)
@@ -47,8 +49,9 @@ namespace LpApiIntegration.FetchFromV2.Db
                 //{
                 //    DbWorker.UpdateCourse(apiCourses, DbContext);
                 //}
-                DbContext.SaveChanges();
+                
             }
+            DbContext.SaveChanges();
         }        
     }
 }

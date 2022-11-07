@@ -33,7 +33,6 @@ namespace LpApiIntegration.FetchFromV2.Db
         public static void UpdateStudent(FullStudent apiStudent, LearnpointDbContext dbContext)
         {
             var dbStudents = dbContext.Students;
-            var compareList = dbContext.Students.ToList();
             foreach (var dbStudent in dbStudents)
             {
                 if (dbStudent.ExternalId == apiStudent.Id)
@@ -66,15 +65,21 @@ namespace LpApiIntegration.FetchFromV2.Db
                     {
                         dbStudent.FullName = apiStudent.FirstName + " " + apiStudent.LastName;
                     }
+                    if (dbStudent.IsActive == false)
+                    {
+                        dbStudent.IsActive = true;
+                    }
                 }
-                if (compareList.Any(s => s.Id == apiStudent.Id))
-                {
-                    dbStudent.IsActive = true;
-                }
-                else
-                {
-                    dbStudent.IsActive = false;
-                }
+            }
+        }
+        public static void CheckForInactiveStudents(FullStudent[] students, LearnpointDbContext dbContext)
+        {
+            HashSet<int> diffids = new HashSet<int>(students.Select(s => s.Id));
+            var results = dbContext.Students.Where(s => !diffids.Contains(s.ExternalId)).ToList();
+
+            foreach (var student in results)
+            {
+                student.IsActive = false;
             }
         }
 
