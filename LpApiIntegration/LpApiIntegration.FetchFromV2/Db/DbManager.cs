@@ -75,7 +75,8 @@ namespace LpApiIntegration.FetchFromV2.Db
 
         public static void RelationshipManager(GroupsApiResponse groupResponse)
         {
-            DbWorker.AddCourseStudentRelation(groupResponse, DbContext);           
+            DbWorker.AddCourseStudentRelation(groupResponse, DbContext);
+            DbWorker.AddCourseStaffRelation(groupResponse, DbContext);
            
             DbContext.SaveChanges();
         }

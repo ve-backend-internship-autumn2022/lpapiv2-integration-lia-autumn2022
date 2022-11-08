@@ -229,5 +229,10 @@ namespace LpApiIntegration.FetchFromV2.Db
                 }
             }
         }
+
+        public static void AddCourseStaffRelation(GroupsApiResponse groupResponse, LearnpointDbContext dbContext)
+        {
+
+        }
     }
 }

@@ -42,6 +42,7 @@ File.WriteAllText(fileName3, jsonStaffMembers);
 // Database manager
 DbManager.StudentManager(studentResponse);
 DbManager.CourseManager(groupResponse);
+DbManager.StaffManager(staffResponse);
 DbManager.RelationshipManager(groupResponse);
 DbManager.StaffManager(staffResponse);
 await host.RunAsync();
