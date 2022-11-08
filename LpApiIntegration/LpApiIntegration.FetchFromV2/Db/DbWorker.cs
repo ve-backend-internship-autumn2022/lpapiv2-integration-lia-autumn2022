@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using LpApiIntegration.FetchFromV2.GroupModel;
 using LpApiIntegration.FetchFromV2.CourseModels;
 using System.Xml.Linq;
+using LpApiIntegration.FetchFromV2.StaffMemberModels;
 
 namespace LpApiIntegration.FetchFromV2.Db
 {
@@ -152,6 +153,79 @@ namespace LpApiIntegration.FetchFromV2.Db
                                      });
                         }
                     }
+                }
+            }
+        }
+       
+
+        public static void AddStaffMember(FullStaffMember apiStaffMember, LearnpointDbContext dbContext)
+        {
+            dbContext.StaffMembers.Add(
+            new StaffModel()
+            {
+                ExternalId = apiStaffMember.Id,
+                NationalRegistrationNumber = apiStaffMember.NationalRegistrationNumber,
+                Signature = apiStaffMember.Signature,
+                FullName = apiStaffMember.FirstName + " " + apiStaffMember.LastName,
+                Username = apiStaffMember.Username,
+                Email = apiStaffMember.Email,
+                Email2 = apiStaffMember.Email2,
+                MobilePhone = apiStaffMember.MobilePhone,
+                MayExposeMobilePhoneToStudents = apiStaffMember.MayExposeMobilePhoneToStudents,
+                Phone2 = apiStaffMember.Phone2,
+                MayExposePhone2ToStudents = apiStaffMember.MayExposePhone2ToStudents,               
+                
+            });
+        }
+
+        public static void UpdateStaffMember(FullStaffMember apiStaffMember, LearnpointDbContext dbContext)
+        {
+            var dbStaffMembers = dbContext.StaffMembers;
+            foreach (var dbStaffMember in dbStaffMembers)
+            {
+                if (dbStaffMember.ExternalId == apiStaffMember.Id)
+                {
+                    if (dbStaffMember.NationalRegistrationNumber != apiStaffMember.NationalRegistrationNumber)
+                    {
+                        dbStaffMember.NationalRegistrationNumber = apiStaffMember.NationalRegistrationNumber;
+                    }
+                    if (dbStaffMember.Signature != apiStaffMember.Signature)
+                    {
+                        dbStaffMember.Signature = apiStaffMember.Signature;
+                    }
+                    if (dbStaffMember.FullName != apiStaffMember.FirstName + " " + apiStaffMember.LastName)
+                    {
+                        dbStaffMember.FullName = apiStaffMember.FirstName + " " + apiStaffMember.LastName;
+                    }                    
+                    if (dbStaffMember.Username != apiStaffMember.Username)
+                    {
+                        dbStaffMember.Username = apiStaffMember.Username;
+                    }
+                    if (dbStaffMember.Email != apiStaffMember.Email)
+                    {
+                        dbStaffMember.Email = apiStaffMember.Email;
+                    }
+                    if (dbStaffMember.Email2 != apiStaffMember.Email2)
+                    {
+                        dbStaffMember.Email2 = apiStaffMember.Email2;
+                    }
+                    if (dbStaffMember.MobilePhone != apiStaffMember.MobilePhone)
+                    {
+                        dbStaffMember.MobilePhone = apiStaffMember.MobilePhone;
+                    }
+                    if (dbStaffMember.MayExposeMobilePhoneToStudents != apiStaffMember.MayExposeMobilePhoneToStudents)
+                    {
+                        dbStaffMember.MayExposeMobilePhoneToStudents = apiStaffMember.MayExposeMobilePhoneToStudents;
+                    }
+                    if (dbStaffMember.Phone2 != apiStaffMember.Phone2)
+                    {
+                        dbStaffMember.Phone2 = apiStaffMember.Phone2;
+                    }
+                    if (dbStaffMember.MayExposePhone2ToStudents != apiStaffMember.MayExposePhone2ToStudents)
+                    {
+                        dbStaffMember.MayExposePhone2ToStudents = apiStaffMember.MayExposePhone2ToStudents;
+                    }
+                   
                 }
             }
         }

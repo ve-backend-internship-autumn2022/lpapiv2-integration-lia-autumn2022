@@ -14,7 +14,7 @@ using LpApiIntegration.FetchFromV2.Db.Models;
 
 using IHost host = Host.CreateDefaultBuilder(args).Build();
 IConfiguration config = host.Services.GetRequiredService<IConfiguration>();
-
+//#
 ApiSettings apiSettings = config.GetRequiredSection("ApiSettings").Get<ApiSettings>();
 
 // Application code should start here.
@@ -37,12 +37,12 @@ string fileName2 = "GroupsJson.json";
 File.WriteAllText(fileName2, jsonGroups);
 
 string fileName3 = "StaffMembersJson.json";
-File.WriteAllText(fileName3, jsonGroups);
+File.WriteAllText(fileName3, jsonStaffMembers);
 
 // Database manager
 DbManager.StudentManager(studentResponse);
 DbManager.CourseManager(groupResponse);
 DbManager.StaffManager(staffResponse);
 DbManager.RelationshipManager(groupResponse);
-
+DbManager.StaffManager(staffResponse);
 await host.RunAsync();

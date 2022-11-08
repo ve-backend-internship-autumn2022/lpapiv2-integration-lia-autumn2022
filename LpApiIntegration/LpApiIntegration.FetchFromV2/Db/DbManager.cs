@@ -57,7 +57,20 @@ namespace LpApiIntegration.FetchFromV2.Db
 
         public static void StaffManager(StaffMembersApiResponse staffResponse)
         {
+            var apiStaffMembers = staffResponse.Data.StaffMembers;
+            foreach (var apiStaffMember in apiStaffMembers)
+            {
+                if (!DbContext.StaffMembers.Any(s => s.ExternalId == apiStaffMember.Id))
+                {
+                    DbWorker.AddStaffMember(apiStaffMember, DbContext);
+                }
+                else
+                {
+                    DbWorker.UpdateStaffMember(apiStaffMember, DbContext);
+                }
+            }
 
+            DbContext.SaveChanges();
         }
 
         public static void RelationshipManager(GroupsApiResponse groupResponse)
@@ -66,6 +79,8 @@ namespace LpApiIntegration.FetchFromV2.Db
             DbWorker.AddCourseStaffRelation(groupResponse, DbContext);
            
             DbContext.SaveChanges();
-        }           
+        }
+
+        
     }
 }
