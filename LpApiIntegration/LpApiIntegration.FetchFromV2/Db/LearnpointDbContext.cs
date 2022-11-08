@@ -13,6 +13,8 @@ namespace LpApiIntegration.FetchFromV2.Db
     internal class LearnpointDbContext : DbContext
     {
         public DbSet<StudentModel> Students { get; set; }
+        public DbSet<StudentCourseRelationModel> StudentCourseRelations { get; set; }
+        public DbSet<CourseModel> Courses { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

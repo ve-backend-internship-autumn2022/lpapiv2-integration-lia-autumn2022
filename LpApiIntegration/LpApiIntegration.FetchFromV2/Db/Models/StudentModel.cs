@@ -11,8 +11,8 @@ namespace LpApiIntegration.FetchFromV2.Db.Models
 {
     internal class StudentModel
     {
-        [Key] public int DbId { get; set; }
-        public int Id { get; set; }
+        [Key] public int Id { get; set; }
+        public int ExternalId { get; set; }
         public string? NationalRegistrationNumber { get; set; }
         public string? Username { get; set; }
         public string? Email { get; set; }
@@ -21,5 +21,7 @@ namespace LpApiIntegration.FetchFromV2.Db.Models
         public string? HomePhone { get; set; }
         public string? FullName { get; set; }
         public bool IsActive { get; set; }
+        public ICollection<StudentCourseRelationModel> CourseMemberships { get; set; }
+
     }
 }

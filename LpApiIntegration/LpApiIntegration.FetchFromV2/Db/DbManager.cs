@@ -1,4 +1,6 @@
-﻿using LpApiIntegration.FetchFromV2.StudentModels;
+﻿using LpApiIntegration.FetchFromV2.Db.Models;
+using LpApiIntegration.FetchFromV2.GroupModel;
+using LpApiIntegration.FetchFromV2.StudentModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,9 +15,10 @@ namespace LpApiIntegration.FetchFromV2.Db
 
         public static void StudentManager(StudentsApiResponse studentResponse)
         {
-            foreach (var apiStudent in studentResponse.Data.Students)
+            var apiStudents = studentResponse.Data.Students;
+            foreach (var apiStudent in apiStudents)
             {
-                if (!DbContext.Students.Any(s => s.Id == apiStudent.Id))
+                if (!DbContext.Students.Any(s => s.ExternalId == apiStudent.Id))
                 {
                     DbWorker.AddStudent(apiStudent, DbContext);
                 }
@@ -23,8 +26,39 @@ namespace LpApiIntegration.FetchFromV2.Db
                 {
                     DbWorker.UpdateStudent(apiStudent, DbContext);
                 }
-                DbContext.SaveChanges();
             }
+            DbWorker.CheckForInactiveStudents(apiStudents, DbContext);
+            DbContext.SaveChanges();
         }
+
+        public static void CourseManager(GroupsApiResponse groupsResponse)
+        {
+            //Search for courses with category-code "CourseInstance"
+            var apiCourses = groupsResponse.Data.Groups.Where(c => c.Category.Code == "CourseInstance");
+
+            //Search coursedefinitions
+            var courseDefinitions = groupsResponse.Data.ReferenceData.CourseDefinitions;
+                       
+
+            foreach (var apiCourse in apiCourses)
+            {
+                if (!DbContext.Courses.Any(c => c.ExternalId == apiCourse.Id))
+                {
+                    DbWorker.AddCourse(apiCourse, courseDefinitions, DbContext);
+                }
+                else
+                {
+                    DbWorker.UpdateCourse(apiCourse, courseDefinitions, DbContext);
+                }
+            }
+            DbContext.SaveChanges();
+        }
+
+        public static void RelationshipManager(GroupsApiResponse groupResponse)
+        {
+            DbWorker.AddCourseStudentRelation(groupResponse, DbContext);           
+           
+            DbContext.SaveChanges();
+        }           
     }
 }
