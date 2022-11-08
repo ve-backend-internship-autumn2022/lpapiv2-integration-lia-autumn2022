@@ -138,16 +138,16 @@ namespace LpApiIntegration.FetchFromV2.Db
             {
                 var courseId = DbContext.Courses.Where(i => i.ExternalId == course.Id).SingleOrDefault().Id;
 
-                foreach (var student in course.StudentGroupMembers)
+                foreach (var apiStudent in course.StudentGroupMembers)
                 {
-                    foreach (var student2 in DbContext.Students)
+                    foreach (var dbStudent in DbContext.Students)
                     {
-                        if (student.Student.Id == student2.ExternalId)
+                        if (apiStudent.Student.Id == dbStudent.ExternalId)
                         {
                             DbContext.StudentCourseRelations.Add(
                                      new StudentCourseRelationModel()
                                      {
-                                         StudentId = student2.Id,
+                                         StudentId = dbStudent.Id,
                                          CourseId = courseId
                                      });
                         }
@@ -158,7 +158,28 @@ namespace LpApiIntegration.FetchFromV2.Db
 
         public static void AddCourseStaffRelation(GroupsApiResponse groupResponse, LearnpointDbContext dbContext)
         {
+            var courses = groupResponse.Data.Groups.Where(c => c.Category.Code == "CourseInstance");
 
+            foreach (var course in courses)
+            {
+                var courseId = dbContext.Courses.Where(i => i.ExternalId == course.Id).SingleOrDefault().Id;
+
+                foreach (var apiStaff in course.StaffGroupMembers)
+                {
+                    foreach (var dbStaff in dbContext.StaffMembers)
+                    {
+                        if (apiStaff.StaffMember.Id == dbStaff.ExternalId)
+                        {
+                            dbContext.StaffCourseRelations.Add(
+                                     new StaffCourseRelationModel()
+                                     {
+                                         StaffId = apiStaff.StaffMember.Id,
+                                         CourseId = courseId
+                                     });
+                        }
+                    }
+                }
+            }
         }
     }
 }
