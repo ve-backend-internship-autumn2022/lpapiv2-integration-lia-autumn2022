@@ -40,17 +40,16 @@ namespace LpApiIntegration.FetchFromV2.Db
             var courseDefinitions = groupsResponse.Data.ReferenceData.CourseDefinitions;
                        
 
-            foreach (var apiGroup in apiCourses)
+            foreach (var apiCourse in apiCourses)
             {
-                if (!DbContext.Courses.Any(c => c.ExternalId == apiGroup.Id))
+                if (!DbContext.Courses.Any(c => c.ExternalId == apiCourse.Id))
                 {
-                    DbWorker.AddCourse(apiCourses, courseDefinitions, DbContext);
+                    DbWorker.AddCourse(apiCourse, courseDefinitions, DbContext);
                 }
-                //else
-                //{
-                //    DbWorker.UpdateCourse(apiCourses, DbContext);
-                //}
-                
+                else
+                {
+                    DbWorker.UpdateCourse(apiCourse, courseDefinitions, DbContext);
+                }
             }
             DbContext.SaveChanges();
         }

@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using LpApiIntegration.FetchFromV2.GroupModel;
 using LpApiIntegration.FetchFromV2.CourseModels;
+using System.Xml.Linq;
 
 namespace LpApiIntegration.FetchFromV2.Db
 {
@@ -83,21 +84,50 @@ namespace LpApiIntegration.FetchFromV2.Db
             }
         }
 
-        public static void AddCourse(IEnumerable<FullGroup> apiCourses, IEnumerable<CourseDefinition> courseDefinitions, LearnpointDbContext dbContext)
+        public static void AddCourse(FullGroup apiCourse, IEnumerable<CourseDefinition> courseDefinitions, LearnpointDbContext dbContext)
         {
-            foreach (var group in apiCourses)
-            {
-                dbContext.Courses.Add(
+            dbContext.Courses.Add(
                    new CourseModel()
                    {
-                       ExternalId = group.Id,
-                       Name = group.Name,
-                       Code = group.Code,
-                       LifespanFrom = group.LifespanFrom,
-                       LifespanUntil = group.LifespanUntil,
-                       Points = courseDefinitions.Where(c => c.Id == group.CourseDefinition.Id).ToList().SingleOrDefault()?.Points
+                       ExternalId = apiCourse.Id,
+                       Name = apiCourse.Name,
+                       Code = apiCourse.Code,
+                       LifespanFrom = apiCourse.LifespanFrom,
+                       LifespanUntil = apiCourse.LifespanUntil,
+                       Points = courseDefinitions.Where(c => c.Id == apiCourse.CourseDefinition.Id).ToList().SingleOrDefault()?.Points
                    });
-            }            
+        }
+
+        public static void UpdateCourse(FullGroup apiCourse, IEnumerable<CourseDefinition> courseDefinitions, LearnpointDbContext dbContext)
+        {
+            var courseDB = dbContext.Courses;
+
+            foreach (var course in courseDB)
+            {
+                if (course.ExternalId == apiCourse.Id)
+                {
+                    if (course.Name != apiCourse.Name)
+                    {
+                        course.Name = apiCourse.Name;
+                    }
+                    if (course.Code != apiCourse.Code)
+                    {
+                        course.Code = apiCourse.Code;
+                    }
+                    if (course.LifespanFrom != apiCourse.LifespanFrom)
+                    {
+                        course.LifespanFrom = apiCourse.LifespanFrom;
+                    }
+                    if (course.LifespanUntil != apiCourse.LifespanUntil)
+                    {
+                        course.LifespanUntil = apiCourse.LifespanUntil;
+                    }
+                    if (course.Points != courseDefinitions.Where(c => c.Id == apiCourse.CourseDefinition.Id).ToList().SingleOrDefault()?.Points)
+                    {
+                        course.Points = courseDefinitions.Where(c => c.Id == apiCourse.CourseDefinition.Id).ToList().SingleOrDefault()?.Points;
+                    }
+                }
+            }
         }
 
         public static void AddCourseStudentRelation (GroupsApiResponse groupResponse, LearnpointDbContext DbContext)
