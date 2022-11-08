@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LpApiIntegration.FetchFromV2.Migrations
 {
     [DbContext(typeof(LearnpointDbContext))]
-    [Migration("20221103091828_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20221108130832_InitialCreation")]
+    partial class InitialCreation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -55,6 +55,75 @@ namespace LpApiIntegration.FetchFromV2.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Courses");
+                });
+
+            modelBuilder.Entity("LpApiIntegration.FetchFromV2.Db.Models.StaffCourseRelationModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaffMemberId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
+
+                    b.HasIndex("StaffMemberId");
+
+                    b.ToTable("StaffCourseRelations");
+                });
+
+            modelBuilder.Entity("LpApiIntegration.FetchFromV2.Db.Models.StaffModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email2")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ExternalId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("FullName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("MayExposeMobilePhoneToStudents")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("MayExposePhone2ToStudents")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("MobilePhone")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NationalRegistrationNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Phone2")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Signature")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Username")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("StaffMembers");
                 });
 
             modelBuilder.Entity("LpApiIntegration.FetchFromV2.Db.Models.StudentCourseRelationModel", b =>
@@ -120,6 +189,25 @@ namespace LpApiIntegration.FetchFromV2.Migrations
                     b.ToTable("Students");
                 });
 
+            modelBuilder.Entity("LpApiIntegration.FetchFromV2.Db.Models.StaffCourseRelationModel", b =>
+                {
+                    b.HasOne("LpApiIntegration.FetchFromV2.Db.Models.CourseModel", "Course")
+                        .WithMany("StaffMemberships")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LpApiIntegration.FetchFromV2.Db.Models.StaffModel", "StaffMember")
+                        .WithMany("CourseMemberships")
+                        .HasForeignKey("StaffMemberId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+
+                    b.Navigation("StaffMember");
+                });
+
             modelBuilder.Entity("LpApiIntegration.FetchFromV2.Db.Models.StudentCourseRelationModel", b =>
                 {
                     b.HasOne("LpApiIntegration.FetchFromV2.Db.Models.CourseModel", "Course")
@@ -141,7 +229,14 @@ namespace LpApiIntegration.FetchFromV2.Migrations
 
             modelBuilder.Entity("LpApiIntegration.FetchFromV2.Db.Models.CourseModel", b =>
                 {
+                    b.Navigation("StaffMemberships");
+
                     b.Navigation("StudentMemberships");
+                });
+
+            modelBuilder.Entity("LpApiIntegration.FetchFromV2.Db.Models.StaffModel", b =>
+                {
+                    b.Navigation("CourseMemberships");
                 });
 
             modelBuilder.Entity("LpApiIntegration.FetchFromV2.Db.Models.StudentModel", b =>

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace LpApiIntegration.FetchFromV2.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class InitialCreation : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -28,6 +28,29 @@ namespace LpApiIntegration.FetchFromV2.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "StaffMembers",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ExternalId = table.Column<int>(type: "int", nullable: false),
+                    NationalRegistrationNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Signature = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FullName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Username = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Email2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MobilePhone = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MayExposeMobilePhoneToStudents = table.Column<bool>(type: "bit", nullable: false),
+                    Phone2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MayExposePhone2ToStudents = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StaffMembers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Students",
                 columns: table => new
                 {
@@ -46,6 +69,32 @@ namespace LpApiIntegration.FetchFromV2.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Students", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "StaffCourseRelations",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    StaffMemberId = table.Column<int>(type: "int", nullable: false),
+                    CourseId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StaffCourseRelations", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_StaffCourseRelations_Courses_CourseId",
+                        column: x => x.CourseId,
+                        principalTable: "Courses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_StaffCourseRelations_StaffMembers_StaffMemberId",
+                        column: x => x.StaffMemberId,
+                        principalTable: "StaffMembers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -75,6 +124,16 @@ namespace LpApiIntegration.FetchFromV2.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_StaffCourseRelations_CourseId",
+                table: "StaffCourseRelations",
+                column: "CourseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StaffCourseRelations_StaffMemberId",
+                table: "StaffCourseRelations",
+                column: "StaffMemberId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_StudentCourseRelations_CourseId",
                 table: "StudentCourseRelations",
                 column: "CourseId");
@@ -88,7 +147,13 @@ namespace LpApiIntegration.FetchFromV2.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "StaffCourseRelations");
+
+            migrationBuilder.DropTable(
                 name: "StudentCourseRelations");
+
+            migrationBuilder.DropTable(
+                name: "StaffMembers");
 
             migrationBuilder.DropTable(
                 name: "Courses");

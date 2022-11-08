@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using LpApiIntegration.FetchFromV2.GroupModel;
 using LpApiIntegration.FetchFromV2.CourseModels;
 using System.Xml.Linq;
+using LpApiIntegration.FetchFromV2.StaffMemberModels;
 
 namespace LpApiIntegration.FetchFromV2.Db
 {
@@ -132,22 +133,121 @@ namespace LpApiIntegration.FetchFromV2.Db
 
         public static void AddCourseStudentRelation (GroupsApiResponse groupResponse, LearnpointDbContext DbContext)
         {
-            var result = groupResponse.Data.Groups.Where(c => c.Category.Code == "CourseInstance");
+            var courses = groupResponse.Data.Groups.Where(c => c.Category.Code == "CourseInstance");
 
-            foreach (var course in result)
+            foreach (var course in courses)
             {
                 var courseId = DbContext.Courses.Where(i => i.ExternalId == course.Id).SingleOrDefault().Id;
 
-                foreach (var student in course.StudentGroupMembers)
+                foreach (var apiStudent in course.StudentGroupMembers)
                 {
-                    foreach (var student2 in DbContext.Students)
+                    foreach (var dbStudent in DbContext.Students)
                     {
-                        if (student.Student.Id == student2.ExternalId)
+                        if (apiStudent.Student.Id == dbStudent.ExternalId)
                         {
                             DbContext.StudentCourseRelations.Add(
                                      new StudentCourseRelationModel()
                                      {
-                                         StudentId = student2.Id,
+                                         StudentId = dbStudent.Id,
+                                         CourseId = courseId
+                                     });
+                        }
+                    }
+                }
+            }
+        }
+       
+
+        public static void AddStaffMember(FullStaffMember apiStaffMember, LearnpointDbContext dbContext)
+        {
+            dbContext.StaffMembers.Add(
+            new StaffModel()
+            {
+                ExternalId = apiStaffMember.Id,
+                NationalRegistrationNumber = apiStaffMember.NationalRegistrationNumber,
+                Signature = apiStaffMember.Signature,
+                FullName = apiStaffMember.FirstName + " " + apiStaffMember.LastName,
+                Username = apiStaffMember.Username,
+                Email = apiStaffMember.Email,
+                Email2 = apiStaffMember.Email2,
+                MobilePhone = apiStaffMember.MobilePhone,
+                MayExposeMobilePhoneToStudents = apiStaffMember.MayExposeMobilePhoneToStudents,
+                Phone2 = apiStaffMember.Phone2,
+                MayExposePhone2ToStudents = apiStaffMember.MayExposePhone2ToStudents,               
+                
+            });
+        }
+
+        public static void UpdateStaffMember(FullStaffMember apiStaffMember, LearnpointDbContext dbContext)
+        {
+            var dbStaffMembers = dbContext.StaffMembers;
+            foreach (var dbStaffMember in dbStaffMembers)
+            {
+                if (dbStaffMember.ExternalId == apiStaffMember.Id)
+                {
+                    if (dbStaffMember.NationalRegistrationNumber != apiStaffMember.NationalRegistrationNumber)
+                    {
+                        dbStaffMember.NationalRegistrationNumber = apiStaffMember.NationalRegistrationNumber;
+                    }
+                    if (dbStaffMember.Signature != apiStaffMember.Signature)
+                    {
+                        dbStaffMember.Signature = apiStaffMember.Signature;
+                    }
+                    if (dbStaffMember.FullName != apiStaffMember.FirstName + " " + apiStaffMember.LastName)
+                    {
+                        dbStaffMember.FullName = apiStaffMember.FirstName + " " + apiStaffMember.LastName;
+                    }                    
+                    if (dbStaffMember.Username != apiStaffMember.Username)
+                    {
+                        dbStaffMember.Username = apiStaffMember.Username;
+                    }
+                    if (dbStaffMember.Email != apiStaffMember.Email)
+                    {
+                        dbStaffMember.Email = apiStaffMember.Email;
+                    }
+                    if (dbStaffMember.Email2 != apiStaffMember.Email2)
+                    {
+                        dbStaffMember.Email2 = apiStaffMember.Email2;
+                    }
+                    if (dbStaffMember.MobilePhone != apiStaffMember.MobilePhone)
+                    {
+                        dbStaffMember.MobilePhone = apiStaffMember.MobilePhone;
+                    }
+                    if (dbStaffMember.MayExposeMobilePhoneToStudents != apiStaffMember.MayExposeMobilePhoneToStudents)
+                    {
+                        dbStaffMember.MayExposeMobilePhoneToStudents = apiStaffMember.MayExposeMobilePhoneToStudents;
+                    }
+                    if (dbStaffMember.Phone2 != apiStaffMember.Phone2)
+                    {
+                        dbStaffMember.Phone2 = apiStaffMember.Phone2;
+                    }
+                    if (dbStaffMember.MayExposePhone2ToStudents != apiStaffMember.MayExposePhone2ToStudents)
+                    {
+                        dbStaffMember.MayExposePhone2ToStudents = apiStaffMember.MayExposePhone2ToStudents;
+                    }
+                   
+                }
+            }
+        }
+
+        public static void AddCourseStaffRelation(GroupsApiResponse groupResponse, LearnpointDbContext dbContext)
+        {
+            var courses = groupResponse.Data.Groups.Where(c => c.Category.Code == "CourseInstance");
+
+            foreach (var course in courses)
+            {
+                var courseId = dbContext.Courses.Where(i => i.ExternalId == course.Id).SingleOrDefault().Id;
+
+                foreach (var apiStaff in course.StaffGroupMembers)
+                {
+                    foreach (var dbStaff in dbContext.StaffMembers)
+                    {
+                        if (apiStaff.StaffMember.Id == dbStaff.ExternalId)
+                        {
+                            dbContext.StaffCourseRelations.Add(
+                                     new StaffCourseRelationModel()
+                                     {
+                                         StaffMemberId = dbStaff.Id,
                                          CourseId = courseId
                                      });
                         }
