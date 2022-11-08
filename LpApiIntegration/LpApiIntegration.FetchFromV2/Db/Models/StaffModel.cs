@@ -15,14 +15,14 @@ namespace LpApiIntegration.FetchFromV2.Db.Models
         public string? NationalRegistrationNumber { get; set; }
         public string? Signature { get; set; }
         public string? FullName { get; set; }      
-        public string? UserName { get; set; }
+        public string? Username { get; set; }
         public string? Email { get; set; }
         public string? Email2 { get; set; }
         public string? MobilePhone { get; set; }
-        public bool MayExposeMobilePhoneToStudent { get; set; }
+        public bool MayExposeMobilePhoneToStudents { get; set; }
         public string? Phone2 { get; set; }
-        public bool MayExposeMobilePhone2ToStudent { get; set; }
-        //public ICollection<StaffCourseRelationModel> CourseMemberships { get; set; }
+        public bool MayExposePhone2ToStudents { get; set; }
+        public ICollection<StaffCourseRelationModel> CourseMemberships { get; set; }
 
     }
 }

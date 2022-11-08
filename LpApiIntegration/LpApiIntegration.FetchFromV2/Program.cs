@@ -37,11 +37,11 @@ string fileName2 = "GroupsJson.json";
 File.WriteAllText(fileName2, jsonGroups);
 
 string fileName3 = "StaffMembersJson.json";
-File.WriteAllText(fileName3, jsonGroups);
+File.WriteAllText(fileName3, jsonStaffMembers);
 
 // Database manager
 DbManager.StudentManager(studentResponse);
 DbManager.CourseManager(groupResponse);
 DbManager.RelationshipManager(groupResponse);
-
+DbManager.StaffManager(staffResponse);
 await host.RunAsync();

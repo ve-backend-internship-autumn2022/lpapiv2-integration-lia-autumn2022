@@ -1,5 +1,6 @@
 ﻿using LpApiIntegration.FetchFromV2.Db.Models;
 using LpApiIntegration.FetchFromV2.GroupModel;
+using LpApiIntegration.FetchFromV2.StaffMemberModels;
 using LpApiIntegration.FetchFromV2.StudentModels;
 using System;
 using System.Collections.Generic;
@@ -54,11 +55,31 @@ namespace LpApiIntegration.FetchFromV2.Db
             DbContext.SaveChanges();
         }
 
+        public static void StaffManager(StaffMembersApiResponse staffResponse)
+        {
+            var apiStaffMembers = staffResponse.Data.StaffMembers;
+            foreach (var apiStaffMember in apiStaffMembers)
+            {
+                if (!DbContext.StaffMembers.Any(s => s.ExternalId == apiStaffMember.Id))
+                {
+                    DbWorker.AddStaffMember(apiStaffMember, DbContext);
+                }
+                else
+                {
+                    DbWorker.UpdateStaffMember(apiStaffMember, DbContext);
+                }
+            }
+
+            DbContext.SaveChanges();
+        }
+
         public static void RelationshipManager(GroupsApiResponse groupResponse)
         {
             DbWorker.AddCourseStudentRelation(groupResponse, DbContext);           
            
             DbContext.SaveChanges();
-        }           
+        }
+
+        
     }
 }
