@@ -247,7 +247,7 @@ namespace LpApiIntegration.FetchFromV2.Db
                             dbContext.StaffCourseRelations.Add(
                                      new StaffCourseRelationModel()
                                      {
-                                         StaffId = apiStaff.StaffMember.Id,
+                                         StaffMemberId = dbStaff.Id,
                                          CourseId = courseId
                                      });
                         }

@@ -37,13 +37,13 @@ namespace LpApiIntegration.FetchFromV2.Migrations
                     NationalRegistrationNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Signature = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     FullName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Username = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Email2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     MobilePhone = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    MayExposeMobilePhoneToStudent = table.Column<bool>(type: "bit", nullable: false),
+                    MayExposeMobilePhoneToStudents = table.Column<bool>(type: "bit", nullable: false),
                     Phone2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    MayExposeMobilePhone2ToStudent = table.Column<bool>(type: "bit", nullable: false)
+                    MayExposePhone2ToStudents = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -77,7 +77,6 @@ namespace LpApiIntegration.FetchFromV2.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    StaffId = table.Column<int>(type: "int", nullable: false),
                     StaffMemberId = table.Column<int>(type: "int", nullable: false),
                     CourseId = table.Column<int>(type: "int", nullable: false)
                 },

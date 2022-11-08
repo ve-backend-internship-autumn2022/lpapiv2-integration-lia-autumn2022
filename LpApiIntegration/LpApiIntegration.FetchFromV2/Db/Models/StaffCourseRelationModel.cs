@@ -11,7 +11,7 @@ namespace LpApiIntegration.FetchFromV2.Db.Models
     {
         [Key] public int Id { get; set; }
 
-        public int StaffId { get; set; }
+        public int StaffMemberId { get; set; }
         public StaffModel StaffMember { get; set; }
 
         public int CourseId { get; set; }

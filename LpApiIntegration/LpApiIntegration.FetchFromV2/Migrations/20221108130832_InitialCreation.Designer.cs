@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LpApiIntegration.FetchFromV2.Migrations
 {
     [DbContext(typeof(LearnpointDbContext))]
-    [Migration("20221108120624_InitialCreation")]
+    [Migration("20221108130832_InitialCreation")]
     partial class InitialCreation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -68,9 +68,6 @@ namespace LpApiIntegration.FetchFromV2.Migrations
                     b.Property<int>("CourseId")
                         .HasColumnType("int");
 
-                    b.Property<int>("StaffId")
-                        .HasColumnType("int");
-
                     b.Property<int>("StaffMemberId")
                         .HasColumnType("int");
 
@@ -103,10 +100,10 @@ namespace LpApiIntegration.FetchFromV2.Migrations
                     b.Property<string>("FullName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("MayExposeMobilePhone2ToStudent")
+                    b.Property<bool>("MayExposeMobilePhoneToStudents")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("MayExposeMobilePhoneToStudent")
+                    b.Property<bool>("MayExposePhone2ToStudents")
                         .HasColumnType("bit");
 
                     b.Property<string>("MobilePhone")
@@ -121,7 +118,7 @@ namespace LpApiIntegration.FetchFromV2.Migrations
                     b.Property<string>("Signature")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserName")
+                    b.Property<string>("Username")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
