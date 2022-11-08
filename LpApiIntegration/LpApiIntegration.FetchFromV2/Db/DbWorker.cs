@@ -133,9 +133,9 @@ namespace LpApiIntegration.FetchFromV2.Db
 
         public static void AddCourseStudentRelation (GroupsApiResponse groupResponse, LearnpointDbContext DbContext)
         {
-            var result = groupResponse.Data.Groups.Where(c => c.Category.Code == "CourseInstance");
+            var courses = groupResponse.Data.Groups.Where(c => c.Category.Code == "CourseInstance");
 
-            foreach (var course in result)
+            foreach (var course in courses)
             {
                 var courseId = DbContext.Courses.Where(i => i.ExternalId == course.Id).SingleOrDefault().Id;
 

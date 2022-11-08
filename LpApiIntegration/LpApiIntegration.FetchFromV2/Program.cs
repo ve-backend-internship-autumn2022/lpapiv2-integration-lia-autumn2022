@@ -14,7 +14,7 @@ using LpApiIntegration.FetchFromV2.Db.Models;
 
 using IHost host = Host.CreateDefaultBuilder(args).Build();
 IConfiguration config = host.Services.GetRequiredService<IConfiguration>();
-//#
+
 ApiSettings apiSettings = config.GetRequiredSection("ApiSettings").Get<ApiSettings>();
 
 // Application code should start here.
