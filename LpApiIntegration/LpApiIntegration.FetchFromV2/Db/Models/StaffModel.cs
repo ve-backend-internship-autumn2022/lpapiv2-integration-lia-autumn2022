@@ -21,7 +21,7 @@ namespace LpApiIntegration.FetchFromV2.Db.Models
         public bool MayExposeMobilePhoneToStudent { get; set; }
         public string? Phone2 { get; set; }
         public bool MayExposeMobilePhone2ToStudent { get; set; }
-        //public ICollection<StaffCourseRelationModel> CourseMemberships { get; set; }
+        public ICollection<StaffCourseRelationModel> CourseMemberships { get; set; }
 
     }
 }
