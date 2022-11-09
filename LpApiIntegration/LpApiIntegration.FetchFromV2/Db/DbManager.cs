@@ -73,6 +73,24 @@ namespace LpApiIntegration.FetchFromV2.Db
             DbContext.SaveChanges();
         }
 
+        public static void ProgramManager(GroupsApiResponse groupResponseExtended)
+        {
+            var apiPrograms = groupResponseExtended.Data.Groups.Where(p => p.Category.Code == "EducationInstance");
+
+            foreach (var apiProgram in apiPrograms)
+            {
+                if (!DbContext.Programs.Any(p => p.ExternalId == apiProgram.Id))
+                {
+                    DbWorker.AddProgram(apiProgram, DbContext);
+                }
+                else
+                {
+                    DbWorker.UpdateProgram(apiProgram, DbContext);
+                }
+            }
+            DbContext.SaveChanges();
+        }
+
         public static void RelationshipManager(GroupsApiResponse groupResponse)
         {
             DbWorker.AddCourseStudentRelation(groupResponse, DbContext);

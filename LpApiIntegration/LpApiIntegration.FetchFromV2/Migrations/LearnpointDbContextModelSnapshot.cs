@@ -55,6 +55,34 @@ namespace LpApiIntegration.FetchFromV2.Migrations
                     b.ToTable("Courses");
                 });
 
+            modelBuilder.Entity("LpApiIntegration.FetchFromV2.Db.Models.ProgramModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Code")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ExternalId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("LifespanFrom")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("LifespanUntil")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Programs");
+                });
+
             modelBuilder.Entity("LpApiIntegration.FetchFromV2.Db.Models.StaffCourseRelationModel", b =>
                 {
                     b.Property<int>("Id")

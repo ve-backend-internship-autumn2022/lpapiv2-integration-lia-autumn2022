@@ -22,21 +22,23 @@ ApiSettings apiSettings = config.GetRequiredSection("ApiSettings").Get<ApiSettin
 // Fetching data from API
 string jsonStudents = FetchFromApi.GetStudents(apiSettings);
 string jsonGroups = FetchFromApi.GetGroups(apiSettings);
+string jsonGroupsExtended = FetchFromApi.GetGroupsExtended(apiSettings);
 string jsonStaffMembers = FetchFromApi.GetStaffMembers(apiSettings);
 
 //Deserializing json to response object
 var studentResponse = JsonSerializer.Deserialize<StudentsApiResponse>(jsonStudents);
 var groupResponse = JsonSerializer.Deserialize<GroupsApiResponse>(jsonGroups);
+var groupResponseExtended = JsonSerializer.Deserialize<GroupsApiResponse>(jsonGroupsExtended);
 var staffResponse = JsonSerializer.Deserialize<StaffMembersApiResponse>(jsonStaffMembers);
 
 //Saving json to file
-string fileName = "StudentsJson.json";
+string fileName = "Students.json";
 File.WriteAllText(fileName, jsonStudents);
 
-string fileName2 = "GroupsJson.json";
-File.WriteAllText(fileName2, jsonGroups);
+string fileName2 = "Groups.json";
+File.WriteAllText(fileName2, jsonGroupsExtended);
 
-string fileName3 = "StaffMembersJson.json";
+string fileName3 = "StaffMembers.json";
 File.WriteAllText(fileName3, jsonStaffMembers);
 
 // Database manager
@@ -45,4 +47,6 @@ DbManager.CourseManager(groupResponse);
 DbManager.StaffManager(staffResponse);
 DbManager.RelationshipManager(groupResponse);
 DbManager.StaffManager(staffResponse);
+DbManager.ProgramManager(groupResponseExtended);
+
 await host.RunAsync();

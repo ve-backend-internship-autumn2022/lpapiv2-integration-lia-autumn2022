@@ -28,6 +28,23 @@ namespace LpApiIntegration.FetchFromV2.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Programs",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ExternalId = table.Column<int>(type: "int", nullable: false),
+                    Code = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LifespanFrom = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LifespanUntil = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Programs", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "StaffMembers",
                 columns: table => new
                 {
@@ -146,6 +163,9 @@ namespace LpApiIntegration.FetchFromV2.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Programs");
+
             migrationBuilder.DropTable(
                 name: "StaffCourseRelations");
 

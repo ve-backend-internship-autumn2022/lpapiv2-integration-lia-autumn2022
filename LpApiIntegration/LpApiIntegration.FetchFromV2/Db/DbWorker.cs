@@ -15,6 +15,7 @@ namespace LpApiIntegration.FetchFromV2.Db
 {
     internal class DbWorker
     {
+        // Student
         public static void AddStudent(FullStudent apiStudent, LearnpointDbContext dbContext)
         {
             dbContext.Students.Add(
@@ -85,6 +86,8 @@ namespace LpApiIntegration.FetchFromV2.Db
             }
         }
 
+        // Course
+
         public static void AddCourse(FullGroup apiCourse, IEnumerable<CourseDefinition> courseDefinitions, LearnpointDbContext dbContext)
         {
             dbContext.Courses.Add(
@@ -131,32 +134,7 @@ namespace LpApiIntegration.FetchFromV2.Db
             }
         }
 
-        public static void AddCourseStudentRelation (GroupsApiResponse groupResponse, LearnpointDbContext DbContext)
-        {
-            var courses = groupResponse.Data.Groups.Where(c => c.Category.Code == "CourseInstance");
-
-            foreach (var course in courses)
-            {
-                var courseId = DbContext.Courses.Where(i => i.ExternalId == course.Id).SingleOrDefault().Id;
-
-                foreach (var apiStudent in course.StudentGroupMembers)
-                {
-                    foreach (var dbStudent in DbContext.Students)
-                    {
-                        if (apiStudent.Student.Id == dbStudent.ExternalId)
-                        {
-                            DbContext.StudentCourseRelations.Add(
-                                     new StudentCourseRelationModel()
-                                     {
-                                         StudentId = dbStudent.Id,
-                                         CourseId = courseId
-                                     });
-                        }
-                    }
-                }
-            }
-        }
-       
+        // Staff
 
         public static void AddStaffMember(FullStaffMember apiStaffMember, LearnpointDbContext dbContext)
         {
@@ -225,11 +203,78 @@ namespace LpApiIntegration.FetchFromV2.Db
                     {
                         dbStaffMember.MayExposePhone2ToStudents = apiStaffMember.MayExposePhone2ToStudents;
                     }
-                   
                 }
             }
         }
 
+        // Program
+
+        public static void AddProgram(FullGroup apiProgram, LearnpointDbContext dbContext)
+        {
+            dbContext.Programs.Add(
+                new ProgramModel()
+                {
+                    ExternalId = apiProgram.Id,
+                    Code = apiProgram.Code,
+                    Name = apiProgram.Name,
+                    LifespanFrom = apiProgram.LifespanFrom,
+                    LifespanUntil = apiProgram.LifespanUntil
+                });
+        }
+        public static void UpdateProgram(FullGroup apiProgram, LearnpointDbContext dbContext)
+        {
+            var dbPrograms = dbContext.Programs;
+            foreach (var dbProgram in dbPrograms)
+            {
+                if (dbProgram.Id == apiProgram.Id)
+                {
+                    if (dbProgram.Code != apiProgram.Code)
+                    {
+                        dbProgram.Code = apiProgram.Code;
+                    }
+                    if (dbProgram.Name != apiProgram.Name)
+                    {
+                        dbProgram.Name = apiProgram.Name;
+                    }
+                    if (dbProgram.LifespanFrom != apiProgram.LifespanFrom)
+                    {
+                        dbProgram.LifespanFrom = apiProgram.LifespanFrom;
+                    }
+                    if (dbProgram.LifespanUntil != apiProgram.LifespanUntil)
+                    {
+                        dbProgram.LifespanUntil = apiProgram.LifespanUntil;
+                    }
+                }
+            }
+        }
+
+        // Relations
+
+        public static void AddCourseStudentRelation(GroupsApiResponse groupResponse, LearnpointDbContext DbContext)
+        {
+            var courses = groupResponse.Data.Groups.Where(c => c.Category.Code == "CourseInstance");
+
+            foreach (var course in courses)
+            {
+                var courseId = DbContext.Courses.Where(i => i.ExternalId == course.Id).SingleOrDefault().Id;
+
+                foreach (var apiStudent in course.StudentGroupMembers)
+                {
+                    foreach (var dbStudent in DbContext.Students)
+                    {
+                        if (apiStudent.Student.Id == dbStudent.ExternalId)
+                        {
+                            DbContext.StudentCourseRelations.Add(
+                                     new StudentCourseRelationModel()
+                                     {
+                                         StudentId = dbStudent.Id,
+                                         CourseId = courseId
+                                     });
+                        }
+                    }
+                }
+            }
+        }
         public static void AddCourseStaffRelation(GroupsApiResponse groupResponse, LearnpointDbContext dbContext)
         {
             var courses = groupResponse.Data.Groups.Where(c => c.Category.Code == "CourseInstance");
