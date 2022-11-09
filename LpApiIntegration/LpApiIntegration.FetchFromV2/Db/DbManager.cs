@@ -91,11 +91,12 @@ namespace LpApiIntegration.FetchFromV2.Db
             DbContext.SaveChanges();
         }
 
-        public static void RelationshipManager(GroupsApiResponse groupResponse)
+        public static void RelationshipManager(GroupsApiResponse groupResponse, GroupsApiResponse groupResponseExtended, StudentsApiResponse studentResponse)
         {
             DbWorker.AddCourseStudentRelation(groupResponse, DbContext);
             DbWorker.AddCourseStaffRelation(groupResponse, DbContext);
-           
+            //DbWorker.AddStudentProgramRelation(groupResponseExtended, studentResponse, DbContext);
+
             DbContext.SaveChanges();
         }
 
