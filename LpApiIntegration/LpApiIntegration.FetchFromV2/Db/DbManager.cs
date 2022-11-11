@@ -39,7 +39,7 @@ namespace LpApiIntegration.FetchFromV2.Db
 
             //Search coursedefinitions
             var courseDefinitions = groupsResponse.Data.ReferenceData.CourseDefinitions;
-                       
+
 
             foreach (var apiCourse in apiCourses)
             {
@@ -95,7 +95,7 @@ namespace LpApiIntegration.FetchFromV2.Db
         {
             DbWorker.AddCourseStudentRelation(groupResponse, DbContext);
             DbWorker.AddCourseStaffRelation(groupResponse, DbContext);
-            //DbWorker.AddStudentProgramRelation(groupResponseExtended, studentResponse, DbContext);
+            DbWorker.AddStudentProgramRelation(groupResponseExtended, studentResponse, DbContext);
 
             DbContext.SaveChanges();
         }
