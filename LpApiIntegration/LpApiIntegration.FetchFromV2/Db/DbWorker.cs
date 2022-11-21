@@ -151,8 +151,8 @@ namespace LpApiIntegration.FetchFromV2.Db
                 MobilePhone = apiStaffMember.MobilePhone,
                 MayExposeMobilePhoneToStudents = apiStaffMember.MayExposeMobilePhoneToStudents,
                 Phone2 = apiStaffMember.Phone2,
-                MayExposePhone2ToStudents = apiStaffMember.MayExposePhone2ToStudents,               
-                
+                MayExposePhone2ToStudents = apiStaffMember.MayExposePhone2ToStudents,
+
             });
         }
 
@@ -174,7 +174,7 @@ namespace LpApiIntegration.FetchFromV2.Db
                     if (dbStaffMember.FullName != apiStaffMember.FirstName + " " + apiStaffMember.LastName)
                     {
                         dbStaffMember.FullName = apiStaffMember.FirstName + " " + apiStaffMember.LastName;
-                    }                    
+                    }
                     if (dbStaffMember.Username != apiStaffMember.Username)
                     {
                         dbStaffMember.Username = apiStaffMember.Username;
@@ -223,35 +223,32 @@ namespace LpApiIntegration.FetchFromV2.Db
         }
         public static void UpdateProgram(FullGroup apiProgram, LearnpointDbContext dbContext)
         {
-            var dbPrograms = dbContext.Programs;
-            foreach (var dbProgram in dbPrograms)
+            var dbProgram = dbContext.Programs.Where(e => e.ExternalId == apiProgram.Id).SingleOrDefault();
+
+            if (dbProgram.Code != apiProgram.Code)
             {
-                if (dbProgram.Id == apiProgram.Id)
-                {
-                    if (dbProgram.Code != apiProgram.Code)
-                    {
-                        dbProgram.Code = apiProgram.Code;
-                    }
-                    if (dbProgram.Name != apiProgram.Name)
-                    {
-                        dbProgram.Name = apiProgram.Name;
-                    }
-                    if (dbProgram.LifespanFrom != apiProgram.LifespanFrom)
-                    {
-                        dbProgram.LifespanFrom = apiProgram.LifespanFrom;
-                    }
-                    if (dbProgram.LifespanUntil != apiProgram.LifespanUntil)
-                    {
-                        dbProgram.LifespanUntil = apiProgram.LifespanUntil;
-                    }
-                }
+                dbProgram.Code = apiProgram.Code;
             }
+            if (dbProgram.Name != apiProgram.Name)
+            {
+                dbProgram.Name = apiProgram.Name;
+            }
+            if (dbProgram.LifespanFrom != apiProgram.LifespanFrom)
+            {
+                dbProgram.LifespanFrom = apiProgram.LifespanFrom;
+            }
+            if (dbProgram.LifespanUntil != apiProgram.LifespanUntil)
+            {
+                dbProgram.LifespanUntil = apiProgram.LifespanUntil;
+            }
+
+           
         }
 
         // Relations
-        public static void AddCourseStudentRelation(GroupsApiResponse groupResponse, LearnpointDbContext DbContext)
+        public static void AddCourseStudentRelation(GroupsApiResponse groupResponseExtended, LearnpointDbContext DbContext)
         {
-            var courses = groupResponse.Data.Groups.Where(c => c.Category.Code == "CourseInstance");
+            var courses = groupResponseExtended.Data.Groups.Where(c => c.Category.Code == "CourseInstance");
 
             foreach (var course in courses)
             {
@@ -274,9 +271,9 @@ namespace LpApiIntegration.FetchFromV2.Db
                 }
             }
         }
-        public static void AddCourseStaffRelation(GroupsApiResponse groupResponse, LearnpointDbContext dbContext)
+        public static void AddCourseStaffRelation(GroupsApiResponse groupResponseExtended, LearnpointDbContext dbContext)
         {
-            var courses = groupResponse.Data.Groups.Where(c => c.Category.Code == "CourseInstance");
+            var courses = groupResponseExtended.Data.Groups.Where(c => c.Category.Code == "CourseInstance");
 
             foreach (var course in courses)
             {
@@ -300,54 +297,178 @@ namespace LpApiIntegration.FetchFromV2.Db
             }
         }
 
-        public static void AddStudentProgramRelation(GroupsApiResponse groupResponseExtended, StudentsApiResponse studentsResponse, LearnpointDbContext dbContext)
+        public static void AddStudentProgramRelation(StudentProgramRelationModel relation, LearnpointDbContext dbContext)
         {
-            bool isActiveStudent = true;
-            string name = "";
-            DateTime fromDate = DateTime.Now;
+             dbContext.StudentProgramRelations.Add(relation);
+        }
 
-            var programs = groupResponseExtended.Data.Groups.Where(c => c.Category.Code == "EducationInstance");
+        public static void AddStudentProgramRelation2(GroupsApiResponse groupResponseExtended, StudentsApiResponse studentResponse, LearnpointDbContext dbContext)
+        {
+                bool isActiveStudent = true;
+                string name = "";
+                DateTime fromDate = DateTime.Now;
 
-            foreach (var program in programs)
-            {
-                var programId = dbContext.Programs.Where(i => i.ExternalId == program.Id).SingleOrDefault().Id;
+                var programs = groupResponseExtended.Data.Groups.Where(c => c.Category.Code == "EducationInstance");
 
-                foreach (var apiStudent in program.StudentGroupMembers)
+                foreach (var program in programs)
                 {
-                    var student = studentsResponse.Data.Students.Where(i => i.Id == apiStudent.Student.Id).SingleOrDefault();
+                    var programId = dbContext.Programs.Where(i => i.ExternalId == program.Id).SingleOrDefault().Id;
 
-                    if (student != null)
+                    foreach (var apiStudent in program.StudentGroupMembers)
                     {
-                        foreach (var educationPlan in student.EducationPlans)
-                        {
-                            foreach (var part in educationPlan.Parts)
+                        var student = studentResponse.Data.Students.Where(i => i.Id == apiStudent.Student.Id).SingleOrDefault();
 
-                                if (part.Code == program.Code)
-                                {
-                                    isActiveStudent = educationPlan.State.IsActiveStudent;
-                                    name = educationPlan.State.Name;
-                                    fromDate = (DateTime)educationPlan.State.FromDate;
-                                }
+                        if (student != null)
+                        {
+                            foreach (var educationPlan in student.EducationPlans)
+                            {
+                                foreach (var part in educationPlan.Parts)
+
+                                    if (part.Code == program.Code)
+                                    {
+                                        isActiveStudent = educationPlan.State.IsActiveStudent;
+                                        name = educationPlan.State.Name;
+                                        fromDate = (DateTime)educationPlan.State.FromDate;
+                                    }
+                            }
                         }
-                    }
 
-                    foreach (var dbStudent in dbContext.Students)
-                    {
-                        if (apiStudent.Student.Id == dbStudent.ExternalId)
+                        foreach (var dbStudent in dbContext.Students)
                         {
-                            dbContext.StudentProgramRelations.Add(
-                             new StudentProgramRelationModel()
-                             {
-                                 StudentId = dbStudent.Id,
-                                 ProgramId = programId,
-                                 IsActiveStudent = isActiveStudent,
-                                 StateName = name,
-                                 FromDate = fromDate
-                             });                         
+                            if (apiStudent.Student.Id == dbStudent.ExternalId)
+                            {
+                                dbContext.StudentProgramRelations.Add(
+                                 new StudentProgramRelationModel()
+                                 {
+                                     StudentId = dbStudent.Id,
+                                     ProgramId = programId,
+                                     IsActiveStudent = isActiveStudent,
+                                     StateName = name,
+                                     FromDate = fromDate
+                                 });
+                            }
                         }
                     }
                 }
-            }
+            
         }
     }
 }
+    //var program = dbContext.Programs.Where(i => i.Id == apiStudent3.ProgramId).SingleOrDefault();
+    //var dbStudent = dbContext.Students.Where(i => i.ExternalId == apiStudent3.StudentId).SingleOrDefault().Id;
+    //var apiStudent = studentsResponse.Data.Students.Where(i => i.Id == dbStudent).SingleOrDefault();
+
+    //foreach (var educationPlan in apiStudent.EducationPlans)
+    //{
+    //    foreach (var part in educationPlan.Parts)
+    //    {
+    //        if (part.Code == program.Code /*&& educationPlan.State.IsActiveStudent == true*/)
+    //        {
+    //            dbContext.StudentProgramRelations.Add(
+    //            new StudentProgramRelationModel()
+    //            {
+    //                StudentId = dbStudent,
+    //                ProgramId = apiStudent3.ProgramId,
+    //                IsActiveStudent = educationPlan.State.IsActiveStudent,
+    //                StateName = educationPlan.State.Name,
+    //                FromDate = (DateTime)educationPlan.State.FromDate,
+    //            });
+    //        }
+    //    }
+    //}
+
+
+
+    //var programs = groupResponseExtended.Data.Groups.Where(c => c.Category.Code == "EducationInstance");
+
+    //foreach (var program in programs)
+    //{
+    //var dbStudent = dbContext.Students.Where(i => i.Id == apiStudent2.StudentId).SingleOrDefault();
+
+    //    if (dbStudent != null)
+    //    {
+    //var apiStudent = studentsResponse.Data.Students.Where(i => i.Id == dbStudent.ExternalId).SingleOrDefault();
+
+    //        foreach (var educationPlan in apiStudent.EducationPlans)
+    //        {
+    //            foreach (var part in educationPlan.Parts)
+
+    //if (part.Code == program.Code && educationPlan.State.IsActiveStudent == true)
+    //{
+    //    dbContext.StudentProgramRelations.Add(
+    //    new StudentProgramRelationModel()
+    //    {
+    //        StudentId = dbStudent.Id,
+    //        ProgramId = apiStudent2.ProgramId,
+    //        IsActiveStudent = educationPlan.State.IsActiveStudent,
+    //        StateName = educationPlan.State.Name,
+    //        FromDate = (DateTime)educationPlan.State.FromDate,
+    //    });
+    //}
+
+    //        }
+    //    }
+    //}
+
+
+
+
+    //foreach (var program in programs)
+    //{
+
+    //    var dbStudent = dbContext.Students.Where(i => i.Id == apiStudent2.Id).SingleOrDefault();
+
+    //    if (dbStudent != null)
+    //    {
+    //        var apiStudent = studentsResponse.Data.Students.Where(i => i.Id == dbStudent.ExternalId).SingleOrDefault();
+
+    //        foreach (var educationPlan in apiStudent.EducationPlans)
+    //        {
+    //            foreach (var part in educationPlan.Parts)
+
+    //                if (part.Code == program.Code)
+    //                {
+    //                    isActiveStudent = educationPlan.State.IsActiveStudent;
+    //                    name = educationPlan.State.Name;
+    //                    fromDate = (DateTime)educationPlan.State.FromDate;
+    //                }
+    //        }
+    //    }
+    //}
+
+
+
+
+    //foreach (var program in programs)
+    //{
+    //    var programId = dbContext.Programs.Where(i => i.ExternalId == program.Id).SingleOrDefault().Id;
+
+    //    foreach (var apiStudent in program.StudentGroupMembers)
+    //    {
+    //        var student = studentsResponse.Data.Students.Where(i => i.Id == apiStudent.Student.Id).SingleOrDefault();
+
+    //        if (student != null)
+    //        {
+
+    //        }
+
+    //        foreach (var dbStudent in dbContext.Students)
+    //        {
+    //            if (apiStudent.Student.Id == dbStudent.ExternalId)
+    //            {
+    //dbContext.StudentProgramRelations.Add(
+    // new StudentProgramRelationModel()
+    // {
+    //     StudentId = dbStudent.Id,
+    //     ProgramId = programId,
+    //     IsActiveStudent = isActiveStudent,
+    //     StateName = name,
+    //     FromDate = fromDate
+    // });
+    //            }
+    //        }
+    //    }
+    //
+
+    
+

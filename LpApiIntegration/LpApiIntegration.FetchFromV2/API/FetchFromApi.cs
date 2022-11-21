@@ -22,7 +22,7 @@ namespace LpApiIntegration.FetchFromV2.API
         public static string GetStudents(ApiSettings apiSettings)
         {
             return Client(apiSettings).GetStringAsync($"/bulkapi/v2/{apiSettings.TenantIdentifier}/students").Result;
-        }
+        }        
 
         //?includecurrentandfuturegroupsonly=false
 
