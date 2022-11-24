@@ -39,13 +39,13 @@ namespace LpApiIntegration.FetchFromV2.Db
             DbContext.SaveChanges();
         }
 
-        public static void CourseManager(GroupsApiResponse groupsResponseExtended)
+        public static void CourseManager(GroupsApiResponse groupsResponse)
         {
             //Search for courses with category-code "CourseInstance"
-            var apiCourses = groupsResponseExtended.Data.Groups.Where(c => c.Category.Code == "CourseInstance");
+            var apiCourses = groupsResponse.Data.Groups.Where(c => c.Category.Code == "CourseInstance");
 
             //Search coursedefinitions
-            var courseDefinitions = groupsResponseExtended.Data.ReferenceData.CourseDefinitions;
+            var courseDefinitions = groupsResponse.Data.ReferenceData.CourseDefinitions;
 
 
             foreach (var apiCourse in apiCourses)
@@ -80,9 +80,9 @@ namespace LpApiIntegration.FetchFromV2.Db
             DbContext.SaveChanges();
         }
 
-        public static void ProgramManager(GroupsApiResponse groupResponseExtended)
+        public static void ProgramManager(GroupsApiResponse groupResponse)
         {
-            var apiPrograms = groupResponseExtended.Data.Groups.Where(p => p.Category.Code == "EducationInstance");
+            var apiPrograms = groupResponse.Data.Groups.Where(p => p.Category.Code == "EducationInstance");
 
             foreach (var apiProgram in apiPrograms)
             {
@@ -99,18 +99,127 @@ namespace LpApiIntegration.FetchFromV2.Db
             DbContext.SaveChanges();
         }
 
-        public static void RelationshipManager(GroupsApiResponse groupResponseExtended, StudentsApiResponse studentResponse)
+        public static void RelationshipManager(GroupsApiResponse groupResponse, StudentsApiResponse studentResponse)
         {
-            //Add Student-Program-Relations
+            //Add and delete staff-course-relations
 
-            var apiPrograms = groupResponseExtended.Data.Groups.Where(p => p.Category.Code == "EducationInstance")
+            var courses = groupResponse.Data.Groups.Where(p => p.Category.Code == "CourseInstance")
+                .Where(p => p.StaffGroupMembers.Length > 0);
+
+            foreach (var course in courses)
+            {
+                var courseId = DbContext.Courses.Where(p => p.ExternalId == course.Id).FirstOrDefault().Id;
+
+                foreach (var staff in course.StaffGroupMembers)
+                {
+                    if (DbContext.StaffMembers.Any(s => s.ExternalId == staff.StaffMember.Id))
+                    {
+                        var staffIdDb = DbContext.StaffMembers.Where(s => s.ExternalId == staff.StaffMember.Id).SingleOrDefault().Id;
+
+                        if (!DbContext.StaffCourseRelations.Any(sp => Convert.ToInt32(sp.StaffMemberId.ToString() + sp.CourseId.ToString())
+                        == Convert.ToInt32(staffIdDb.ToString() + courseId.ToString())))
+                        {
+                            var relation = new StaffCourseRelationModel()
+                            {
+                                StaffMemberId = staffIdDb,
+                                CourseId = courseId
+                            };
+
+                            DbWorker.AddCourseStaffRelation(relation, DbContext);
+                        }
+                        else
+                        {
+
+                            foreach (var Course in courses)
+                            {
+                                if (Course.Id == 320)
+                                {
+                                    var staffGroupMembers = course.StaffGroupMembers.ToList();
+
+                                    staffGroupMembers.RemoveAt(0);
+
+                                    //Hämta eget kurs-id för aktuell kurs
+                                    var CourseId = DbContext.Courses.Where(c => c.ExternalId == Course.Id).SingleOrDefault().Id;
+
+                                    //Lägg alla id:n i StaffGroupMembers i en HashSet
+                                    HashSet<int> apiIds = new HashSet<int>(staffGroupMembers.Select(s => s.StaffMember.Id));
+
+                                    //Lägg alla externa id:n som har en relation med aktuell kurs i en Hashset
+                                    HashSet<int> dbIds = new HashSet<int>(DbContext.StaffCourseRelations.Where(c => c.CourseId == CourseId).Include(p => p.StaffMember)
+                                        .Select(s => s.StaffMember.ExternalId));
+
+                                    //Gör en lista som visar vilka id:n som finns i databasen men inte i StaffGroupMembers
+                                    var idDifferences = dbIds.Except(apiIds).ToList();
+
+                                    //Om listan inte är tom
+                                    if (idDifferences.Count != 0)
+                                    {
+                                        //Loopa igenom listan
+                                        foreach (var externalId in idDifferences)
+                                        {
+                                            //Ta fram eget StaffId för varje externalId i listan
+                                            var staffMemberId = DbContext.StaffMembers.Where(e => e.ExternalId == externalId).SingleOrDefault().Id;
+
+                                            //Ta fram relationen som StaffId:t har med kursen
+                                            var relation = DbContext.StaffCourseRelations.Where(s => s.StaffMemberId == staffMemberId)
+                                                .Where(c => c.CourseId == CourseId).SingleOrDefault();
+
+                                            //Ta bort relationen
+                                            DbContext.StaffCourseRelations.Remove(relation);
+
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    //Hämta eget kurs-id för aktuell kurs
+                                    var dbCourseId = DbContext.Courses.Where(c => c.ExternalId == Course.Id).SingleOrDefault().Id;
+
+                                    //Lägg alla id:n i StaffGroupMembers i en HashSet                                    
+                                    HashSet<int> apiIds = new HashSet<int>(Course.StaffGroupMembers.Select(s => s.StaffMember.Id));
+
+                                    //Lägg alla externa id:n som har en relation med aktuell kurs i en Hashset
+                                    HashSet<int> dbIds = new HashSet<int>(DbContext.StaffCourseRelations.Where(c => c.CourseId == dbCourseId).Include(p => p.StaffMember)
+                                        .Select(s => s.StaffMember.ExternalId));
+
+                                    //Gör en lista som visar vilka id:n som finns i databasen men inte i StaffGroupMembers
+                                    var idDifferences = dbIds.Except(apiIds).ToList();
+
+                                    //Om listan inte är tom
+                                    if (idDifferences.Count != 0)
+                                    {
+                                        //Loopa igenom listan
+                                        foreach (var externalId in idDifferences)
+                                        {
+                                            //Ta fram eget StaffId för varje externalId i listan
+                                            var staffMemberId = DbContext.StaffMembers.Where(e => e.ExternalId == externalId).SingleOrDefault().Id;
+
+                                            //Ta fram relationen som StaffId:t har med kursen
+                                            var relation = DbContext.StaffCourseRelations.Where(s => s.StaffMemberId == staffMemberId)
+                                                .Where(c => c.CourseId == dbCourseId).SingleOrDefault();
+
+                                            //Ta bort relationen
+                                            DbContext.StaffCourseRelations.Remove(relation);
+
+                                        }
+                                    }
+                                }
+
+                            }
+
+                        }
+                    }
+                }
+            }
+
+            DbContext.SaveChanges();
+
+
+            //Add and delete student-program-relations
+            var apiPrograms = groupResponse.Data.Groups.Where(p => p.Category.Code == "EducationInstance")
             .Where(p => p.StudentGroupMembers.Length > 0);
 
             var apiStudents = studentResponse.Data.Students;
-
-            bool isActiveStudent = true;
-            string stateName = "";
-            DateTime fromDate = DateTime.Now;
 
             foreach (var apiProgram in apiPrograms)
             {
@@ -135,24 +244,101 @@ namespace LpApiIntegration.FetchFromV2.Db
                                 {
                                     if (DbContext.Programs.Any(p => p.Code == part.Code) && educationPlan.State.Name != null && educationPlan.State.FromDate != null)
                                     {
-                                        program = DbContext.Programs.Where(p => p.Code == part.Code).SingleOrDefault();
-                                        isActiveStudent = educationPlan.State.IsActiveStudent;
-                                        stateName = educationPlan.State.Name;
-                                        fromDate = (DateTime)educationPlan.State.FromDate;
+                                        program = DbContext.Programs.Where(p => p.Code == part.Code).SingleOrDefault();                                        
 
                                         var relation = new StudentProgramRelationModel()
                                         {
                                             StudentId = studentIdDb,
                                             ProgramId = program.Id,
-                                            IsActiveStudent = isActiveStudent,
-                                            StateName = stateName,
-                                            FromDate = fromDate
+                                            IsActiveStudent = educationPlan.State.IsActiveStudent,
+                                            StateName = educationPlan.State.Name,
+                                            FromDate = (DateTime)educationPlan.State.FromDate
                                         };
 
                                         DbWorker.AddStudentProgramRelation(relation, DbContext);
                                     }
                                 }
                             }
+                        }
+                        else
+                        {
+                            foreach (var program in apiPrograms)
+                            {
+                                if (program.Id == 322)
+                                {
+                                    var studentGroupMembers = program.StudentGroupMembers.ToList();
+
+                                    studentGroupMembers.RemoveAt(0);
+
+                                    //Hämta eget program-id för aktuell kurs
+                                    var dbProgramId = DbContext.Programs.Where(c => c.ExternalId == program.Id).SingleOrDefault().Id;
+
+                                    //Lägg alla id:n i StudentGroupMembers i en HashSet                                    
+                                    HashSet<int> apiIds = new HashSet<int>(studentGroupMembers.Select(s => s.Student.Id));
+
+                                    //Lägg alla externa id:n som har en relation med aktuellt program i en Hashset
+                                    HashSet<int> dbIds = new HashSet<int>(DbContext.StudentProgramRelations.Where(c => c.ProgramId == dbProgramId).Include(p => p.Student)
+                                        .Select(s => s.Student.ExternalId));
+
+                                    //Gör en lista som visar vilka id:n som finns i databasen men inte i StudentGroupMembers
+                                    var idDifferences = dbIds.Except(apiIds).ToList();
+
+                                    //Om listan inte är tom
+                                    if (idDifferences.Count != 0)
+                                    {
+                                        //Loopa igenom listan
+                                        foreach (var externalId in idDifferences)
+                                        {
+                                            //Ta fram eget studentId för varje externalId i listan
+                                            var studentId = DbContext.Students.Where(e => e.ExternalId == externalId).SingleOrDefault().Id;
+
+                                            //Ta fram relationen som student-id:t har med programmet
+                                            var relation = DbContext.StudentProgramRelations.Where(s => s.StudentId == studentId)
+                                                .Where(c => c.ProgramId == dbProgramId).SingleOrDefault();
+
+                                            //Ta bort relationen
+                                            DbContext.StudentProgramRelations.Remove(relation);
+
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    //Hämta eget program-id för aktuellt program
+                                    var dbProgramId = DbContext.Programs.Where(c => c.ExternalId == program.Id).SingleOrDefault().Id;
+
+                                    //Lägg alla id:n i StudentGroupMembers i en HashSet                                    
+                                    HashSet<int> apiIds = new HashSet<int>(program.StudentGroupMembers.Select(s => s.Student.Id));
+
+                                    //Lägg alla externa id:n som har en relation med aktuellt program i en Hashset
+                                    HashSet<int> dbIds = new HashSet<int>(DbContext.StudentProgramRelations.Where(c => c.ProgramId == dbProgramId).Include(p => p.Student)
+                                        .Select(s => s.Student.ExternalId));
+
+                                    //Gör en lista som visar vilka id:n som finns i databasen men inte i StudentGroupMembers
+                                    var idDifferences = dbIds.Except(apiIds).ToList();
+
+                                    //Om listan inte är tom
+                                    if (idDifferences.Count != 0)
+                                    {
+                                        //Loopa igenom listan
+                                        foreach (var externalId in idDifferences)
+                                        {
+                                            //Ta fram eget studentId för varje externalId i listan
+                                            var studentId = DbContext.Students.Where(e => e.ExternalId == externalId).SingleOrDefault().Id;
+
+                                            //Ta fram relationen som student-id:t har med programmet
+                                            var relation = DbContext.StudentProgramRelations.Where(s => s.StudentId == studentId)
+                                                .Where(c => c.ProgramId == dbProgramId).SingleOrDefault();
+
+                                            //Ta bort relationen
+                                            DbContext.StudentProgramRelations.Remove(relation);
+
+                                        }
+                                    }
+                                }
+
+                            }
+
                         }
                     }
                 }
