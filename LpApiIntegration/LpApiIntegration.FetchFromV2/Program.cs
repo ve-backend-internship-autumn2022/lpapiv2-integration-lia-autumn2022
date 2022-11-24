@@ -48,7 +48,12 @@ var staffResponse = JsonSerializer.Deserialize<StaffMembersApiResponse>(jsonStaf
 DbManager.StudentManager(studentResponse);
 DbManager.CourseManager(groupResponse);
 DbManager.StaffManager(staffResponse);
+<<<<<<< HEAD
 DbManager.ProgramManager(groupResponseExtended);
 DbManager.RelationshipManager(groupResponseExtended, groupResponse, studentResponse);
+=======
+DbManager.ProgramManager(groupResponse);
+DbManager.RelationshipManager(groupResponse, studentResponse);
+>>>>>>> 2789acbf07b039538f7cf6066fdb778601d7d099
 
 await host.RunAsync();
