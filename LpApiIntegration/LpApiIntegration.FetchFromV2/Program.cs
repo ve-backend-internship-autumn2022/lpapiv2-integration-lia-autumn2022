@@ -1,16 +1,13 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using LpApiIntegration.FetchFromV2;
+using LpApiIntegration.FetchFromV2.API;
+using LpApiIntegration.FetchFromV2.Db;
+using LpApiIntegration.FetchFromV2.GroupModel;
+using LpApiIntegration.FetchFromV2.StaffMemberModels;
+using LpApiIntegration.FetchFromV2.StudentModels;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using LpApiIntegration.FetchFromV2;
-using LpApiIntegration.FetchFromV2.StudentModels;
-using LpApiIntegration.FetchFromV2.GroupModel;
-using System.Text;
+using Microsoft.Extensions.Hosting;
 using System.Text.Json;
-using LpApiIntegration.FetchFromV2.StaffMemberModels;
-using LpApiIntegration.FetchFromV2.API;
-using Microsoft.EntityFrameworkCore;
-using LpApiIntegration.FetchFromV2.Db;
-using LpApiIntegration.FetchFromV2.Db.Models;
 
 using IHost host = Host.CreateDefaultBuilder(args).Build();
 IConfiguration config = host.Services.GetRequiredService<IConfiguration>();

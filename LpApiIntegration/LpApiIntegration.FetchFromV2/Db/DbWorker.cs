@@ -1,15 +1,8 @@
-﻿using LpApiIntegration.FetchFromV2.StudentModels;
+﻿using LpApiIntegration.FetchFromV2.CourseModels;
 using LpApiIntegration.FetchFromV2.Db.Models;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using LpApiIntegration.FetchFromV2.GroupModel;
-using LpApiIntegration.FetchFromV2.CourseModels;
-using System.Xml.Linq;
 using LpApiIntegration.FetchFromV2.StaffMemberModels;
+using LpApiIntegration.FetchFromV2.StudentModels;
 
 namespace LpApiIntegration.FetchFromV2.Db
 {
@@ -35,49 +28,44 @@ namespace LpApiIntegration.FetchFromV2.Db
 
         public static void UpdateStudent(FullStudent apiStudent, LearnpointDbContext dbContext)
         {
-            var dbStudents = dbContext.Students;
-            foreach (var dbStudent in dbStudents)
+            var dbStudent = dbContext.Students.Where(s => s.ExternalId == apiStudent.Id).SingleOrDefault();
+
+            if (dbStudent.NationalRegistrationNumber != apiStudent.NationalRegistrationNumber)
             {
-                if (dbStudent.ExternalId == apiStudent.Id)
-                {
-                    if (dbStudent.NationalRegistrationNumber != apiStudent.NationalRegistrationNumber)
-                    {
-                        dbStudent.NationalRegistrationNumber = apiStudent.NationalRegistrationNumber;
-                    }
-                    if (dbStudent.Username != apiStudent.Username)
-                    {
-                        dbStudent.Username = apiStudent.Username;
-                    }
-                    if (dbStudent.Email != apiStudent.Email)
-                    {
-                        dbStudent.Email = apiStudent.Email;
-                    }
-                    if (dbStudent.Email2 != apiStudent.Email2)
-                    {
-                        dbStudent.Email2 = apiStudent.Email2;
-                    }
-                    if (dbStudent.MobilePhone != apiStudent.MobilePhone)
-                    {
-                        dbStudent.MobilePhone = apiStudent.MobilePhone;
-                    }
-                    if (dbStudent.HomePhone != apiStudent.HomePhone)
-                    {
-                        dbStudent.HomePhone = apiStudent.HomePhone;
-                    }
-                    if (dbStudent.FullName != apiStudent.FirstName + " " + apiStudent.LastName)
-                    {
-                        dbStudent.FullName = apiStudent.FirstName + " " + apiStudent.LastName;
-                    }
-                    if (dbStudent.IsActive == false)
-                    {
-                        dbStudent.IsActive = true;
-                    }
-                }
+                dbStudent.NationalRegistrationNumber = apiStudent.NationalRegistrationNumber;
+            }
+            if (dbStudent.Username != apiStudent.Username)
+            {
+                dbStudent.Username = apiStudent.Username;
+            }
+            if (dbStudent.Email != apiStudent.Email)
+            {
+                dbStudent.Email = apiStudent.Email;
+            }
+            if (dbStudent.Email2 != apiStudent.Email2)
+            {
+                dbStudent.Email2 = apiStudent.Email2;
+            }
+            if (dbStudent.MobilePhone != apiStudent.MobilePhone)
+            {
+                dbStudent.MobilePhone = apiStudent.MobilePhone;
+            }
+            if (dbStudent.HomePhone != apiStudent.HomePhone)
+            {
+                dbStudent.HomePhone = apiStudent.HomePhone;
+            }
+            if (dbStudent.FullName != apiStudent.FirstName + " " + apiStudent.LastName)
+            {
+                dbStudent.FullName = apiStudent.FirstName + " " + apiStudent.LastName;
+            }
+            if (dbStudent.IsActive == false)
+            {
+                dbStudent.IsActive = true;
             }
         }
         public static void CheckForInactiveStudents(FullStudent[] students, LearnpointDbContext dbContext)
         {
-            HashSet<int> diffids = new HashSet<int>(students.Select(s => s.Id));
+            HashSet<int> diffids = new(students.Select(s => s.Id));
             var results = dbContext.Students.Where(s => !diffids.Contains(s.ExternalId)).ToList();
 
             foreach (var student in results)
@@ -104,33 +92,27 @@ namespace LpApiIntegration.FetchFromV2.Db
 
         public static void UpdateCourse(FullGroup apiCourse, IEnumerable<CourseDefinition> courseDefinitions, LearnpointDbContext dbContext)
         {
-            var courseDB = dbContext.Courses;
+            var dbCourse = dbContext.Courses.Where(c => c.ExternalId == apiCourse.Id).SingleOrDefault();
 
-            foreach (var course in courseDB)
+            if (dbCourse.Name != apiCourse.Name)
             {
-                if (course.ExternalId == apiCourse.Id)
-                {
-                    if (course.Name != apiCourse.Name)
-                    {
-                        course.Name = apiCourse.Name;
-                    }
-                    if (course.Code != apiCourse.Code)
-                    {
-                        course.Code = apiCourse.Code;
-                    }
-                    if (course.LifespanFrom != apiCourse.LifespanFrom)
-                    {
-                        course.LifespanFrom = apiCourse.LifespanFrom;
-                    }
-                    if (course.LifespanUntil != apiCourse.LifespanUntil)
-                    {
-                        course.LifespanUntil = apiCourse.LifespanUntil;
-                    }
-                    if (course.Points != courseDefinitions.Where(c => c.Id == apiCourse.CourseDefinition.Id).ToList().SingleOrDefault()?.Points)
-                    {
-                        course.Points = courseDefinitions.Where(c => c.Id == apiCourse.CourseDefinition.Id).ToList().SingleOrDefault()?.Points;
-                    }
-                }
+                dbCourse.Name = apiCourse.Name;
+            }
+            if (dbCourse.Code != apiCourse.Code)
+            {
+                dbCourse.Code = apiCourse.Code;
+            }
+            if (dbCourse.LifespanFrom != apiCourse.LifespanFrom)
+            {
+                dbCourse.LifespanFrom = apiCourse.LifespanFrom;
+            }
+            if (dbCourse.LifespanUntil != apiCourse.LifespanUntil)
+            {
+                dbCourse.LifespanUntil = apiCourse.LifespanUntil;
+            }
+            if (dbCourse.Points != courseDefinitions.Where(c => c.Id == apiCourse.CourseDefinition.Id).ToList().SingleOrDefault()?.Points)
+            {
+                dbCourse.Points = courseDefinitions.Where(c => c.Id == apiCourse.CourseDefinition.Id).ToList().SingleOrDefault()?.Points;
             }
         }
 
@@ -158,52 +140,47 @@ namespace LpApiIntegration.FetchFromV2.Db
 
         public static void UpdateStaffMember(FullStaffMember apiStaffMember, LearnpointDbContext dbContext)
         {
-            var dbStaffMembers = dbContext.StaffMembers;
-            foreach (var dbStaffMember in dbStaffMembers)
+            var dbStaff = dbContext.StaffMembers.Where(s => s.ExternalId == apiStaffMember.Id).SingleOrDefault();
+
+            if (dbStaff.NationalRegistrationNumber != apiStaffMember.NationalRegistrationNumber)
             {
-                if (dbStaffMember.ExternalId == apiStaffMember.Id)
-                {
-                    if (dbStaffMember.NationalRegistrationNumber != apiStaffMember.NationalRegistrationNumber)
-                    {
-                        dbStaffMember.NationalRegistrationNumber = apiStaffMember.NationalRegistrationNumber;
-                    }
-                    if (dbStaffMember.Signature != apiStaffMember.Signature)
-                    {
-                        dbStaffMember.Signature = apiStaffMember.Signature;
-                    }
-                    if (dbStaffMember.FullName != apiStaffMember.FirstName + " " + apiStaffMember.LastName)
-                    {
-                        dbStaffMember.FullName = apiStaffMember.FirstName + " " + apiStaffMember.LastName;
-                    }
-                    if (dbStaffMember.Username != apiStaffMember.Username)
-                    {
-                        dbStaffMember.Username = apiStaffMember.Username;
-                    }
-                    if (dbStaffMember.Email != apiStaffMember.Email)
-                    {
-                        dbStaffMember.Email = apiStaffMember.Email;
-                    }
-                    if (dbStaffMember.Email2 != apiStaffMember.Email2)
-                    {
-                        dbStaffMember.Email2 = apiStaffMember.Email2;
-                    }
-                    if (dbStaffMember.MobilePhone != apiStaffMember.MobilePhone)
-                    {
-                        dbStaffMember.MobilePhone = apiStaffMember.MobilePhone;
-                    }
-                    if (dbStaffMember.MayExposeMobilePhoneToStudents != apiStaffMember.MayExposeMobilePhoneToStudents)
-                    {
-                        dbStaffMember.MayExposeMobilePhoneToStudents = apiStaffMember.MayExposeMobilePhoneToStudents;
-                    }
-                    if (dbStaffMember.Phone2 != apiStaffMember.Phone2)
-                    {
-                        dbStaffMember.Phone2 = apiStaffMember.Phone2;
-                    }
-                    if (dbStaffMember.MayExposePhone2ToStudents != apiStaffMember.MayExposePhone2ToStudents)
-                    {
-                        dbStaffMember.MayExposePhone2ToStudents = apiStaffMember.MayExposePhone2ToStudents;
-                    }
-                }
+                dbStaff.NationalRegistrationNumber = apiStaffMember.NationalRegistrationNumber;
+            }
+            if (dbStaff.Signature != apiStaffMember.Signature)
+            {
+                dbStaff.Signature = apiStaffMember.Signature;
+            }
+            if (dbStaff.FullName != apiStaffMember.FirstName + " " + apiStaffMember.LastName)
+            {
+                dbStaff.FullName = apiStaffMember.FirstName + " " + apiStaffMember.LastName;
+            }
+            if (dbStaff.Username != apiStaffMember.Username)
+            {
+                dbStaff.Username = apiStaffMember.Username;
+            }
+            if (dbStaff.Email != apiStaffMember.Email)
+            {
+                dbStaff.Email = apiStaffMember.Email;
+            }
+            if (dbStaff.Email2 != apiStaffMember.Email2)
+            {
+                dbStaff.Email2 = apiStaffMember.Email2;
+            }
+            if (dbStaff.MobilePhone != apiStaffMember.MobilePhone)
+            {
+                dbStaff.MobilePhone = apiStaffMember.MobilePhone;
+            }
+            if (dbStaff.MayExposeMobilePhoneToStudents != apiStaffMember.MayExposeMobilePhoneToStudents)
+            {
+                dbStaff.MayExposeMobilePhoneToStudents = apiStaffMember.MayExposeMobilePhoneToStudents;
+            }
+            if (dbStaff.Phone2 != apiStaffMember.Phone2)
+            {
+                dbStaff.Phone2 = apiStaffMember.Phone2;
+            }
+            if (dbStaff.MayExposePhone2ToStudents != apiStaffMember.MayExposePhone2ToStudents)
+            {
+                dbStaff.MayExposePhone2ToStudents = apiStaffMember.MayExposePhone2ToStudents;
             }
         }
 
@@ -223,7 +200,7 @@ namespace LpApiIntegration.FetchFromV2.Db
         }
         public static void UpdateProgram(FullGroup apiProgram, LearnpointDbContext dbContext)
         {
-            var dbProgram = dbContext.Programs.Where(e => e.ExternalId == apiProgram.Id).SingleOrDefault();
+            var dbProgram = dbContext.Programs.Where(p => p.ExternalId == apiProgram.Id).SingleOrDefault();
 
             if (dbProgram.Code != apiProgram.Code)
             {
@@ -241,8 +218,6 @@ namespace LpApiIntegration.FetchFromV2.Db
             {
                 dbProgram.LifespanUntil = apiProgram.LifespanUntil;
             }
-
-           
         }
 
         // Relations
@@ -254,10 +229,22 @@ namespace LpApiIntegration.FetchFromV2.Db
         {
             dbContext.StaffCourseRelations.Add(relation);
         }
-
         public static void AddStudentProgramRelation(StudentProgramRelationModel relation, LearnpointDbContext dbContext)
         {
-             dbContext.StudentProgramRelations.Add(relation);
+            dbContext.StudentProgramRelations.Add(relation);
+        }
+
+        public static void RemoveCourseStudentRelation(StudentCourseRelationModel relation, LearnpointDbContext dbContext)
+        {
+            dbContext.StudentCourseRelations.Remove(relation);
+        }
+        public static void RemoveCourseStaffRelation(StaffCourseRelationModel relation, LearnpointDbContext dbContext)
+        {
+            dbContext.StaffCourseRelations.Remove(relation);
+        }
+        public static void RemoveStudentProgramRelation(StudentProgramRelationModel relation, LearnpointDbContext dbContext)
+        {
+            dbContext.StudentProgramRelations.Remove(relation);
         }
     }
 }

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace LpApiIntegration.FetchFromV2.API
+﻿namespace LpApiIntegration.FetchFromV2.API
 {
     internal class FetchFromApi
     {
@@ -27,8 +21,6 @@ namespace LpApiIntegration.FetchFromV2.API
         {
             return Client(apiSettings).GetStringAsync($"/bulkapi/v2/{apiSettings.TenantIdentifier}/students?hasactiveeducation=false").Result;
         }
-
-        //?includecurrentandfuturegroupsonly=false
 
         public static string GetGroups(ApiSettings apiSettings)
         {
