@@ -246,30 +246,9 @@ namespace LpApiIntegration.FetchFromV2.Db
         }
 
         // Relations
-        public static void AddCourseStudentRelation(GroupsApiResponse groupResponseExtended, LearnpointDbContext DbContext)
+        public static void AddCourseStudentRelation(StudentCourseRelationModel relation, LearnpointDbContext dbContext)
         {
-            var courses = groupResponseExtended.Data.Groups.Where(c => c.Category.Code == "CourseInstance");
-
-            foreach (var course in courses)
-            {
-                var courseId = DbContext.Courses.Where(i => i.ExternalId == course.Id).SingleOrDefault().Id;
-
-                foreach (var apiStudent in course.StudentGroupMembers)
-                {
-                    foreach (var dbStudent in DbContext.Students)
-                    {
-                        if (apiStudent.Student.Id == dbStudent.ExternalId)
-                        {
-                            DbContext.StudentCourseRelations.Add(
-                                     new StudentCourseRelationModel()
-                                     {
-                                         StudentId = dbStudent.Id,
-                                         CourseId = courseId
-                                     });
-                        }
-                    }
-                }
-            }
+            dbContext.StudentCourseRelations.Add(relation);
         }
         public static void AddCourseStaffRelation(StaffCourseRelationModel relation, LearnpointDbContext dbContext)
         {
