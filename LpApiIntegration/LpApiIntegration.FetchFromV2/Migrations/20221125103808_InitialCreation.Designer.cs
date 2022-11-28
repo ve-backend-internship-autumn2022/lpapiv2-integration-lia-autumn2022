@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LpApiIntegration.FetchFromV2.Migrations
 {
     [DbContext(typeof(LearnpointDbContext))]
-    [Migration("20221108130832_InitialCreation")]
+    [Migration("20221125103808_InitialCreation")]
     partial class InitialCreation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -55,6 +55,34 @@ namespace LpApiIntegration.FetchFromV2.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Courses");
+                });
+
+            modelBuilder.Entity("LpApiIntegration.FetchFromV2.Db.Models.ProgramModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Code")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ExternalId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("LifespanFrom")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("LifespanUntil")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Programs");
                 });
 
             modelBuilder.Entity("LpApiIntegration.FetchFromV2.Db.Models.StaffCourseRelationModel", b =>
@@ -189,6 +217,38 @@ namespace LpApiIntegration.FetchFromV2.Migrations
                     b.ToTable("Students");
                 });
 
+            modelBuilder.Entity("LpApiIntegration.FetchFromV2.Db.Models.StudentProgramRelationModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime?>("FromDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActiveStudent")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("ProgramId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("StateName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StudentId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProgramId");
+
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("StudentProgramRelations");
+                });
+
             modelBuilder.Entity("LpApiIntegration.FetchFromV2.Db.Models.StaffCourseRelationModel", b =>
                 {
                     b.HasOne("LpApiIntegration.FetchFromV2.Db.Models.CourseModel", "Course")
@@ -223,6 +283,25 @@ namespace LpApiIntegration.FetchFromV2.Migrations
                         .IsRequired();
 
                     b.Navigation("Course");
+
+                    b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("LpApiIntegration.FetchFromV2.Db.Models.StudentProgramRelationModel", b =>
+                {
+                    b.HasOne("LpApiIntegration.FetchFromV2.Db.Models.ProgramModel", "Program")
+                        .WithMany()
+                        .HasForeignKey("ProgramId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LpApiIntegration.FetchFromV2.Db.Models.StudentModel", "Student")
+                        .WithMany()
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Program");
 
                     b.Navigation("Student");
                 });

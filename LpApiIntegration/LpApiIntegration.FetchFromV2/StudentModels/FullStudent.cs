@@ -21,6 +21,6 @@ namespace LpApiIntegration.FetchFromV2.StudentModels
         public StudentHomeAddress? HomeAddress { get; set; }
         public string? HomePhone { get; set; }
         public StudentGroup[] Groups { get; set; }
-        public StudentEducationPlan[] EducationPlan { get; set; }
+        public StudentEducationPlan[] EducationPlans { get; set; }
     }
 }

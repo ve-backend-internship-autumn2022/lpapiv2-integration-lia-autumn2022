@@ -28,6 +28,23 @@ namespace LpApiIntegration.FetchFromV2.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Programs",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ExternalId = table.Column<int>(type: "int", nullable: false),
+                    Code = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LifespanFrom = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LifespanUntil = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Programs", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "StaffMembers",
                 columns: table => new
                 {
@@ -123,6 +140,35 @@ namespace LpApiIntegration.FetchFromV2.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "StudentProgramRelations",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    StudentId = table.Column<int>(type: "int", nullable: false),
+                    ProgramId = table.Column<int>(type: "int", nullable: false),
+                    IsActiveStudent = table.Column<bool>(type: "bit", nullable: false),
+                    StateName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FromDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StudentProgramRelations", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_StudentProgramRelations_Programs_ProgramId",
+                        column: x => x.ProgramId,
+                        principalTable: "Programs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_StudentProgramRelations_Students_StudentId",
+                        column: x => x.StudentId,
+                        principalTable: "Students",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_StaffCourseRelations_CourseId",
                 table: "StaffCourseRelations",
@@ -142,6 +188,16 @@ namespace LpApiIntegration.FetchFromV2.Migrations
                 name: "IX_StudentCourseRelations_StudentId",
                 table: "StudentCourseRelations",
                 column: "StudentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StudentProgramRelations_ProgramId",
+                table: "StudentProgramRelations",
+                column: "ProgramId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StudentProgramRelations_StudentId",
+                table: "StudentProgramRelations",
+                column: "StudentId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -153,10 +209,16 @@ namespace LpApiIntegration.FetchFromV2.Migrations
                 name: "StudentCourseRelations");
 
             migrationBuilder.DropTable(
+                name: "StudentProgramRelations");
+
+            migrationBuilder.DropTable(
                 name: "StaffMembers");
 
             migrationBuilder.DropTable(
                 name: "Courses");
+
+            migrationBuilder.DropTable(
+                name: "Programs");
 
             migrationBuilder.DropTable(
                 name: "Students");
