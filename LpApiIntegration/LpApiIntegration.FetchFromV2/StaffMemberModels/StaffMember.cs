@@ -9,6 +9,7 @@ namespace LpApiIntegration.FetchFromV2.StaffMemberModels
     internal class StaffMember
     {
         public int Id { get; set; }
+        public int UserId { get; set; }
         public string? NationalRegistrationNumber { get; set; }
         public string? Signature { get; set; }
         public string? FirstName { get; set; }

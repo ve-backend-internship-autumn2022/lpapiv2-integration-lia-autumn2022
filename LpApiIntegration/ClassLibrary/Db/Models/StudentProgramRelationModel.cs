@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using LpApiIntegration.FetchFromV2.Db.Models;
 using System.ComponentModel.DataAnnotations;      
 
 
-namespace LpApiIntegration.FetchFromV2.Db.Models
+namespace LpApiIntegration.Db
 {
-    internal class StudentProgramRelationModel
+    public class StudentProgramRelationModel
     {
         [Key] public int Id { get; set; }
         public int StudentId { get; set; }

@@ -1,4 +1,5 @@
-﻿using LpApiIntegration.FetchFromV2.Db.Models;
+﻿
+using LpApiIntegration.Db;
 using LpApiIntegration.FetchFromV2.GroupModel;
 using LpApiIntegration.FetchFromV2.StaffMemberModels;
 using LpApiIntegration.FetchFromV2.StudentModels;

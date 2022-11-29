@@ -1,5 +1,5 @@
-﻿using LpApiIntegration.FetchFromV2.CourseModels;
-using LpApiIntegration.FetchFromV2.Db.Models;
+﻿using LpApiIntegration.Db;
+using LpApiIntegration.FetchFromV2.CourseModels;
 using LpApiIntegration.FetchFromV2.GroupModel;
 using LpApiIntegration.FetchFromV2.StaffMemberModels;
 using LpApiIntegration.FetchFromV2.StudentModels;
@@ -15,6 +15,7 @@ namespace LpApiIntegration.FetchFromV2.Db
             new StudentModel()
             {
                 ExternalId = apiStudent.Id,
+                ExternalUserId = apiStudent.UserId,
                 NationalRegistrationNumber = apiStudent.NationalRegistrationNumber,
                 Username = apiStudent.Username,
                 Email = apiStudent.Email,
@@ -124,6 +125,7 @@ namespace LpApiIntegration.FetchFromV2.Db
             new StaffModel()
             {
                 ExternalId = apiStaffMember.Id,
+                ExternalUserId = apiStaffMember.UserId,                
                 NationalRegistrationNumber = apiStaffMember.NationalRegistrationNumber,
                 Signature = apiStaffMember.Signature,
                 FullName = apiStaffMember.FirstName + " " + apiStaffMember.LastName,

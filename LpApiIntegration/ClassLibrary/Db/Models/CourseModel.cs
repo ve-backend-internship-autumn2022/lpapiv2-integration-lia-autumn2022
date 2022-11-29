@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LpApiIntegration.FetchFromV2.Db.Models
+namespace LpApiIntegration.Db
 {
-    internal class CourseModel
+    public class CourseModel
     {
         [Key] public int Id { get; set; }
         public int ExternalId { get; set; }

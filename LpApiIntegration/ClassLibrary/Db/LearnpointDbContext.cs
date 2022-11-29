@@ -1,10 +1,11 @@
-﻿using LpApiIntegration.FetchFromV2.Db.Models;
+﻿using LpApiIntegration.Db;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
+
 namespace LpApiIntegration.FetchFromV2.Db
 {
-    internal class LearnpointDbContext : DbContext
+    public class LearnpointDbContext : DbContext
     {
         public DbSet<StudentModel> Students { get; set; }
         public DbSet<StudentCourseRelationModel> StudentCourseRelations { get; set; }
