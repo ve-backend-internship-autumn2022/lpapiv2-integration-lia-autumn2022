@@ -1,6 +1,6 @@
 ﻿using LearnpointAPIv3;
 using LearnpointAPIv3.API;
-using LpApiIntegration.FetchFromV3;
+using LpApiIntegration.FetchFromV3.API.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -14,33 +14,34 @@ ApiSettings apiSettings = config.GetRequiredSection("ApiSettings").Get<ApiSettin
 // Application code should start here.
 
 // Fetching data from API
-string jsonCoursedefinitions = FetchFromApi.GetCoursedefinitions(apiSettings);
-//string jsonStudents = FetchFromApi.GetStudents(apiSettings);
-//string jsonStudentsExtended = FetchFromApi.GetStudentsExtended(apiSettings);
-//string jsonGroups = FetchFromApi.GetGroups(apiSettings);
-//string jsonGroupsExtended = FetchFromApi.GetGroupsExtended(apiSettings);
-//string jsonStaffMembers = FetchFromApi.GetStaffMembers(apiSettings);
+string jsonCourseDefinitions = FetchFromApi.GetCourseDefinitions(apiSettings);
+string jsonCourseEnrollments = FetchFromApi.GetCourseEnrollments(apiSettings);
+string jsonCourseGrades = FetchFromApi.GetCourseGrades(apiSettings);
+string jsonCourseInstances = FetchFromApi.GetCourseInstances(apiSettings);
+
+string jsonGroupMemberships = FetchFromApi.GetGroupMemberships(apiSettings);
+string jsonGroups = FetchFromApi.GetGroups(apiSettings);
 
 //Deserializing json to response object
-var coursedefinitionResponse = JsonSerializer.Deserialize<CourseDefinitionListApiResponse>(jsonCoursedefinitions);
-//var studentResponse = JsonSerializer.Deserialize<StudentsApiResponse>(jsonStudents);
-//var studentResponseExtended = JsonSerializer.Deserialize<StudentsApiResponse>(jsonStudentsExtended);
+var courseDefinitionResponse = JsonSerializer.Deserialize<CourseDefinitionListApiResponse>(jsonCourseDefinitions);
+var courseEnrollmentResponse = JsonSerializer.Deserialize<CourseEnrollmentListApiResponse>(jsonCourseEnrollments);
+var courseGradeResponse = JsonSerializer.Deserialize<CourseGradeListApiResponse>(jsonCourseGrades);
+var courseInstanceResponse = JsonSerializer.Deserialize<CourseInstanceListApiResponse>(jsonCourseInstances);
 
-Console.WriteLine(coursedefinitionResponse.Data[2].Code);
+var groupMembershipResponse = JsonSerializer.Deserialize<GroupMembershipListApiResponse>(jsonGroupMemberships);
+var groupResponse = JsonSerializer.Deserialize<GroupListApiResponse>(jsonGroups);
 
-//var groupResponse = JsonSerializer.Deserialize<GroupsApiResponse>(jsonGroups);
-//var groupResponseExtended = JsonSerializer.Deserialize<GroupsApiResponse>(jsonGroupsExtended);
 
-//var staffResponse = JsonSerializer.Deserialize<StaffMembersApiResponse>(jsonStaffMembers);
+//Console.WriteLine(groupResponse.Data[0].Name);
 
 //Saving json to file
-File.WriteAllText("Coursedefinitions.json", jsonCoursedefinitions);
-//File.WriteAllText("StudentsExtended.json", jsonStudentsExtended);
+File.WriteAllText("Coursedefinitions.json", jsonCourseDefinitions);
+File.WriteAllText("CourseEnrollments.json", jsonCourseEnrollments);
+File.WriteAllText("CourseGrades.json", jsonCourseGrades);
+File.WriteAllText("CourseInstances.json", jsonCourseInstances);
 
-//File.WriteAllText("Groups.json", jsonGroups);
-//File.WriteAllText("GroupsExtended.json", jsonGroupsExtended);
-
-//File.WriteAllText("StaffMembers.json", jsonStaffMembers);
+File.WriteAllText("GroupMemberships.json", jsonGroupMemberships);
+File.WriteAllText("Groups.json", jsonGroups);
 
 // Database manager
 //DbManager.StudentManager(studentResponse);

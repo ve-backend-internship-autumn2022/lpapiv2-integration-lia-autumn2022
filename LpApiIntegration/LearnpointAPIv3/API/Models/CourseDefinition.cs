@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LpApiIntegration.FetchFromV2
+namespace LpApiIntegration.FetchFromV3.API.Models
 {
     internal class CourseDefinition
     {

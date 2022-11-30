@@ -20,33 +20,35 @@ namespace LearnpointAPIv3.API
             return client;
         }
 
-        public static string GetCoursedefinitions(ApiSettings apiSettings)
+        public static string GetCourseDefinitions(ApiSettings apiSettings)
         {
             return Client(apiSettings).GetStringAsync($"/v3/{apiSettings.TenantIdentifier}/coursedefinitions").Result;
         }
 
-        //public static string GetStudents(ApiSettings apiSettings)
-        //{
-        //    return Client(apiSettings).GetStringAsync($"/bulkapi/v2/{apiSettings.TenantIdentifier}/students").Result;
-        //}
-        //public static string GetStudentsExtended(ApiSettings apiSettings)
-        //{
-        //    return Client(apiSettings).GetStringAsync($"/bulkapi/v2/{apiSettings.TenantIdentifier}/students?hasactiveeducation=false").Result;
-        //}
+        public static string GetCourseEnrollments(ApiSettings apiSettings)
+        {
+            return Client(apiSettings).GetStringAsync($"/v3/{apiSettings.TenantIdentifier}/courseenrollments").Result;
+        }
 
-        //public static string GetGroups(ApiSettings apiSettings)
-        //{
-        //    return Client(apiSettings).GetStringAsync($"/bulkapi/v2/{apiSettings.TenantIdentifier}/groups").Result;
-        //}
-        //public static string GetGroupsExtended(ApiSettings apiSettings)
-        //{
-        //    return Client(apiSettings).GetStringAsync($"/bulkapi/v2/{apiSettings.TenantIdentifier}/groups?includecurrentandfuturegroupsonly=false").Result;
-        //}
+        public static string GetCourseGrades(ApiSettings apiSettings)
+        {
+            return Client(apiSettings).GetStringAsync($"/v3/{apiSettings.TenantIdentifier}/coursegrades").Result;
+        }
 
-        //public static string GetStaffMembers(ApiSettings apiSettings)
-        //{
-        //    return Client(apiSettings).GetStringAsync($"/bulkapi/v2/{apiSettings.TenantIdentifier}/staffmembers").Result;
-        //}
+        public static string GetCourseInstances(ApiSettings apiSettings)
+        {
+            return Client(apiSettings).GetStringAsync($"/v3/{apiSettings.TenantIdentifier}/courseinstances?includePrevious=false&includeActive=true&includeFuture=true").Result;
+        }
+
+        public static string GetGroupMemberships(ApiSettings apiSettings)
+        {
+            return Client(apiSettings).GetStringAsync($"/v3/{apiSettings.TenantIdentifier}/groupmemberships").Result;
+        }
+
+        public static string GetGroups(ApiSettings apiSettings)
+        {
+            return Client(apiSettings).GetStringAsync($"/v3/{apiSettings.TenantIdentifier}/groups").Result;
+        }
 
     }
 }

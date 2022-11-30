@@ -18,18 +18,14 @@ ApiSettings apiSettings = config.GetRequiredSection("ApiSettings").Get<ApiSettin
 
 // Fetching data from API
 string jsonStudents = FetchFromApi.GetStudents(apiSettings);
-string jsonStudentsExtended = FetchFromApi.GetStudentsExtended(apiSettings);
 string jsonGroups = FetchFromApi.GetGroups(apiSettings);
 string jsonGroupsExtended = FetchFromApi.GetGroupsExtended(apiSettings);
 string jsonStaffMembers = FetchFromApi.GetStaffMembers(apiSettings);
 
 //Deserializing json to response object
 var studentResponse = JsonSerializer.Deserialize<StudentsApiResponse>(jsonStudents);
-var studentResponseExtended = JsonSerializer.Deserialize<StudentsApiResponse>(jsonStudentsExtended);
-
 var groupResponse = JsonSerializer.Deserialize<GroupsApiResponse>(jsonGroups);
 var groupResponseExtended = JsonSerializer.Deserialize<GroupsApiResponse>(jsonGroupsExtended);
-
 var staffResponse = JsonSerializer.Deserialize<StaffMembersApiResponse>(jsonStaffMembers);
 
 //Saving json to file
