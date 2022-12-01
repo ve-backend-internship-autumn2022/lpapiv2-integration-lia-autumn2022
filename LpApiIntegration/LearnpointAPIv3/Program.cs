@@ -1,5 +1,6 @@
 ﻿using LearnpointAPIv3;
 using LearnpointAPIv3.API;
+using LpApiIntegration.FetchFromV2.Db;
 using LpApiIntegration.FetchFromV3.API.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -45,7 +46,7 @@ File.WriteAllText("Groups.json", jsonGroups);
 
 // Database manager
 //DbManager.StudentManager(studentResponse);
-//DbManager.CourseManager(groupResponse);
+DbManager.CourseManager(courseDefinitionResponse, courseInstanceResponse);
 //DbManager.StaffManager(staffResponse);
 //DbManager.ProgramManager(groupResponseExtended);
 //DbManager.RelationshipManager(groupResponseExtended, groupResponse, studentResponse);
