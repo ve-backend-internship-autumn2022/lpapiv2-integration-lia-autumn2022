@@ -49,6 +49,13 @@ namespace LearnpointAPIv3.API
         {
             return Client(apiSettings).GetStringAsync($"/v3/{apiSettings.TenantIdentifier}/groups").Result;
         }
-
+        public static string GetActiveStudents(ApiSettings apiSettings)
+        {
+            return Client(apiSettings).GetStringAsync($"/v3/{apiSettings.TenantIdentifier}/users?includeActive=true&includeInactive=false&includeStudents=true&includeStaff=false").Result;
+        }
+        public static string GetActiveStaff(ApiSettings apiSettings)
+        {
+            return Client(apiSettings).GetStringAsync($"/v3/{apiSettings.TenantIdentifier}/users?includeActive=true&includeInactive=false&includeStudents=false&includeStaff=true").Result;
+        }
     }
 }
