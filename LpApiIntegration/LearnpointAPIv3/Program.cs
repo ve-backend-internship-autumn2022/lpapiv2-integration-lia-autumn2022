@@ -23,6 +23,9 @@ string jsonCourseInstances = FetchFromApi.GetCourseInstances(apiSettings);
 string jsonGroupMemberships = FetchFromApi.GetGroupMemberships(apiSettings);
 string jsonGroups = FetchFromApi.GetGroups(apiSettings);
 
+string jsonActiveStudent = FetchFromApi.GetActiveStudents(apiSettings);
+string jsonActiveStaffMembers = FetchFromApi.GetActiveStaff(apiSettings);
+
 //Deserializing json to response object
 var courseDefinitionResponse = JsonSerializer.Deserialize<CourseDefinitionListApiResponse>(jsonCourseDefinitions);
 var courseEnrollmentResponse = JsonSerializer.Deserialize<CourseEnrollmentListApiResponse>(jsonCourseEnrollments);
@@ -32,6 +35,8 @@ var courseInstanceResponse = JsonSerializer.Deserialize<CourseInstanceListApiRes
 var groupMembershipResponse = JsonSerializer.Deserialize<GroupMembershipListApiResponse>(jsonGroupMemberships);
 var groupResponse = JsonSerializer.Deserialize<GroupListApiResponse>(jsonGroups);
 
+var activeStudents = JsonSerializer.Deserialize<User>(jsonActiveStudent);
+var activeStaffMembers = JsonSerializer.Deserialize<User>(jsonActiveStaffMembers);
 
 //Console.WriteLine(groupResponse.Data[0].Name);
 
@@ -43,6 +48,9 @@ File.WriteAllText("CourseInstances.json", jsonCourseInstances);
 
 File.WriteAllText("GroupMemberships.json", jsonGroupMemberships);
 File.WriteAllText("Groups.json", jsonGroups);
+
+File.WriteAllText("ActiveStudents.json", jsonActiveStudent);
+File.WriteAllText("ActiveStaffMembers.json", jsonActiveStaffMembers);
 
 // Database manager
 //DbManager.StudentManager(studentResponse);
