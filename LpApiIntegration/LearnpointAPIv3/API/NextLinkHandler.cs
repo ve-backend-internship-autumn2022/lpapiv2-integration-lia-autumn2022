@@ -25,12 +25,72 @@ namespace LpApiIntegration.FetchFromV3.API
                 {
                     DbManager.StudentManager(activeStudentsResponse);
 
-                    string nextLinkJsonActiveStudent = FetchFromApi.GetNextLink(apiSettings, activeStudentsResponse.NextLink);
-                    activeStudentsResponse = JsonSerializer.Deserialize<UserListApiResponse>(nextLinkJsonActiveStudent);
+                    string nextLinkRequest = FetchFromApi.GetNextLink(apiSettings, activeStudentsResponse.NextLink);
+                    activeStudentsResponse = JsonSerializer.Deserialize<UserListApiResponse>(nextLinkRequest);
 
                     DbManager.StudentManager(activeStudentsResponse);
                 }
             } while (activeStudentsResponse.NextLink != null);
+        }
+        public static void Courses(ApiSettings apiSettings, CourseDefinitionListApiResponse courseDefinitionResponse,
+            CourseInstanceListApiResponse courseInstanceResponse)
+        {
+            do
+            {
+                if (courseDefinitionResponse.NextLink == null & courseInstanceResponse.NextLink == null)
+                {
+                    DbManager.CourseManager(courseDefinitionResponse, courseInstanceResponse);
+                }
+                else if (courseDefinitionResponse.NextLink != null & courseInstanceResponse.NextLink != null)
+                {
+                    DbManager.CourseManager(courseDefinitionResponse, courseInstanceResponse);
+
+                    string nextLinkRequestDefinition = FetchFromApi.GetNextLink(apiSettings, courseDefinitionResponse.NextLink);
+                    string nextLinkRequestInstance = FetchFromApi.GetNextLink(apiSettings, courseInstanceResponse.NextLink);
+                    courseDefinitionResponse = JsonSerializer.Deserialize<CourseDefinitionListApiResponse>(nextLinkRequestDefinition);
+                    courseInstanceResponse = JsonSerializer.Deserialize<CourseInstanceListApiResponse>(nextLinkRequestInstance);
+
+                    DbManager.CourseManager(courseDefinitionResponse, courseInstanceResponse);
+                }
+            } while (courseDefinitionResponse.NextLink != null & courseInstanceResponse.NextLink != null);
+        }
+        public static void StaffMembers(ApiSettings apiSettings, UserListApiResponse activeStaffMembersResponse)
+        {
+            do
+            {
+                if (activeStaffMembersResponse.NextLink == null)
+                {
+                    DbManager.StaffManager(activeStaffMembersResponse);
+                }
+                else if (activeStaffMembersResponse.NextLink != null)
+                {
+                    DbManager.StaffManager(activeStaffMembersResponse);
+
+                    string nextLinkRequest = FetchFromApi.GetNextLink(apiSettings, activeStaffMembersResponse.NextLink);
+                    activeStaffMembersResponse = JsonSerializer.Deserialize<UserListApiResponse>(nextLinkRequest);
+
+                    DbManager.StaffManager(activeStaffMembersResponse);
+                }
+            } while (activeStaffMembersResponse.NextLink != null);
+        }
+        public static void Programs(ApiSettings apiSettings, ProgramInstanceListApiResponse programInstanceResponse)
+        {
+            do
+            {
+                if (programInstanceResponse.NextLink == null)
+                {
+                    DbManager.ProgramManager(programInstanceResponse);
+                }
+                else if (programInstanceResponse.NextLink != null)
+                {
+                    DbManager.ProgramManager(programInstanceResponse);
+
+                    string nextLinkRequest = FetchFromApi.GetNextLink(apiSettings, programInstanceResponse.NextLink);
+                    programInstanceResponse = JsonSerializer.Deserialize<ProgramInstanceListApiResponse>(nextLinkRequest);
+
+                    DbManager.ProgramManager(programInstanceResponse);
+                }
+            } while (programInstanceResponse.NextLink != null);
         }
     }
 }

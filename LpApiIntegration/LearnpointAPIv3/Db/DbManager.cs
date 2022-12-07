@@ -15,17 +15,15 @@ namespace LpApiIntegration.FetchFromV2.Db
 
             foreach (var apiStudent in apiStudents)
             {
-                Console.WriteLine($"{apiStudent.FirstName} {apiStudent.LastName}");
-                //if (!DbContext.Students.Any(s => s.ExternalId == apiStudent.Id))
-                //{
-                //    DbWorker.AddStudent(apiStudent, DbContext);
-                //}
-                //else
-                //{
-                //    DbWorker.UpdateStudent(apiStudent, DbContext);
-                //}
+                if (!DbContext.Students.Any(s => s.ExternalId == apiStudent.Id))
+                {
+                    DbWorker.AddStudent(apiStudent, DbContext);
+                }
+                else
+                {
+                    DbWorker.UpdateStudent(apiStudent, DbContext);
+                }
             }
-            Console.WriteLine();
 
             DbWorker.CheckForInactiveStudents(apiStudents, DbContext);
             
@@ -35,24 +33,19 @@ namespace LpApiIntegration.FetchFromV2.Db
         public static void CourseManager(CourseDefinitionListApiResponse courseDefinitionResponse, CourseInstanceListApiResponse courseInstanceResponse)
         {
             var apiCourses = courseDefinitionResponse.Data;
+            var apiCourseInstances = courseInstanceResponse.Data;                      
 
-            //Search coursedefinitions
-            //var CourseDefinition = courseInstanceResponse.Data;           
-
-            foreach (var apiCourse in apiCourses)
+            foreach (var apiCourseInstance in apiCourseInstances)
             {
-                var courseInstance = courseInstanceResponse.Data.Where(c => c.CourseDefinitionId == apiCourse.Id).SingleOrDefault();
-                
-                if (courseInstance != null)
+                var apiCourse = courseDefinitionResponse.Data.Where(c => c.Id == apiCourseInstance.CourseDefinitionId).SingleOrDefault();
+
+                if (DbContext.Courses.Any(c => c.ExternalId == apiCourse.Id))
                 {
-                    if (!DbContext.Courses.Any(c => c.ExternalId == apiCourse.Id))
-                    {
-                        DbWorker.AddCourse(apiCourse, courseInstance, DbContext);
-                    }
-                    else
-                    {
-                        DbWorker.UpdateCourse(apiCourse, courseInstance, DbContext);
-                    }
+                    DbWorker.UpdateCourse(apiCourse, apiCourseInstance, DbContext);                    
+                }
+                else
+                {
+                    DbWorker.AddCourse(apiCourse, apiCourseInstance, DbContext);
                 }
             }
 
@@ -61,43 +54,41 @@ namespace LpApiIntegration.FetchFromV2.Db
 
         public static void StaffManager(UserListApiResponse activeStaffMembersResponse)
         {
-            do
-            {
-                var apiStaffMembers = activeStaffMembersResponse.Data;
+            var apiStaffMembers = activeStaffMembersResponse.Data;
 
-                foreach (var apiStaffMember in apiStaffMembers)
+            foreach (var apiStaffMember in apiStaffMembers)
+            {
+                if (!DbContext.StaffMembers.Any(s => s.ExternalId == apiStaffMember.Id))
                 {
-                    if (!DbContext.StaffMembers.Any(s => s.ExternalId == apiStaffMember.Id))
-                    {
-                        DbWorker.AddStaffMember(apiStaffMember, DbContext);
-                    }
-                    else
-                    {
-                        DbWorker.UpdateStaffMember(apiStaffMember, DbContext);
-                    }
+                    DbWorker.AddStaffMember(apiStaffMember, DbContext);
                 }
-            } while (activeStaffMembersResponse.NextLink != null);
+                else
+                {
+                    DbWorker.UpdateStaffMember(apiStaffMember, DbContext);
+                }
+            }
 
             DbContext.SaveChanges();
         }
 
-        //public static void ProgramManager(GroupsApiResponse groupResponse)
-        //{
-        //    var apiPrograms = groupResponse.Data.Groups.Where(p => p.Category.Code == "EducationInstance");
+        public static void ProgramManager(ProgramInstanceListApiResponse programInstanceResponse)
+        {
+            var apiPrograms = programInstanceResponse.Data;
 
-        //    foreach (var apiProgram in apiPrograms)
-        //    {
-        //        if (DbContext.Programs.Any(c => c.ExternalId == apiProgram.Id))
-        //        {
-        //            DbWorker.UpdateProgram(apiProgram, DbContext);
-        //        }
-        //        else
-        //        {
-        //            DbWorker.AddProgram(apiProgram, DbContext);
-        //        }
-        //    }
-        //    DbContext.SaveChanges();
-        //}
+            foreach (var apiProgram in apiPrograms)
+            {
+                if (DbContext.Programs.Any(c => c.ExternalId == apiProgram.Id))
+                {
+                    DbWorker.UpdateProgram(apiProgram, DbContext);
+                }
+                else
+                {
+                    DbWorker.AddProgram(apiProgram, DbContext);
+                }
+            }
+
+            DbContext.SaveChanges();
+        }
 
         //public static void RelationshipManager(GroupsApiResponse groupReponseExtended, GroupsApiResponse groupResponse, StudentsApiResponse studentResponse)
         //{

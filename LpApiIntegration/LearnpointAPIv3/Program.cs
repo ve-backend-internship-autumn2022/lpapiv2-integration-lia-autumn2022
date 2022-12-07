@@ -28,6 +28,8 @@ string jsonGroups = FetchFromApi.GetGroups(apiSettings);
 string jsonActiveStudent = FetchFromApi.GetActiveStudents(apiSettings);
 string jsonActiveStaffMembers = FetchFromApi.GetActiveStaff(apiSettings);
 
+string jsonProgramInstances = FetchFromApi.GetProgramInstances(apiSettings);
+
 //Deserializing json to response object
 var courseDefinitionResponse = JsonSerializer.Deserialize<CourseDefinitionListApiResponse>(jsonCourseDefinitions);
 var courseEnrollmentResponse = JsonSerializer.Deserialize<CourseEnrollmentListApiResponse>(jsonCourseEnrollments);
@@ -40,8 +42,10 @@ var groupResponse = JsonSerializer.Deserialize<GroupListApiResponse>(jsonGroups)
 var activeStudentsResponse = JsonSerializer.Deserialize<UserListApiResponse>(jsonActiveStudent);
 var activeStaffMembersResponse = JsonSerializer.Deserialize<UserListApiResponse>(jsonActiveStaffMembers);
 
-//Saving json to file for testing and comparasion
-//File.WriteAllText("Coursedefinitions.json", jsonCourseDefinitions);
+var programInstanceResponse = JsonSerializer.Deserialize<ProgramInstanceListApiResponse>(jsonProgramInstances);
+
+//Saving json to file
+//File.WriteAllText("CourseDefinitions.json", jsonCourseDefinitions);
 //File.WriteAllText("CourseEnrollments.json", jsonCourseEnrollments);
 //File.WriteAllText("CourseGrades.json", jsonCourseGrades);
 //File.WriteAllText("CourseInstances.json", jsonCourseInstances);
@@ -52,11 +56,13 @@ var activeStaffMembersResponse = JsonSerializer.Deserialize<UserListApiResponse>
 //File.WriteAllText("ActiveStudents.json", jsonActiveStudent);
 //File.WriteAllText("ActiveStaffMembers.json", jsonActiveStaffMembers);
 
+//File.WriteAllText("ProgramInstances.json", jsonProgramInstances);
+
 // Sends first batch to Database Manager then checks NextLink for further batches to send
 NextLinkHandler.Students(apiSettings, activeStudentsResponse);
-//DbManager.CourseManager(courseDefinitionResponse, courseInstanceResponse);
-//DbManager.StaffManager(activeStaffMembersResponse);
-//DbManager.ProgramManager(groupResponseExtended);
+NextLinkHandler.Courses(apiSettings, courseDefinitionResponse, courseInstanceResponse);
+NextLinkHandler.StaffMembers(apiSettings, activeStaffMembersResponse);
+NextLinkHandler.Programs(apiSettings, programInstanceResponse);
 //DbManager.RelationshipManager(groupResponseExtended, groupResponse, studentResponse);
 
 await host.RunAsync();

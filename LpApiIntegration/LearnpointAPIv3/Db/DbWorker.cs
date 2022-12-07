@@ -77,7 +77,7 @@ namespace LpApiIntegration.FetchFromV2.Db
 
         // Course
 
-        public static void AddCourse(CourseDefinition apiCourse, CourseInstance? courseInstance, LearnpointDbContext dbContext)
+        public static void AddCourse(CourseDefinition apiCourse, CourseInstance courseInstance, LearnpointDbContext dbContext)
         {
             dbContext.Courses.Add(
                    new CourseModel()
@@ -176,39 +176,39 @@ namespace LpApiIntegration.FetchFromV2.Db
 
         // Program
 
-        //public static void AddProgram(FullGroup apiProgram, LearnpointDbContext dbContext)
-        //{
-        //    dbContext.Programs.Add(
-        //        new ProgramModel()
-        //        {
-        //            ExternalId = apiProgram.Id,
-        //            Code = apiProgram.Code,
-        //            Name = apiProgram.Name,
-        //            LifespanFrom = apiProgram.LifespanFrom,
-        //            LifespanUntil = apiProgram.LifespanUntil
-        //        });
-        //}
-        //public static void UpdateProgram(FullGroup apiProgram, LearnpointDbContext dbContext)
-        //{
-        //    var dbProgram = dbContext.Programs.Where(p => p.ExternalId == apiProgram.Id).SingleOrDefault();
+        public static void AddProgram(ProgramInstance apiProgram, LearnpointDbContext dbContext)
+        {
+            dbContext.Programs.Add(
+                new ProgramModel()
+                {
+                    ExternalId = apiProgram.Id,
+                    Code = apiProgram.Code,
+                    Name = apiProgram.Name,
+                    LifespanFrom = apiProgram.From,
+                    LifespanUntil = apiProgram.To
+                });
+        }
+        public static void UpdateProgram(ProgramInstance apiProgram, LearnpointDbContext dbContext)
+        {
+            var dbProgram = dbContext.Programs.Where(p => p.ExternalId == apiProgram.Id).SingleOrDefault();
 
-        //    if (dbProgram.Code != apiProgram.Code)
-        //    {
-        //        dbProgram.Code = apiProgram.Code;
-        //    }
-        //    if (dbProgram.Name != apiProgram.Name)
-        //    {
-        //        dbProgram.Name = apiProgram.Name;
-        //    }
-        //    if (dbProgram.LifespanFrom != apiProgram.LifespanFrom)
-        //    {
-        //        dbProgram.LifespanFrom = apiProgram.LifespanFrom;
-        //    }
-        //    if (dbProgram.LifespanUntil != apiProgram.LifespanUntil)
-        //    {
-        //        dbProgram.LifespanUntil = apiProgram.LifespanUntil;
-        //    }
-        //}
+            if (dbProgram.Code != apiProgram.Code)
+            {
+                dbProgram.Code = apiProgram.Code;
+            }
+            if (dbProgram.Name != apiProgram.Name)
+            {
+                dbProgram.Name = apiProgram.Name;
+            }
+            if (dbProgram.LifespanFrom != apiProgram.From)
+            {
+                dbProgram.LifespanFrom = apiProgram.From;
+            }
+            if (dbProgram.LifespanUntil != apiProgram.To)
+            {
+                dbProgram.LifespanUntil = apiProgram.To;
+            }
+        }
 
         // Relations
         public static void AddCourseStudentRelation(StudentCourseRelationModel relation, LearnpointDbContext dbContext)
