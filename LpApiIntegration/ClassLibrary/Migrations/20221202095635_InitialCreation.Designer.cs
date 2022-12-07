@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LpApiIntegration.Db.Migrations
 {
     [DbContext(typeof(LearnpointDbContext))]
-    [Migration("20221201101352_InitialCreation")]
+    [Migration("20221202095635_InitialCreation")]
     partial class InitialCreation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

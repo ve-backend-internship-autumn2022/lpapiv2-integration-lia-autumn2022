@@ -20,6 +20,7 @@ namespace LpApiIntegration.FetchFromV3.API.Models
         public string? Email2 { get; set; }
         public string? Phone { get; set; }
         public string? Phone2 { get; set; }
+        public string? Signature { get; set; }
         public string[]? StaffFunctions { get; set; }
     }
 }

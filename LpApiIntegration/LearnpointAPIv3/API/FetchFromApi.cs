@@ -8,7 +8,6 @@ namespace LearnpointAPIv3.API
 {
     internal class FetchFromApi
     {
-       
         private static HttpClient Client(ApiSettings apiSettings)
         {
             //Creates API Client
@@ -51,11 +50,17 @@ namespace LearnpointAPIv3.API
         }
         public static string GetActiveStudents(ApiSettings apiSettings)
         {
-            return Client(apiSettings).GetStringAsync($"/v3/{apiSettings.TenantIdentifier}/users?includeActive=true&includeInactive=false&includeStudents=true&includeStaff=false").Result;
+            return Client(apiSettings).GetStringAsync($"/v3/{apiSettings.TenantIdentifier}/users?includeActive=true&includeInactive=false&includeStudents=true&includeStaff=false&limit=20").Result;
         }
+
         public static string GetActiveStaff(ApiSettings apiSettings)
         {
             return Client(apiSettings).GetStringAsync($"/v3/{apiSettings.TenantIdentifier}/users?includeActive=true&includeInactive=false&includeStudents=false&includeStaff=true").Result;
+        }
+
+        public static string GetNextLink(ApiSettings apiSettings, string nextLink)
+        {
+            return Client(apiSettings).GetStringAsync(nextLink.Remove(0, 46)).Result;
         }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using LearnpointAPIv3;
 using LearnpointAPIv3.API;
+using LpApiIntegration.Db;
 using LpApiIntegration.FetchFromV2.Db;
+using LpApiIntegration.FetchFromV3.API;
 using LpApiIntegration.FetchFromV3.API.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -35,27 +37,25 @@ var courseInstanceResponse = JsonSerializer.Deserialize<CourseInstanceListApiRes
 var groupMembershipResponse = JsonSerializer.Deserialize<GroupMembershipListApiResponse>(jsonGroupMemberships);
 var groupResponse = JsonSerializer.Deserialize<GroupListApiResponse>(jsonGroups);
 
-var activeStudents = JsonSerializer.Deserialize<User>(jsonActiveStudent);
-var activeStaffMembers = JsonSerializer.Deserialize<User>(jsonActiveStaffMembers);
+var activeStudentsResponse = JsonSerializer.Deserialize<UserListApiResponse>(jsonActiveStudent);
+var activeStaffMembersResponse = JsonSerializer.Deserialize<UserListApiResponse>(jsonActiveStaffMembers);
 
-//Console.WriteLine(groupResponse.Data[0].Name);
+//Saving json to file for testing and comparasion
+//File.WriteAllText("Coursedefinitions.json", jsonCourseDefinitions);
+//File.WriteAllText("CourseEnrollments.json", jsonCourseEnrollments);
+//File.WriteAllText("CourseGrades.json", jsonCourseGrades);
+//File.WriteAllText("CourseInstances.json", jsonCourseInstances);
 
-//Saving json to file
-File.WriteAllText("Coursedefinitions.json", jsonCourseDefinitions);
-File.WriteAllText("CourseEnrollments.json", jsonCourseEnrollments);
-File.WriteAllText("CourseGrades.json", jsonCourseGrades);
-File.WriteAllText("CourseInstances.json", jsonCourseInstances);
+//File.WriteAllText("GroupMemberships.json", jsonGroupMemberships);
+//File.WriteAllText("Groups.json", jsonGroups);
 
-File.WriteAllText("GroupMemberships.json", jsonGroupMemberships);
-File.WriteAllText("Groups.json", jsonGroups);
+//File.WriteAllText("ActiveStudents.json", jsonActiveStudent);
+//File.WriteAllText("ActiveStaffMembers.json", jsonActiveStaffMembers);
 
-File.WriteAllText("ActiveStudents.json", jsonActiveStudent);
-File.WriteAllText("ActiveStaffMembers.json", jsonActiveStaffMembers);
-
-// Database manager
-//DbManager.StudentManager(studentResponse);
-DbManager.CourseManager(courseDefinitionResponse, courseInstanceResponse);
-//DbManager.StaffManager(staffResponse);
+// Sends first batch to Database Manager then checks NextLink for further batches to send
+NextLinkHandler.Students(apiSettings, activeStudentsResponse);
+//DbManager.CourseManager(courseDefinitionResponse, courseInstanceResponse);
+//DbManager.StaffManager(activeStaffMembersResponse);
 //DbManager.ProgramManager(groupResponseExtended);
 //DbManager.RelationshipManager(groupResponseExtended, groupResponse, studentResponse);
 

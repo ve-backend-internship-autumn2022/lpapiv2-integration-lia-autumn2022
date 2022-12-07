@@ -13,8 +13,8 @@ namespace LpApiIntegration.FetchFromV3.API.Models
         public int ProgramInstanceId { get; set; }
         public DateTime Enrolled { get; set; }
         public DateTime? Unenrolled { get; set; }
-        public enum State { Active, Canceled, Finished }
-        public string? StateDescription { get; set; }
+        public bool Active { get; set; }
+        public bool Canceled { get; set; }
         public DateTime Changed { get; set; }
         public string? DiplomaDate { get; set; }
         public Specialization[]? SelectedSpecializations { get; set; }

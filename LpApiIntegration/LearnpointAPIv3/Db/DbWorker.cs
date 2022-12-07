@@ -10,71 +10,70 @@ namespace LpApiIntegration.FetchFromV2.Db
     internal class DbWorker
     {
         // Student
-        //public static void AddStudent(FullStudent apiStudent, LearnpointDbContext dbContext)
-        //{
-        //    dbContext.Students.Add(
-        //    new StudentModel()
-        //    {
-        //        ExternalId = apiStudent.Id,
-        //        ExternalUserId = apiStudent.UserId,
-        //        NationalRegistrationNumber = apiStudent.NationalRegistrationNumber,
-        //        Username = apiStudent.Username,
-        //        Email = apiStudent.Email,
-        //        Email2 = apiStudent.Email2,
-        //        MobilePhone = apiStudent.MobilePhone,
-        //        HomePhone = apiStudent.HomePhone,
-        //        FullName = apiStudent.FirstName + " " + apiStudent.LastName,
-        //        IsActive = true
-        //    });
-        //}
+        public static void AddStudent(User apiStudent, LearnpointDbContext dbContext)
+        {
+            dbContext.Students.Add(
+            new StudentModel()
+            {
+                ExternalId = apiStudent.Id,
+                NationalRegistrationNumber = apiStudent.NationalRegistrationNumber,
+                Username = apiStudent.Username,
+                Email = apiStudent.Email,
+                Email2 = apiStudent.Email2,
+                MobilePhone = apiStudent.Phone,
+                HomePhone = apiStudent.Phone2,
+                FullName = apiStudent.FirstName + " " + apiStudent.LastName,
+                IsActive = apiStudent.IsActiveStudent
+            });
+        }
 
-        //public static void UpdateStudent(FullStudent apiStudent, LearnpointDbContext dbContext)
-        //{
-        //    var dbStudent = dbContext.Students.Where(s => s.ExternalId == apiStudent.Id).SingleOrDefault();
+        public static void UpdateStudent(User apiStudent, LearnpointDbContext dbContext)
+        {
+            var dbStudent = dbContext.Students.Where(s => s.ExternalId == apiStudent.Id).SingleOrDefault();
 
-        //    if (dbStudent.NationalRegistrationNumber != apiStudent.NationalRegistrationNumber)
-        //    {
-        //        dbStudent.NationalRegistrationNumber = apiStudent.NationalRegistrationNumber;
-        //    }
-        //    if (dbStudent.Username != apiStudent.Username)
-        //    {
-        //        dbStudent.Username = apiStudent.Username;
-        //    }
-        //    if (dbStudent.Email != apiStudent.Email)
-        //    {
-        //        dbStudent.Email = apiStudent.Email;
-        //    }
-        //    if (dbStudent.Email2 != apiStudent.Email2)
-        //    {
-        //        dbStudent.Email2 = apiStudent.Email2;
-        //    }
-        //    if (dbStudent.MobilePhone != apiStudent.MobilePhone)
-        //    {
-        //        dbStudent.MobilePhone = apiStudent.MobilePhone;
-        //    }
-        //    if (dbStudent.HomePhone != apiStudent.HomePhone)
-        //    {
-        //        dbStudent.HomePhone = apiStudent.HomePhone;
-        //    }
-        //    if (dbStudent.FullName != apiStudent.FirstName + " " + apiStudent.LastName)
-        //    {
-        //        dbStudent.FullName = apiStudent.FirstName + " " + apiStudent.LastName;
-        //    }
-        //    if (dbStudent.IsActive == false)
-        //    {
-        //        dbStudent.IsActive = true;
-        //    }
-        //}
-        //public static void CheckForInactiveStudents(FullStudent[] students, LearnpointDbContext dbContext)
-        //{
-        //    HashSet<int> diffids = new(students.Select(s => s.Id));
-        //    var results = dbContext.Students.Where(s => !diffids.Contains(s.ExternalId)).ToList();
+            if (dbStudent.NationalRegistrationNumber != apiStudent.NationalRegistrationNumber)
+            {
+                dbStudent.NationalRegistrationNumber = apiStudent.NationalRegistrationNumber;
+            }
+            if (dbStudent.Username != apiStudent.Username)
+            {
+                dbStudent.Username = apiStudent.Username;
+            }
+            if (dbStudent.Email != apiStudent.Email)
+            {
+                dbStudent.Email = apiStudent.Email;
+            }
+            if (dbStudent.Email2 != apiStudent.Email2)
+            {
+                dbStudent.Email2 = apiStudent.Email2;
+            }
+            if (dbStudent.MobilePhone != apiStudent.Phone)
+            {
+                dbStudent.MobilePhone = apiStudent.Phone;
+            }
+            if (dbStudent.HomePhone != apiStudent.Phone2)
+            {
+                dbStudent.HomePhone = apiStudent.Phone2;
+            }
+            if (dbStudent.FullName != apiStudent.FirstName + " " + apiStudent.LastName)
+            {
+                dbStudent.FullName = apiStudent.FirstName + " " + apiStudent.LastName;
+            }
+            if (dbStudent.IsActive != true)
+            {
+                dbStudent.IsActive = apiStudent.IsActiveStudent;
+            }
+        }
+        public static void CheckForInactiveStudents(User[] students, LearnpointDbContext dbContext)
+        {
+            HashSet<int> diffids = new(students.Select(s => s.Id));
+            var results = dbContext.Students.Where(s => !diffids.Contains(s.ExternalId)).ToList();
 
-        //    foreach (var student in results)
-        //    {
-        //        student.IsActive = false;
-        //    }
-        //}
+            foreach (var student in results)
+            {
+                student.IsActive = false;
+            }
+        }
 
         // Course
 
@@ -120,72 +119,60 @@ namespace LpApiIntegration.FetchFromV2.Db
 
         // Staff
 
-        //public static void AddStaffMember(FullStaffMember apiStaffMember, LearnpointDbContext dbContext)
-        //{
-        //    dbContext.StaffMembers.Add(
-        //    new StaffModel()
-        //    {
-        //        ExternalId = apiStaffMember.Id,
-        //        ExternalUserId = apiStaffMember.UserId,
-        //        NationalRegistrationNumber = apiStaffMember.NationalRegistrationNumber,
-        //        Signature = apiStaffMember.Signature,
-        //        FullName = apiStaffMember.FirstName + " " + apiStaffMember.LastName,
-        //        Username = apiStaffMember.Username,
-        //        Email = apiStaffMember.Email,
-        //        Email2 = apiStaffMember.Email2,
-        //        MobilePhone = apiStaffMember.MobilePhone,
-        //        MayExposeMobilePhoneToStudents = apiStaffMember.MayExposeMobilePhoneToStudents,
-        //        Phone2 = apiStaffMember.Phone2,
-        //        MayExposePhone2ToStudents = apiStaffMember.MayExposePhone2ToStudents,
+        public static void AddStaffMember(User apiStaffMember, LearnpointDbContext dbContext)
+        {
+            dbContext.StaffMembers.Add(
+            new StaffModel()
+            {
+                ExternalId = apiStaffMember.Id,
+                NationalRegistrationNumber = apiStaffMember.NationalRegistrationNumber,
+                Signature = apiStaffMember.Signature,
+                FullName = apiStaffMember.FirstName + " " + apiStaffMember.LastName,
+                Username = apiStaffMember.Username,
+                Email = apiStaffMember.Email,
+                Email2 = apiStaffMember.Email2,
+                MobilePhone = apiStaffMember.Phone,
+                Phone2 = apiStaffMember.Phone2
+            });
+        }
 
-        //    });
-        //}
+        public static void UpdateStaffMember(User apiStaffMember, LearnpointDbContext dbContext)
+        {
+            var dbStaff = dbContext.StaffMembers.Where(s => s.ExternalId == apiStaffMember.Id).SingleOrDefault();
 
-        //public static void UpdateStaffMember(FullStaffMember apiStaffMember, LearnpointDbContext dbContext)
-        //{
-        //    var dbStaff = dbContext.StaffMembers.Where(s => s.ExternalId == apiStaffMember.Id).SingleOrDefault();
-
-        //    if (dbStaff.NationalRegistrationNumber != apiStaffMember.NationalRegistrationNumber)
-        //    {
-        //        dbStaff.NationalRegistrationNumber = apiStaffMember.NationalRegistrationNumber;
-        //    }
-        //    if (dbStaff.Signature != apiStaffMember.Signature)
-        //    {
-        //        dbStaff.Signature = apiStaffMember.Signature;
-        //    }
-        //    if (dbStaff.FullName != apiStaffMember.FirstName + " " + apiStaffMember.LastName)
-        //    {
-        //        dbStaff.FullName = apiStaffMember.FirstName + " " + apiStaffMember.LastName;
-        //    }
-        //    if (dbStaff.Username != apiStaffMember.Username)
-        //    {
-        //        dbStaff.Username = apiStaffMember.Username;
-        //    }
-        //    if (dbStaff.Email != apiStaffMember.Email)
-        //    {
-        //        dbStaff.Email = apiStaffMember.Email;
-        //    }
-        //    if (dbStaff.Email2 != apiStaffMember.Email2)
-        //    {
-        //        dbStaff.Email2 = apiStaffMember.Email2;
-        //    }
-        //    if (dbStaff.MobilePhone != apiStaffMember.MobilePhone)
-        //    {
-        //        dbStaff.MobilePhone = apiStaffMember.MobilePhone;
-        //    }
-        //    if (dbStaff.MayExposeMobilePhoneToStudents != apiStaffMember.MayExposeMobilePhoneToStudents)
-        //    {
-        //        dbStaff.MayExposeMobilePhoneToStudents = apiStaffMember.MayExposeMobilePhoneToStudents;
-        //    }
-        //    if (dbStaff.Phone2 != apiStaffMember.Phone2)
-        //    {
-        //        dbStaff.Phone2 = apiStaffMember.Phone2;
-        //    }
-        //    if (dbStaff.MayExposePhone2ToStudents != apiStaffMember.MayExposePhone2ToStudents)
-        //    {
-        //        dbStaff.MayExposePhone2ToStudents = apiStaffMember.MayExposePhone2ToStudents;
-        //    }
-        //}
+            if (dbStaff.NationalRegistrationNumber != apiStaffMember.NationalRegistrationNumber)
+            {
+                dbStaff.NationalRegistrationNumber = apiStaffMember.NationalRegistrationNumber;
+            }
+            if (dbStaff.Signature != apiStaffMember.Signature)
+            {
+                dbStaff.Signature = apiStaffMember.Signature;
+            }
+            if (dbStaff.FullName != apiStaffMember.FirstName + " " + apiStaffMember.LastName)
+            {
+                dbStaff.FullName = apiStaffMember.FirstName + " " + apiStaffMember.LastName;
+            }
+            if (dbStaff.Username != apiStaffMember.Username)
+            {
+                dbStaff.Username = apiStaffMember.Username;
+            }
+            if (dbStaff.Email != apiStaffMember.Email)
+            {
+                dbStaff.Email = apiStaffMember.Email;
+            }
+            if (dbStaff.Email2 != apiStaffMember.Email2)
+            {
+                dbStaff.Email2 = apiStaffMember.Email2;
+            }
+            if (dbStaff.MobilePhone != apiStaffMember.Phone)
+            {
+                dbStaff.MobilePhone = apiStaffMember.Phone;
+            }
+            if (dbStaff.Phone2 != apiStaffMember.Phone2)
+            {
+                dbStaff.Phone2 = apiStaffMember.Phone2;
+            }
+        }
 
         // Program
 
