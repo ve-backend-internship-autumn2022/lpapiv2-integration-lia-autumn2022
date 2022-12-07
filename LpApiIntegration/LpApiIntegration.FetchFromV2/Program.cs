@@ -29,13 +29,12 @@ var groupResponseExtended = JsonSerializer.Deserialize<GroupsApiResponse>(jsonGr
 var staffResponse = JsonSerializer.Deserialize<StaffMembersApiResponse>(jsonStaffMembers);
 
 //Saving json to file
-//File.WriteAllText("Students.json", jsonStudents);
-//File.WriteAllText("StudentsExtended.json", jsonStudentsExtended);
+File.WriteAllText("Students.json", jsonStudents);
 
-//File.WriteAllText("Groups.json", jsonGroups);
-//File.WriteAllText("GroupsExtended.json", jsonGroupsExtended);
+File.WriteAllText("Groups.json", jsonGroups);
+File.WriteAllText("GroupsExtended.json", jsonGroupsExtended);
 
-//File.WriteAllText("StaffMembers.json", jsonStaffMembers);
+File.WriteAllText("StaffMembers.json", jsonStaffMembers);
 
 // Database manager
 DbManager.StudentManager(studentResponse);
