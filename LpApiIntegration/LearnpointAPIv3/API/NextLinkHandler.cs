@@ -15,82 +15,136 @@ namespace LpApiIntegration.FetchFromV3.API
     {
         public static void Students(ApiSettings apiSettings, UserListApiResponse activeStudentsResponse)
         {
+            var students = new List<User>();
+
             do
             {
                 if (activeStudentsResponse.NextLink == null)
                 {
-                    DbManager.StudentManager(activeStudentsResponse);
+                    students.AddRange(activeStudentsResponse.Data);
                 }
                 else if (activeStudentsResponse.NextLink != null)
                 {
-                    DbManager.StudentManager(activeStudentsResponse);
+                    students.AddRange(activeStudentsResponse.Data);
 
-                    string nextLinkRequest = FetchFromApi.GetNextLink(apiSettings, activeStudentsResponse.NextLink);
-                    activeStudentsResponse = JsonSerializer.Deserialize<UserListApiResponse>(nextLinkRequest);
+                    activeStudentsResponse = JsonSerializer.Deserialize<UserListApiResponse>(activeStudentsResponse.NextLink);
 
-                    DbManager.StudentManager(activeStudentsResponse);
+                    students.AddRange(activeStudentsResponse.Data);
                 }
             } while (activeStudentsResponse.NextLink != null);
+
+            DbManager.StudentManager(students);
         }
         public static void Courses(ApiSettings apiSettings, CourseDefinitionListApiResponse courseDefinitionResponse,
             CourseInstanceListApiResponse courseInstanceResponse)
         {
+            var courseDefinitions = new List<CourseDefinition>();
+            var courseInstances = new List<CourseInstance>();
+
             do
             {
                 if (courseDefinitionResponse.NextLink == null & courseInstanceResponse.NextLink == null)
                 {
-                    DbManager.CourseManager(courseDefinitionResponse, courseInstanceResponse);
+                    courseDefinitions.AddRange(courseDefinitionResponse.Data);
+                    courseInstances.AddRange(courseInstanceResponse.Data);
                 }
                 else if (courseDefinitionResponse.NextLink != null & courseInstanceResponse.NextLink != null)
                 {
-                    DbManager.CourseManager(courseDefinitionResponse, courseInstanceResponse);
+                    courseDefinitions.AddRange(courseDefinitionResponse.Data);
+                    courseInstances.AddRange(courseInstanceResponse.Data);
 
-                    string nextLinkRequestDefinition = FetchFromApi.GetNextLink(apiSettings, courseDefinitionResponse.NextLink);
-                    string nextLinkRequestInstance = FetchFromApi.GetNextLink(apiSettings, courseInstanceResponse.NextLink);
-                    courseDefinitionResponse = JsonSerializer.Deserialize<CourseDefinitionListApiResponse>(nextLinkRequestDefinition);
-                    courseInstanceResponse = JsonSerializer.Deserialize<CourseInstanceListApiResponse>(nextLinkRequestInstance);
+                    courseDefinitionResponse = JsonSerializer.Deserialize<CourseDefinitionListApiResponse>(courseDefinitionResponse.NextLink);
+                    courseInstanceResponse = JsonSerializer.Deserialize<CourseInstanceListApiResponse>(courseInstanceResponse.NextLink);
 
-                    DbManager.CourseManager(courseDefinitionResponse, courseInstanceResponse);
+                    courseDefinitions.AddRange(courseDefinitionResponse.Data);
+                    courseInstances.AddRange(courseInstanceResponse.Data);
                 }
             } while (courseDefinitionResponse.NextLink != null & courseInstanceResponse.NextLink != null);
+
+            DbManager.CourseManager(courseDefinitions, courseInstances);
         }
         public static void StaffMembers(ApiSettings apiSettings, UserListApiResponse activeStaffMembersResponse)
         {
+            var staffMembers = new List<User>();
+
             do
             {
                 if (activeStaffMembersResponse.NextLink == null)
                 {
-                    DbManager.StaffManager(activeStaffMembersResponse);
+                    staffMembers.AddRange(activeStaffMembersResponse.Data);
                 }
                 else if (activeStaffMembersResponse.NextLink != null)
                 {
-                    DbManager.StaffManager(activeStaffMembersResponse);
+                    staffMembers.AddRange(activeStaffMembersResponse.Data);
 
-                    string nextLinkRequest = FetchFromApi.GetNextLink(apiSettings, activeStaffMembersResponse.NextLink);
-                    activeStaffMembersResponse = JsonSerializer.Deserialize<UserListApiResponse>(nextLinkRequest);
+                    activeStaffMembersResponse = JsonSerializer.Deserialize<UserListApiResponse>(activeStaffMembersResponse.NextLink);
 
-                    DbManager.StaffManager(activeStaffMembersResponse);
+                    staffMembers.AddRange(activeStaffMembersResponse.Data);
                 }
             } while (activeStaffMembersResponse.NextLink != null);
+
+            DbManager.StaffManager(staffMembers);
         }
         public static void Programs(ApiSettings apiSettings, ProgramInstanceListApiResponse programInstanceResponse)
         {
+            var programs = new List<ProgramInstance>();
+
             do
             {
                 if (programInstanceResponse.NextLink == null)
                 {
-                    DbManager.ProgramManager(programInstanceResponse);
+                    programs.AddRange(programInstanceResponse.Data);
                 }
                 else if (programInstanceResponse.NextLink != null)
                 {
-                    DbManager.ProgramManager(programInstanceResponse);
+                    programs.AddRange(programInstanceResponse.Data);
 
-                    string nextLinkRequest = FetchFromApi.GetNextLink(apiSettings, programInstanceResponse.NextLink);
-                    programInstanceResponse = JsonSerializer.Deserialize<ProgramInstanceListApiResponse>(nextLinkRequest);
+                    programInstanceResponse = JsonSerializer.Deserialize<ProgramInstanceListApiResponse>(programInstanceResponse.NextLink);
 
-                    DbManager.ProgramManager(programInstanceResponse);
+                    programs.AddRange(programInstanceResponse.Data);
                 }
             } while (programInstanceResponse.NextLink != null);
+
+            DbManager.ProgramManager(programs);
+        }
+        public static void Relations(ApiSettings apiSettings, CourseStaffMembershipListApiResponse courseStaffMembershipResponse, CourseInstanceListApiResponse courseInstanceResponse)
+        {
+            var courseStaffReletions = new List<CourseStaffMembership>();
+            var courseInstances = new List<CourseInstance>();
+
+            do
+            {
+                if (courseStaffMembershipResponse.NextLink == null)
+                {
+                    courseStaffReletions.AddRange(courseStaffMembershipResponse.Data);
+                }
+                else if (courseStaffMembershipResponse.NextLink != null)
+                {
+                    courseStaffReletions.AddRange(courseStaffMembershipResponse.Data);
+
+                    courseStaffMembershipResponse = JsonSerializer.Deserialize<CourseStaffMembershipListApiResponse>(courseStaffMembershipResponse.NextLink);
+
+                    courseStaffReletions.AddRange(courseStaffMembershipResponse.Data);
+                }
+            } while (courseStaffMembershipResponse.NextLink != null);
+
+            do
+            {
+                if (courseInstanceResponse.NextLink == null)
+                {
+                    courseInstances.AddRange(courseInstanceResponse.Data);
+                }
+                else if (courseInstanceResponse.NextLink != null)
+                {
+                    courseInstances.AddRange(courseInstanceResponse.Data);
+
+                    courseInstanceResponse = JsonSerializer.Deserialize<CourseInstanceListApiResponse>(courseInstanceResponse.NextLink);
+
+                    courseInstances.AddRange(courseInstanceResponse.Data);
+                }
+            } while (courseInstanceResponse.NextLink != null);
+
+            DbManager.RelationshipManager(courseStaffReletions, courseInstances);
         }
     }
 }

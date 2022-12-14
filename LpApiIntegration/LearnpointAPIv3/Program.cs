@@ -23,6 +23,7 @@ string jsonCourseGrades = FetchFromApi.GetCourseGrades(apiSettings);
 string jsonCourseInstances = FetchFromApi.GetCourseInstances(apiSettings);
 
 string jsonGroupMemberships = FetchFromApi.GetGroupMemberships(apiSettings);
+string jsonCourseStaffMembership = FetchFromApi.GetCourseStaffMembership(apiSettings);
 string jsonGroups = FetchFromApi.GetGroups(apiSettings);
 
 string jsonActiveStudent = FetchFromApi.GetActiveStudents(apiSettings);
@@ -37,6 +38,7 @@ var courseGradeResponse = JsonSerializer.Deserialize<CourseGradeListApiResponse>
 var courseInstanceResponse = JsonSerializer.Deserialize<CourseInstanceListApiResponse>(jsonCourseInstances);
 
 var groupMembershipResponse = JsonSerializer.Deserialize<GroupMembershipListApiResponse>(jsonGroupMemberships);
+var courseStaffMembershipResponse = JsonSerializer.Deserialize<CourseStaffMembershipListApiResponse>(jsonCourseStaffMembership);
 var groupResponse = JsonSerializer.Deserialize<GroupListApiResponse>(jsonGroups);
 
 var activeStudentsResponse = JsonSerializer.Deserialize<UserListApiResponse>(jsonActiveStudent);
@@ -60,9 +62,9 @@ var programInstanceResponse = JsonSerializer.Deserialize<ProgramInstanceListApiR
 
 // Sends first batch to Database Manager then checks NextLink for further batches to send
 NextLinkHandler.Students(apiSettings, activeStudentsResponse);
-NextLinkHandler.Courses(apiSettings, courseDefinitionResponse, courseInstanceResponse);
+//NextLinkHandler.Courses(apiSettings, courseDefinitionResponse, courseInstanceResponse);
 NextLinkHandler.StaffMembers(apiSettings, activeStaffMembersResponse);
 NextLinkHandler.Programs(apiSettings, programInstanceResponse);
-//DbManager.RelationshipManager(groupResponseExtended, groupResponse, studentResponse);
+NextLinkHandler.Relations(apiSettings, courseStaffMembershipResponse, courseInstanceResponse);
 
 await host.RunAsync();

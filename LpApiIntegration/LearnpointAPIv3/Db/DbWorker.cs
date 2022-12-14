@@ -64,7 +64,7 @@ namespace LpApiIntegration.FetchFromV2.Db
                 dbStudent.IsActive = apiStudent.IsActiveStudent;
             }
         }
-        public static void CheckForInactiveStudents(User[] students, LearnpointDbContext dbContext)
+        public static void CheckForInactiveStudents(List<User> students, LearnpointDbContext dbContext)
         {
             HashSet<int> diffids = new(students.Select(s => s.Id));
             var results = dbContext.Students.Where(s => !diffids.Contains(s.ExternalId)).ToList();
@@ -77,31 +77,31 @@ namespace LpApiIntegration.FetchFromV2.Db
 
         // Course
 
-        public static void AddCourse(CourseDefinition apiCourse, CourseInstance courseInstance, LearnpointDbContext dbContext)
+        public static void AddCourse(CourseDefinition courseDefinition, CourseInstance courseInstance, LearnpointDbContext dbContext)
         {
             dbContext.Courses.Add(
                    new CourseModel()
                    {
-                       ExternalId = apiCourse.Id,
-                       Name = apiCourse.Name,
-                       Code = apiCourse.Code,
+                       ExternalId = courseInstance.Id,
+                       Name = courseDefinition.Name,
+                       Code = courseDefinition.Code,
                        LifespanFrom = courseInstance.From,
                        LifespanUntil = courseInstance.To,
-                       Points = apiCourse.Points,
+                       Points = courseDefinition.Points,
                    });
         }
 
-        public static void UpdateCourse(CourseDefinition apiCourse, CourseInstance courseInstance, LearnpointDbContext dbContext)
+        public static void UpdateCourse(CourseDefinition courseDefinition, CourseInstance courseInstance, LearnpointDbContext dbContext)
         {
-            var dbCourse = dbContext.Courses.Where(c => c.ExternalId == apiCourse.Id).SingleOrDefault();
+            var dbCourse = dbContext.Courses.Where(c => c.ExternalId == courseInstance.Id).SingleOrDefault();
 
-            if (dbCourse.Name != apiCourse.Name)
+            if (dbCourse.Name != courseDefinition.Name)
             {
-                dbCourse.Name = apiCourse.Name;
+                dbCourse.Name = courseDefinition.Name;
             }
-            if (dbCourse.Code != apiCourse.Code)
+            if (dbCourse.Code != courseDefinition.Code)
             {
-                dbCourse.Code = apiCourse.Code;
+                dbCourse.Code = courseDefinition.Code;
             }
             if (dbCourse.LifespanFrom != courseInstance.From)
             {
@@ -111,9 +111,9 @@ namespace LpApiIntegration.FetchFromV2.Db
             {
                 dbCourse.LifespanUntil = courseInstance.To;
             }
-            if (dbCourse.Points != apiCourse.Points)
+            if (dbCourse.Points != courseDefinition.Points)
             {
-                dbCourse.Points = apiCourse.Points;
+                dbCourse.Points = courseDefinition.Points;
             }
         }
 
