@@ -23,13 +23,14 @@ string jsonCourseGrades = FetchFromApi.GetCourseGrades(apiSettings);
 string jsonCourseInstances = FetchFromApi.GetCourseInstances(apiSettings);
 
 string jsonGroupMemberships = FetchFromApi.GetGroupMemberships(apiSettings);
-string jsonCourseStaffMembership = FetchFromApi.GetCourseStaffMembership(apiSettings);
+string jsonCourseStaffMemberships = FetchFromApi.GetCourseStaffMembership(apiSettings);
 string jsonGroups = FetchFromApi.GetGroups(apiSettings);
 
-string jsonActiveStudent = FetchFromApi.GetActiveStudents(apiSettings);
+string jsonStudents = FetchFromApi.GetStudents(apiSettings);
 string jsonActiveStaffMembers = FetchFromApi.GetActiveStaff(apiSettings);
 
 string jsonProgramInstances = FetchFromApi.GetProgramInstances(apiSettings);
+string jsonProgramEnrollments = FetchFromApi.GetProgramEnrollments(apiSettings);
 
 //Deserializing json to response object
 var courseDefinitionResponse = JsonSerializer.Deserialize<CourseDefinitionListApiResponse>(jsonCourseDefinitions);
@@ -38,13 +39,15 @@ var courseGradeResponse = JsonSerializer.Deserialize<CourseGradeListApiResponse>
 var courseInstanceResponse = JsonSerializer.Deserialize<CourseInstanceListApiResponse>(jsonCourseInstances);
 
 var groupMembershipResponse = JsonSerializer.Deserialize<GroupMembershipListApiResponse>(jsonGroupMemberships);
-var courseStaffMembershipResponse = JsonSerializer.Deserialize<CourseStaffMembershipListApiResponse>(jsonCourseStaffMembership);
+var courseStaffMembershipResponse = JsonSerializer.Deserialize<CourseStaffMembershipListApiResponse>(jsonCourseStaffMemberships);
 var groupResponse = JsonSerializer.Deserialize<GroupListApiResponse>(jsonGroups);
 
-var activeStudentsResponse = JsonSerializer.Deserialize<UserListApiResponse>(jsonActiveStudent);
+var studentsResponse = JsonSerializer.Deserialize<UserListApiResponse>(jsonStudents);
+//var studentResponse = JsonSerializer.Deserialize<UserApiResponse>(jsonStudents);
 var activeStaffMembersResponse = JsonSerializer.Deserialize<UserListApiResponse>(jsonActiveStaffMembers);
 
 var programInstanceResponse = JsonSerializer.Deserialize<ProgramInstanceListApiResponse>(jsonProgramInstances);
+var programEnrollmentResponse = JsonSerializer.Deserialize<ProgramEnrollmentListApiResponse>(jsonProgramEnrollments);
 
 //Saving json to file
 //File.WriteAllText("CourseDefinitions.json", jsonCourseDefinitions);
@@ -53,18 +56,22 @@ var programInstanceResponse = JsonSerializer.Deserialize<ProgramInstanceListApiR
 //File.WriteAllText("CourseInstances.json", jsonCourseInstances);
 
 //File.WriteAllText("GroupMemberships.json", jsonGroupMemberships);
+//File.WriteAllText("CourseStaffMemberships.json", jsonCourseStaffMemberships);
 //File.WriteAllText("Groups.json", jsonGroups);
 
-//File.WriteAllText("ActiveStudents.json", jsonActiveStudent);
+//File.WriteAllText("Students.json", jsonStudents);
 //File.WriteAllText("ActiveStaffMembers.json", jsonActiveStaffMembers);
 
 //File.WriteAllText("ProgramInstances.json", jsonProgramInstances);
+//File.WriteAllText("ProgramEnrollments.json", jsonProgramEnrollments);
+
 
 // Sends first batch to Database Manager then checks NextLink for further batches to send
-NextLinkHandler.Students(apiSettings, activeStudentsResponse);
-//NextLinkHandler.Courses(apiSettings, courseDefinitionResponse, courseInstanceResponse);
-NextLinkHandler.StaffMembers(apiSettings, activeStaffMembersResponse);
-NextLinkHandler.Programs(apiSettings, programInstanceResponse);
-NextLinkHandler.Relations(apiSettings, courseStaffMembershipResponse, courseInstanceResponse);
+NextLinkHandler.Students(studentsResponse);
+NextLinkHandler.Courses(courseDefinitionResponse, courseInstanceResponse);
+NextLinkHandler.StaffMembers(activeStaffMembersResponse);
+NextLinkHandler.Programs(programInstanceResponse);
+NextLinkHandler.Relations(courseStaffMembershipResponse, courseInstanceResponse, groupMembershipResponse, 
+    courseEnrollmentResponse, programEnrollmentResponse, apiSettings);
 
 await host.RunAsync();

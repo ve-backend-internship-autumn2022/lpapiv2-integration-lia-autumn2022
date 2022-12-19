@@ -24,70 +24,93 @@ namespace LearnpointAPIv3.API
         {
             var apiRequestLink = $"{apiSettings.ApiBaseAddress}/v3/{apiSettings.TenantIdentifier}/coursedefinitions";
 
-            return GetData(apiSettings, apiRequestLink);
+            return GetData(apiSettings, apiRequestLink, null);
         }
 
         public static string GetCourseEnrollments(ApiSettings apiSettings)
         {
             var apiRequestLink = $"{apiSettings.ApiBaseAddress}/v3/{apiSettings.TenantIdentifier}/courseenrollments";
 
-            return GetData(apiSettings, apiRequestLink);           
+            return GetData(apiSettings, apiRequestLink, null);           
         }
 
         public static string GetCourseGrades(ApiSettings apiSettings)
         {
             var apiRequestLink = $"{apiSettings.ApiBaseAddress}/v3/{apiSettings.TenantIdentifier}/coursegrades";
 
-            return GetData(apiSettings, apiRequestLink);
+            return GetData(apiSettings, apiRequestLink, null);
         }
 
         public static string GetCourseInstances(ApiSettings apiSettings)
         {
             var apiRequestLink = $"{apiSettings.ApiBaseAddress}/v3/{apiSettings.TenantIdentifier}/courseinstances?includePrevious=false&includeActive=true&includeFuture=true";
 
-            return GetData(apiSettings, apiRequestLink);
+            return GetData(apiSettings, apiRequestLink, null);
         }
 
         public static string GetGroupMemberships(ApiSettings apiSettings)
         {
             var apiRequestLink = $"{apiSettings.ApiBaseAddress}/v3/{apiSettings.TenantIdentifier}/groupmemberships";
 
-            return GetData(apiSettings, apiRequestLink);
+            return GetData(apiSettings, apiRequestLink, null);
         }
 
         public static string GetCourseStaffMembership(ApiSettings apiSettings)
         {
             var apiRequestLink = $"{apiSettings.ApiBaseAddress}/v3/{apiSettings.TenantIdentifier}/coursestaffmemberships";
 
-            return GetData(apiSettings, apiRequestLink);
+            return GetData(apiSettings, apiRequestLink, null);
         }
 
         public static string GetGroups(ApiSettings apiSettings)
         {
             var apiRequestLink = $"{apiSettings.ApiBaseAddress}/v3/{apiSettings.TenantIdentifier}/groups";
 
-            return GetData(apiSettings, apiRequestLink);
+            return GetData(apiSettings, apiRequestLink, null);
         }
 
-        public static string GetActiveStudents(ApiSettings apiSettings)
+        public static string GetStudents(ApiSettings apiSettings)
         {
             var apiRequestLink = $"{apiSettings.ApiBaseAddress}/v3/{apiSettings.TenantIdentifier}/users?includeActive=true&includeInactive=false&includeStudents=true&includeStaff=false";
             
-            return GetData(apiSettings, apiRequestLink);
+            return GetData(apiSettings, apiRequestLink, null);
+        }
+
+        public static string GetStudent(ApiSettings apiSettings, int userId)
+        {
+            var apiRequestLink = $"{apiSettings.ApiBaseAddress}/v3/{apiSettings.TenantIdentifier}/users/{userId}";
+
+            return GetData(apiSettings, apiRequestLink, null);
         }
 
         public static string GetActiveStaff(ApiSettings apiSettings)
         {
             var apiRequestLink = $"{apiSettings.ApiBaseAddress}/v3/{apiSettings.TenantIdentifier}/users?includeActive=true&includeInactive=false&includeStudents=false&includeStaff=true";
 
-            return GetData(apiSettings, apiRequestLink);
+            return GetData(apiSettings, apiRequestLink, null);
         }
 
         public static string GetProgramInstances(ApiSettings apiSettings)
         {
             var apiRequestLink = $"{apiSettings.ApiBaseAddress}/v3/{apiSettings.TenantIdentifier}/programinstances?includePrevious=true&includeActive=true&includeFuture=true&expandSpecializations=false";
 
-            return GetData(apiSettings, apiRequestLink);
+            return GetData(apiSettings, apiRequestLink, null);
+        }
+
+        public static string GetProgramEnrollments(ApiSettings apiSettings)
+        {
+            var apiRequestLink = $"{apiSettings.ApiBaseAddress}/v3/{apiSettings.TenantIdentifier}/programenrollments?includeActive=true&includeInactive=true&excludeCanceled=true&expandSelectedCourseDefinitions=false&expandSelectedSpecializations=false";
+
+            return GetData(apiSettings, apiRequestLink, null);
+        }
+
+        public static string GetEnrollmentStudents(ApiSettings apiSettings, int[] lookupFilter)
+        {
+            var apiRequestLink = $"{apiSettings.ApiBaseAddress}/v3/{apiSettings.TenantIdentifier}/users/lookup";
+
+            var content = new { Ids = lookupFilter };
+            
+            return GetData(apiSettings, apiRequestLink, content);
         }
 
         private static string GetData(ApiSettings apiSettings, string apiRequestLink, object content = null)
@@ -105,11 +128,12 @@ namespace LearnpointAPIv3.API
                 {
                     responseTask = Client(apiSettings).GetAsync(apiRequestLink);
                 }
-                else
+                else 
                 {
                     var htmlContent = new StringContent(JsonSerializer.Serialize(content), Encoding.UTF8, "application/json");
-                    responseTask = Client(apiSettings).PostAsync(apiSettings.ApiBaseAddress, htmlContent);
+                    responseTask = Client(apiSettings).PostAsync(apiRequestLink, htmlContent);
                 }
+
                 HttpResponseMessage response = responseTask.Result;   
                 if (response.IsSuccessStatusCode)
                 {
