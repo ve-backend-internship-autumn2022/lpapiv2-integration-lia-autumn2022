@@ -5,6 +5,10 @@ VisualStudioVersion = 17.3.32922.545
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LpApiIntegration.FetchFromV2", "LpApiIntegration.FetchFromV2\LpApiIntegration.FetchFromV2.csproj", "{B916403B-D517-4D17-8E2B-29EB02B70F17}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LpApiIntegration.FetchFromV3", "LearnpointAPIv3\LpApiIntegration.FetchFromV3.csproj", "{881DD8F5-FD15-4E13-A1D8-B966DAC45B26}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LpApiIntegration.Db", "ClassLibrary\LpApiIntegration.Db.csproj", "{EDB8C60C-7F2F-49FF-B109-7365F9917AFE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{B916403B-D517-4D17-8E2B-29EB02B70F17}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B916403B-D517-4D17-8E2B-29EB02B70F17}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B916403B-D517-4D17-8E2B-29EB02B70F17}.Release|Any CPU.Build.0 = Release|Any CPU
+		{881DD8F5-FD15-4E13-A1D8-B966DAC45B26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{881DD8F5-FD15-4E13-A1D8-B966DAC45B26}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{881DD8F5-FD15-4E13-A1D8-B966DAC45B26}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{881DD8F5-FD15-4E13-A1D8-B966DAC45B26}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EDB8C60C-7F2F-49FF-B109-7365F9917AFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDB8C60C-7F2F-49FF-B109-7365F9917AFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDB8C60C-7F2F-49FF-B109-7365F9917AFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDB8C60C-7F2F-49FF-B109-7365F9917AFE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace LpApiIntegration.FetchFromV2.Migrations
+namespace LpApiIntegration.Db.Migrations
 {
     public partial class InitialCreation : Migration
     {
@@ -16,8 +16,8 @@ namespace LpApiIntegration.FetchFromV2.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ExternalId = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Code = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Code = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LifespanFrom = table.Column<DateTime>(type: "datetime2", nullable: true),
                     LifespanUntil = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Points = table.Column<int>(type: "int", nullable: true)
@@ -51,6 +51,7 @@ namespace LpApiIntegration.FetchFromV2.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ExternalId = table.Column<int>(type: "int", nullable: false),
+                    ExternalUserId = table.Column<int>(type: "int", nullable: false),
                     NationalRegistrationNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Signature = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     FullName = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -74,6 +75,7 @@ namespace LpApiIntegration.FetchFromV2.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ExternalId = table.Column<int>(type: "int", nullable: false),
+                    ExternalUserId = table.Column<int>(type: "int", nullable: false),
                     NationalRegistrationNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Username = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: true),

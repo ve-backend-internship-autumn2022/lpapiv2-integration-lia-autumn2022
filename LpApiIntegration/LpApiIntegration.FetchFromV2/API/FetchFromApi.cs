@@ -17,11 +17,7 @@
         {
             return Client(apiSettings).GetStringAsync($"/bulkapi/v2/{apiSettings.TenantIdentifier}/students").Result;
         }        
-        public static string GetStudentsExtended(ApiSettings apiSettings)
-        {
-            return Client(apiSettings).GetStringAsync($"/bulkapi/v2/{apiSettings.TenantIdentifier}/students?hasactiveeducation=false").Result;
-        }
-
+       
         public static string GetGroups(ApiSettings apiSettings)
         {
             return Client(apiSettings).GetStringAsync($"/bulkapi/v2/{apiSettings.TenantIdentifier}/groups").Result;

@@ -1,4 +1,5 @@
-﻿using LpApiIntegration.FetchFromV2.Db.Models;
+﻿
+using LpApiIntegration.Db;
 using LpApiIntegration.FetchFromV2.GroupModel;
 using LpApiIntegration.FetchFromV2.StaffMemberModels;
 using LpApiIntegration.FetchFromV2.StudentModels;
@@ -232,20 +233,18 @@ namespace LpApiIntegration.FetchFromV2.Db
                             {
                                 var apiStudent = studentResponse.Data.Students.Where(s => s.Id == student.Student.Id).SingleOrDefault();
 
+                                var program = DbContext.Programs.Where(p => p.Id == programId).SingleOrDefault();
+
                                 foreach (var educationPlan in apiStudent.EducationPlans)
                                 {
-                                    ProgramModel program = null;
-
                                     foreach (var part in educationPlan.Parts)
                                     {
-                                        if (DbContext.Programs.Any(p => p.Code == part.Code) && educationPlan.State.Name != null && educationPlan.State.FromDate != null)
+                                        if (part.Code == program.Code )
                                         {
-                                            program = DbContext.Programs.Where(p => p.Code == part.Code).SingleOrDefault();
-
                                             var relation = new StudentProgramRelationModel()
                                             {
                                                 StudentId = dbStudentId,
-                                                ProgramId = program.Id,
+                                                ProgramId = programId,
                                                 IsActiveStudent = educationPlan.State.IsActiveStudent,
                                                 StateName = educationPlan.State.Name,
                                                 FromDate = (DateTime)educationPlan.State.FromDate

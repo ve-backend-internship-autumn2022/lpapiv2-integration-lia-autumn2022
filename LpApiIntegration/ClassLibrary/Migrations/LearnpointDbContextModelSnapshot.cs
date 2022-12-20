@@ -4,18 +4,16 @@ using LpApiIntegration.FetchFromV2.Db;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace LpApiIntegration.FetchFromV2.Migrations
+namespace LpApiIntegration.Db.Migrations
 {
     [DbContext(typeof(LearnpointDbContext))]
-    [Migration("20221125103808_InitialCreation")]
-    partial class InitialCreation
+    partial class LearnpointDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,7 +22,7 @@ namespace LpApiIntegration.FetchFromV2.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("LpApiIntegration.FetchFromV2.Db.Models.CourseModel", b =>
+            modelBuilder.Entity("LpApiIntegration.Db.CourseModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -33,7 +31,6 @@ namespace LpApiIntegration.FetchFromV2.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Code")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ExternalId")
@@ -46,7 +43,6 @@ namespace LpApiIntegration.FetchFromV2.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("Points")
@@ -57,7 +53,7 @@ namespace LpApiIntegration.FetchFromV2.Migrations
                     b.ToTable("Courses");
                 });
 
-            modelBuilder.Entity("LpApiIntegration.FetchFromV2.Db.Models.ProgramModel", b =>
+            modelBuilder.Entity("LpApiIntegration.Db.ProgramModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -85,7 +81,7 @@ namespace LpApiIntegration.FetchFromV2.Migrations
                     b.ToTable("Programs");
                 });
 
-            modelBuilder.Entity("LpApiIntegration.FetchFromV2.Db.Models.StaffCourseRelationModel", b =>
+            modelBuilder.Entity("LpApiIntegration.Db.StaffCourseRelationModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -108,7 +104,7 @@ namespace LpApiIntegration.FetchFromV2.Migrations
                     b.ToTable("StaffCourseRelations");
                 });
 
-            modelBuilder.Entity("LpApiIntegration.FetchFromV2.Db.Models.StaffModel", b =>
+            modelBuilder.Entity("LpApiIntegration.Db.StaffModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -123,6 +119,9 @@ namespace LpApiIntegration.FetchFromV2.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ExternalId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ExternalUserId")
                         .HasColumnType("int");
 
                     b.Property<string>("FullName")
@@ -154,7 +153,7 @@ namespace LpApiIntegration.FetchFromV2.Migrations
                     b.ToTable("StaffMembers");
                 });
 
-            modelBuilder.Entity("LpApiIntegration.FetchFromV2.Db.Models.StudentCourseRelationModel", b =>
+            modelBuilder.Entity("LpApiIntegration.Db.StudentCourseRelationModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -177,7 +176,7 @@ namespace LpApiIntegration.FetchFromV2.Migrations
                     b.ToTable("StudentCourseRelations");
                 });
 
-            modelBuilder.Entity("LpApiIntegration.FetchFromV2.Db.Models.StudentModel", b =>
+            modelBuilder.Entity("LpApiIntegration.Db.StudentModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -192,6 +191,9 @@ namespace LpApiIntegration.FetchFromV2.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ExternalId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ExternalUserId")
                         .HasColumnType("int");
 
                     b.Property<string>("FullName")
@@ -217,7 +219,7 @@ namespace LpApiIntegration.FetchFromV2.Migrations
                     b.ToTable("Students");
                 });
 
-            modelBuilder.Entity("LpApiIntegration.FetchFromV2.Db.Models.StudentProgramRelationModel", b =>
+            modelBuilder.Entity("LpApiIntegration.Db.StudentProgramRelationModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -249,15 +251,15 @@ namespace LpApiIntegration.FetchFromV2.Migrations
                     b.ToTable("StudentProgramRelations");
                 });
 
-            modelBuilder.Entity("LpApiIntegration.FetchFromV2.Db.Models.StaffCourseRelationModel", b =>
+            modelBuilder.Entity("LpApiIntegration.Db.StaffCourseRelationModel", b =>
                 {
-                    b.HasOne("LpApiIntegration.FetchFromV2.Db.Models.CourseModel", "Course")
+                    b.HasOne("LpApiIntegration.Db.CourseModel", "Course")
                         .WithMany("StaffMemberships")
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("LpApiIntegration.FetchFromV2.Db.Models.StaffModel", "StaffMember")
+                    b.HasOne("LpApiIntegration.Db.StaffModel", "StaffMember")
                         .WithMany("CourseMemberships")
                         .HasForeignKey("StaffMemberId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -268,15 +270,15 @@ namespace LpApiIntegration.FetchFromV2.Migrations
                     b.Navigation("StaffMember");
                 });
 
-            modelBuilder.Entity("LpApiIntegration.FetchFromV2.Db.Models.StudentCourseRelationModel", b =>
+            modelBuilder.Entity("LpApiIntegration.Db.StudentCourseRelationModel", b =>
                 {
-                    b.HasOne("LpApiIntegration.FetchFromV2.Db.Models.CourseModel", "Course")
+                    b.HasOne("LpApiIntegration.Db.CourseModel", "Course")
                         .WithMany("StudentMemberships")
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("LpApiIntegration.FetchFromV2.Db.Models.StudentModel", "Student")
+                    b.HasOne("LpApiIntegration.Db.StudentModel", "Student")
                         .WithMany("CourseMemberships")
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -287,15 +289,15 @@ namespace LpApiIntegration.FetchFromV2.Migrations
                     b.Navigation("Student");
                 });
 
-            modelBuilder.Entity("LpApiIntegration.FetchFromV2.Db.Models.StudentProgramRelationModel", b =>
+            modelBuilder.Entity("LpApiIntegration.Db.StudentProgramRelationModel", b =>
                 {
-                    b.HasOne("LpApiIntegration.FetchFromV2.Db.Models.ProgramModel", "Program")
+                    b.HasOne("LpApiIntegration.Db.ProgramModel", "Program")
                         .WithMany()
                         .HasForeignKey("ProgramId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("LpApiIntegration.FetchFromV2.Db.Models.StudentModel", "Student")
+                    b.HasOne("LpApiIntegration.Db.StudentModel", "Student")
                         .WithMany()
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -306,19 +308,19 @@ namespace LpApiIntegration.FetchFromV2.Migrations
                     b.Navigation("Student");
                 });
 
-            modelBuilder.Entity("LpApiIntegration.FetchFromV2.Db.Models.CourseModel", b =>
+            modelBuilder.Entity("LpApiIntegration.Db.CourseModel", b =>
                 {
                     b.Navigation("StaffMemberships");
 
                     b.Navigation("StudentMemberships");
                 });
 
-            modelBuilder.Entity("LpApiIntegration.FetchFromV2.Db.Models.StaffModel", b =>
+            modelBuilder.Entity("LpApiIntegration.Db.StaffModel", b =>
                 {
                     b.Navigation("CourseMemberships");
                 });
 
-            modelBuilder.Entity("LpApiIntegration.FetchFromV2.Db.Models.StudentModel", b =>
+            modelBuilder.Entity("LpApiIntegration.Db.StudentModel", b =>
                 {
                     b.Navigation("CourseMemberships");
                 });
