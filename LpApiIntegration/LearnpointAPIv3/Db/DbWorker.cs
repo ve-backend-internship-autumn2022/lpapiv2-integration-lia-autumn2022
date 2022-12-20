@@ -1,9 +1,5 @@
 ﻿using LpApiIntegration.Db;
 using LpApiIntegration.FetchFromV3.API.Models;
-//using LpApiIntegration.FetchFromV2.CourseModels;
-//using LpApiIntegration.FetchFromV2.GroupModel;
-//using LpApiIntegration.FetchFromV2.StaffMemberModels;
-//using LpApiIntegration.FetchFromV2.StudentModels;
 
 namespace LpApiIntegration.FetchFromV2.Db
 {

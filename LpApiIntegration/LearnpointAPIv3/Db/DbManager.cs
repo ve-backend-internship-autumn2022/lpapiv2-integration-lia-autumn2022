@@ -1,12 +1,9 @@
 ﻿
 using LearnpointAPIv3;
-using LearnpointAPIv3.API;
 using LpApiIntegration.Db;
 using LpApiIntegration.FetchFromV3.API.Models;
+using LpApiIntegration.FetchFromV3.Functions;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Text;
-using System.Text.Json;
 
 namespace LpApiIntegration.FetchFromV2.Db
 {
@@ -14,9 +11,11 @@ namespace LpApiIntegration.FetchFromV2.Db
     {
         private static LearnpointDbContext DbContext = new();
 
-        public static void StudentManager(List<User> Students, UserApiResponse student)
+        public static void StudentManager(List<User> students, List<ProgramEnrollment> programEnrollments, ApiSettings apiSettings)
         {
-            var apiStudents = Students;
+            students.AddRange(FetchData.GetEnrollmentStudents(programEnrollments, apiSettings, DbContext));
+
+            var apiStudents = students;
 
             foreach (var apiStudent in apiStudents)
             {
@@ -26,21 +25,21 @@ namespace LpApiIntegration.FetchFromV2.Db
                 }
                 else
                 {
-                    
+
                     DbWorker.AddStudent(apiStudent, DbContext);
 
                 }
             }
 
             DbWorker.CheckForInactiveStudents(apiStudents, DbContext);
-            
+
             DbContext.SaveChanges();
         }
 
         public static void CourseManager(List<CourseDefinition> courseDefinitions, List<CourseInstance> courseInstances)
         {
             var apiCourses = courseDefinitions;
-            var apiCourseInstances = courseInstances;                      
+            var apiCourseInstances = courseInstances;
 
             foreach (var apiCourseInstance in apiCourseInstances)
             {
@@ -48,7 +47,7 @@ namespace LpApiIntegration.FetchFromV2.Db
 
                 if (DbContext.Courses.Any(c => c.ExternalId == apiCourseInstance.Id))
                 {
-                    DbWorker.UpdateCourse(apiCourse, apiCourseInstance, DbContext);                    
+                    DbWorker.UpdateCourse(apiCourse, apiCourseInstance, DbContext);
                 }
                 else
                 {
@@ -65,13 +64,13 @@ namespace LpApiIntegration.FetchFromV2.Db
 
             foreach (var apiStaffMember in apiStaffMembers)
             {
-                if (!DbContext.StaffMembers.Any(s => s.ExternalId == apiStaffMember.Id))
+                if (DbContext.StaffMembers.Any(s => s.ExternalId == apiStaffMember.Id))
                 {
-                    DbWorker.AddStaffMember(apiStaffMember, DbContext);
+                    DbWorker.UpdateStaffMember(apiStaffMember, DbContext);
                 }
                 else
                 {
-                    DbWorker.UpdateStaffMember(apiStaffMember, DbContext);
+                    DbWorker.AddStaffMember(apiStaffMember, DbContext);
                 }
             }
 
@@ -125,10 +124,10 @@ namespace LpApiIntegration.FetchFromV2.Db
 
                 foreach (var relation in relations)
                 {
-                    var student = DbContext.Students.Where(s => s.ExternalId == relation.UserId).SingleOrDefault();
+                    var studentId = DbContext.Students.Where(s => s.ExternalId == relation.UserId).SingleOrDefault().Id;
                     var courseId = DbContext.Courses.Where(c => c.ExternalId == relation.CourseInstanceId).SingleOrDefault().Id;
 
-                    if (DbContext.StudentCourseRelations.Any(sc => sc.StudentId == student.Id && sc.CourseId == courseId))
+                    if (DbContext.StudentCourseRelations.Any(sc => sc.StudentId == studentId && sc.CourseId == courseId))
                     {
                         HashSet<int> apiIds = new(relations.Select(s => s.UserId));
 
@@ -142,7 +141,7 @@ namespace LpApiIntegration.FetchFromV2.Db
                         {
                             foreach (var externalId in idDifferences)
                             {
-                                var studentId = DbContext.Students.Where(e => e.ExternalId == externalId).SingleOrDefault().Id;
+                                studentId = DbContext.Students.Where(e => e.ExternalId == externalId).SingleOrDefault().Id;
 
                                 var dbRelation = DbContext.StudentCourseRelations.Where(s => s.StudentId == studentId)
                                     .Where(c => c.CourseId == courseId).SingleOrDefault();
@@ -155,7 +154,7 @@ namespace LpApiIntegration.FetchFromV2.Db
                     {
                         var studentCourse = new StudentCourseRelationModel()
                         {
-                            StudentId = student.Id,
+                            StudentId = studentId,
                             CourseId = courseId
                         };
 
@@ -220,8 +219,7 @@ namespace LpApiIntegration.FetchFromV2.Db
                 //Add and delete student-program-relations
                 var relations = new List<ProgramEnrollment>();
                 var stateName = "";
-                var userIds = new List<int>();
-                
+
                 foreach (var enrollment in programEnrollments)
                 {
                     var dbProgram = DbContext.Programs.Where(p => p.ExternalId == enrollment.ProgramInstanceId).SingleOrDefault();
@@ -231,17 +229,6 @@ namespace LpApiIntegration.FetchFromV2.Db
                         relations.Add(enrollment);
                     }
                 }
-
-                foreach (var relation in relations)
-                {
-                    if (!DbContext.Students.Any(s => s.ExternalId == relation.UserId))
-                    {
-                        userIds.Add(relation.UserId);
-                    }
-                }
-
-                var lookupFilter = new { Ids = userIds.ToArray() };
-                FetchFromApi.GetEnrollmentStudents(apiSettings, lookupFilter.Ids);
 
                 foreach (var relation in relations)
                 {
@@ -299,8 +286,8 @@ namespace LpApiIntegration.FetchFromV2.Db
 
                             DbWorker.AddStudentProgramRelation(studentProgram, DbContext);
                         }
-                    }                  
-                }   
+                    }
+                }
             }
         }
     }

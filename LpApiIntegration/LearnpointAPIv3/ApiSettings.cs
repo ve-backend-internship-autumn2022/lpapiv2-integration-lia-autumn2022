@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace LearnpointAPIv3
+﻿namespace LearnpointAPIv3
 {
     internal class ApiSettings
     {

@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using LpApiIntegration.FetchFromV3.API.Models;
 using System.Net;
-using System.Net.Http.Json;
-using System.Reflection.Metadata;
 using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace LearnpointAPIv3.API
 {
@@ -20,97 +15,82 @@ namespace LearnpointAPIv3.API
             return client;
         }
 
-        public static string GetCourseDefinitions(ApiSettings apiSettings)
+        public static List<CourseDefinition> GetCourseDefinitions(ApiSettings apiSettings)
         {
             var apiRequestLink = $"{apiSettings.ApiBaseAddress}/v3/{apiSettings.TenantIdentifier}/coursedefinitions";
 
-            return GetData(apiSettings, apiRequestLink, null);
+            return FetchList<CourseDefinition>(apiSettings, apiRequestLink);
+
         }
 
-        public static string GetCourseEnrollments(ApiSettings apiSettings)
+        public static List<CourseEnrollment> GetCourseEnrollments(ApiSettings apiSettings)
         {
             var apiRequestLink = $"{apiSettings.ApiBaseAddress}/v3/{apiSettings.TenantIdentifier}/courseenrollments";
 
-            return GetData(apiSettings, apiRequestLink, null);           
+            return FetchList<CourseEnrollment>(apiSettings, apiRequestLink);
         }
 
-        public static string GetCourseGrades(ApiSettings apiSettings)
-        {
-            var apiRequestLink = $"{apiSettings.ApiBaseAddress}/v3/{apiSettings.TenantIdentifier}/coursegrades";
-
-            return GetData(apiSettings, apiRequestLink, null);
-        }
-
-        public static string GetCourseInstances(ApiSettings apiSettings)
+        public static List<CourseInstance> GetCourseInstances(ApiSettings apiSettings)
         {
             var apiRequestLink = $"{apiSettings.ApiBaseAddress}/v3/{apiSettings.TenantIdentifier}/courseinstances?includePrevious=false&includeActive=true&includeFuture=true";
 
-            return GetData(apiSettings, apiRequestLink, null);
+            return FetchList<CourseInstance>(apiSettings, apiRequestLink);
         }
 
-        public static string GetGroupMemberships(ApiSettings apiSettings)
-        {
-            var apiRequestLink = $"{apiSettings.ApiBaseAddress}/v3/{apiSettings.TenantIdentifier}/groupmemberships";
-
-            return GetData(apiSettings, apiRequestLink, null);
-        }
-
-        public static string GetCourseStaffMembership(ApiSettings apiSettings)
+        public static List<CourseStaffMembership> GetCourseStaffMembership(ApiSettings apiSettings)
         {
             var apiRequestLink = $"{apiSettings.ApiBaseAddress}/v3/{apiSettings.TenantIdentifier}/coursestaffmemberships";
 
-            return GetData(apiSettings, apiRequestLink, null);
+            return FetchList<CourseStaffMembership>(apiSettings, apiRequestLink);
         }
 
-        public static string GetGroups(ApiSettings apiSettings)
-        {
-            var apiRequestLink = $"{apiSettings.ApiBaseAddress}/v3/{apiSettings.TenantIdentifier}/groups";
-
-            return GetData(apiSettings, apiRequestLink, null);
-        }
-
-        public static string GetStudents(ApiSettings apiSettings)
+        public static List<User> GetActiveStudents(ApiSettings apiSettings)
         {
             var apiRequestLink = $"{apiSettings.ApiBaseAddress}/v3/{apiSettings.TenantIdentifier}/users?includeActive=true&includeInactive=false&includeStudents=true&includeStaff=false";
-            
-            return GetData(apiSettings, apiRequestLink, null);
+
+            return FetchList<User>(apiSettings, apiRequestLink);
         }
 
-        public static string GetStudent(ApiSettings apiSettings, int userId)
-        {
-            var apiRequestLink = $"{apiSettings.ApiBaseAddress}/v3/{apiSettings.TenantIdentifier}/users/{userId}";
-
-            return GetData(apiSettings, apiRequestLink, null);
-        }
-
-        public static string GetActiveStaff(ApiSettings apiSettings)
+        public static List<User> GetActiveStaff(ApiSettings apiSettings)
         {
             var apiRequestLink = $"{apiSettings.ApiBaseAddress}/v3/{apiSettings.TenantIdentifier}/users?includeActive=true&includeInactive=false&includeStudents=false&includeStaff=true";
 
-            return GetData(apiSettings, apiRequestLink, null);
+            return FetchList<User>(apiSettings, apiRequestLink);
         }
 
-        public static string GetProgramInstances(ApiSettings apiSettings)
+        public static List<ProgramInstance> GetProgramInstances(ApiSettings apiSettings)
         {
             var apiRequestLink = $"{apiSettings.ApiBaseAddress}/v3/{apiSettings.TenantIdentifier}/programinstances?includePrevious=true&includeActive=true&includeFuture=true&expandSpecializations=false";
 
-            return GetData(apiSettings, apiRequestLink, null);
+            return FetchList<ProgramInstance>(apiSettings, apiRequestLink);
         }
 
-        public static string GetProgramEnrollments(ApiSettings apiSettings)
+        public static List<ProgramEnrollment> GetProgramEnrollments(ApiSettings apiSettings)
         {
             var apiRequestLink = $"{apiSettings.ApiBaseAddress}/v3/{apiSettings.TenantIdentifier}/programenrollments?includeActive=true&includeInactive=true&excludeCanceled=true&expandSelectedCourseDefinitions=false&expandSelectedSpecializations=false";
 
-            return GetData(apiSettings, apiRequestLink, null);
+            return FetchList<ProgramEnrollment>(apiSettings, apiRequestLink);
         }
 
-        public static string GetEnrollmentStudents(ApiSettings apiSettings, int[] lookupFilter)
+        public static List<User> GetEnrollmentStudents(ApiSettings apiSettings, int[] userIds)
         {
             var apiRequestLink = $"{apiSettings.ApiBaseAddress}/v3/{apiSettings.TenantIdentifier}/users/lookup";
 
-            var content = new { Ids = lookupFilter };
-            
-            return GetData(apiSettings, apiRequestLink, content);
+            var content = new { Ids = userIds };
+
+            return FetchList<User>(apiSettings, apiRequestLink, content);
+        }
+
+        private static List<T> FetchList<T>(ApiSettings apiSettings, string apiRequestLink, object content = null)
+        {
+            var list = new List<T>();
+            do
+            {
+                var apiResponse = JsonSerializer.Deserialize<ApiResponse<List<T>>>(GetData(apiSettings, apiRequestLink, content));
+                list.AddRange(apiResponse.Data);
+                apiRequestLink = apiResponse.NextLink;
+            } while (apiRequestLink != null);
+            return list;
         }
 
         private static string GetData(ApiSettings apiSettings, string apiRequestLink, object content = null)
@@ -128,13 +108,13 @@ namespace LearnpointAPIv3.API
                 {
                     responseTask = Client(apiSettings).GetAsync(apiRequestLink);
                 }
-                else 
+                else
                 {
                     var htmlContent = new StringContent(JsonSerializer.Serialize(content), Encoding.UTF8, "application/json");
                     responseTask = Client(apiSettings).PostAsync(apiRequestLink, htmlContent);
                 }
 
-                HttpResponseMessage response = responseTask.Result;   
+                HttpResponseMessage response = responseTask.Result;
                 if (response.IsSuccessStatusCode)
                 {
                     return response.Content.ReadAsStringAsync().Result;
