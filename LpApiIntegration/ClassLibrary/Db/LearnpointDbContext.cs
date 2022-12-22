@@ -1,4 +1,5 @@
 ﻿using LpApiIntegration.Db;
+using LpApiIntegration.Db.Db.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -14,6 +15,8 @@ namespace LpApiIntegration.FetchFromV2.Db
         public DbSet<StaffModel> StaffMembers { get; set; }
         public DbSet<ProgramModel> Programs { get; set; }
         public DbSet<StudentProgramRelationModel> StudentProgramRelations { get; set; }
+        public DbSet<GradingModel> Grades { get; set; }
+        public DbSet<ProgramEnrollmentModel> ProgramEnrollments { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

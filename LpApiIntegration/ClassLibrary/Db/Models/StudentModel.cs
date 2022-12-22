@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LpApiIntegration.Db.Db.Models;
 
 namespace LpApiIntegration.Db
 {
@@ -23,6 +24,8 @@ namespace LpApiIntegration.Db
         public string? FullName { get; set; }
         public bool IsActive { get; set; }
         public ICollection<StudentCourseRelationModel> CourseMemberships { get; set; }
+        public ICollection<GradingModel> StudentGrade { get; set; }
+        
 
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LpApiIntegration.Db.Db.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -18,5 +19,6 @@ namespace LpApiIntegration.Db
         public int? Points { get; set; }
         public ICollection<StudentCourseRelationModel> StudentMemberships { get; set; }
         public ICollection<StaffCourseRelationModel> StaffMemberships { get; set; }
+        public ICollection<GradingModel> StudentGrade { get; set; }
     }
 }

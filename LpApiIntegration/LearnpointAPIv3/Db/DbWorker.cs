@@ -1,4 +1,5 @@
 ﻿using LpApiIntegration.Db;
+using LpApiIntegration.Db.Db.Models;
 using LpApiIntegration.FetchFromV3.API.Models;
 
 namespace LpApiIntegration.FetchFromV2.Db
@@ -203,6 +204,57 @@ namespace LpApiIntegration.FetchFromV2.Db
             if (dbProgram.LifespanUntil != apiProgram.To)
             {
                 dbProgram.LifespanUntil = apiProgram.To;
+            }
+        }
+
+        public static void AddProgramEnrollment(ProgramEnrollment programEnrollment, LearnpointDbContext dbContext)
+        {
+            dbContext.Add(
+                new ProgramEnrollmentModel()
+                {
+                    ExternalId = programEnrollment.Id,
+                    StudentId = programEnrollment.UserId,
+                    ProgramInstanceId = programEnrollment.ProgramInstanceId,
+                    Enrolled = programEnrollment.Enrolled,
+                    Unenrolled = programEnrollment.Unenrolled,
+                    Active = programEnrollment.Active,
+                    Canceled = programEnrollment.Canceled,
+                    Changed = programEnrollment.Changed,
+                    DiplomaDate = programEnrollment.DiplomaDate,
+                });
+        }
+
+        public static void UpdateProgramEnrollment(ProgramEnrollment programEnrollment, LearnpointDbContext dbContext)
+        {
+            var dbProgramEnrollment = dbContext.ProgramEnrollments.Where(p => p.Id == programEnrollment.Id).SingleOrDefault();
+
+            if (dbProgramEnrollment.ProgramInstanceId != programEnrollment.ProgramInstanceId)
+            {
+                dbProgramEnrollment.ProgramInstanceId = programEnrollment.ProgramInstanceId;
+            }
+            if (dbProgramEnrollment.Enrolled != programEnrollment.Enrolled)
+            {
+                dbProgramEnrollment.Enrolled = programEnrollment.Enrolled;
+            }
+            if (dbProgramEnrollment.Unenrolled != programEnrollment.Unenrolled)
+            {
+                dbProgramEnrollment.Unenrolled = programEnrollment.Unenrolled;
+            }
+            if (dbProgramEnrollment.Active != programEnrollment.Active)
+            {
+                dbProgramEnrollment.Active = programEnrollment.Active;
+            }
+            if (dbProgramEnrollment.Canceled != programEnrollment.Canceled)
+            {
+                dbProgramEnrollment.Canceled = programEnrollment.Canceled;
+            }
+            if (dbProgramEnrollment.Changed != programEnrollment.Changed)
+            {
+                dbProgramEnrollment.Changed = programEnrollment.Changed;
+            }
+            if (dbProgramEnrollment.DiplomaDate != programEnrollment.DiplomaDate)
+            {
+                dbProgramEnrollment.DiplomaDate = programEnrollment.DiplomaDate;
             }
         }
 

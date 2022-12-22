@@ -30,9 +30,9 @@ namespace LearnpointAPIv3.API
             return FetchList<CourseEnrollment>(apiSettings, apiRequestLink);
         }
 
-        public static List<CourseInstance> GetCourseInstances(ApiSettings apiSettings)
+        public static List<CourseInstance> GetCourseInstances(ApiSettings apiSettings, string includePrevious = "false")
         {
-            var apiRequestLink = $"{apiSettings.ApiBaseAddress}/v3/{apiSettings.TenantIdentifier}/courseinstances?includePrevious=false&includeActive=true&includeFuture=true";
+            var apiRequestLink = $"{apiSettings.ApiBaseAddress}/v3/{apiSettings.TenantIdentifier}/courseinstances?includePrevious={includePrevious}&includeActive=true&includeFuture=true";
 
             return FetchList<CourseInstance>(apiSettings, apiRequestLink);
         }
@@ -42,6 +42,13 @@ namespace LearnpointAPIv3.API
             var apiRequestLink = $"{apiSettings.ApiBaseAddress}/v3/{apiSettings.TenantIdentifier}/coursestaffmemberships";
 
             return FetchList<CourseStaffMembership>(apiSettings, apiRequestLink);
+        }
+
+        public static List<CourseGrade> GetCourseGrades(ApiSettings apiSettings)
+        {
+            var apiRequestLink = $"{apiSettings.ApiBaseAddress}/v3/{apiSettings.TenantIdentifier}/coursegrades";
+
+            return FetchList<CourseGrade>(apiSettings, apiRequestLink);
         }
 
         public static List<User> GetActiveStudents(ApiSettings apiSettings)
@@ -72,13 +79,22 @@ namespace LearnpointAPIv3.API
             return FetchList<ProgramEnrollment>(apiSettings, apiRequestLink);
         }
 
-        public static List<User> GetEnrollmentStudents(ApiSettings apiSettings, int[] userIds)
+        public static List<User> GetUserLookup(ApiSettings apiSettings, int[] userIds)
         {
             var apiRequestLink = $"{apiSettings.ApiBaseAddress}/v3/{apiSettings.TenantIdentifier}/users/lookup";
 
             var content = new { Ids = userIds };
 
             return FetchList<User>(apiSettings, apiRequestLink, content);
+        }
+
+        public static List<CourseInstance> GetCourseInstancesLookup(ApiSettings apiSettings, int?[] courseInstanceIds)
+        {
+            var apiRequestLink = $"{apiSettings.ApiBaseAddress}/v3/{apiSettings.TenantIdentifier}/courseinstances/lookup";
+
+            var content = new { Ids = courseInstanceIds };
+
+            return FetchList<CourseInstance>(apiSettings, apiRequestLink, content);
         }
 
         private static List<T> FetchList<T>(ApiSettings apiSettings, string apiRequestLink, object content = null)

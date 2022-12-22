@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LpApiIntegration.Db.Db.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -23,6 +24,7 @@ namespace LpApiIntegration.Db
         public string? Phone2 { get; set; }
         public bool MayExposePhone2ToStudents { get; set; }
         public ICollection<StaffCourseRelationModel> CourseMemberships { get; set; }
+        public ICollection<GradingModel> StudentGrade { get; set; }
 
     }
 }
