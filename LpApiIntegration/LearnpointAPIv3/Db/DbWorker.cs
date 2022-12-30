@@ -73,6 +73,50 @@ namespace LpApiIntegration.FetchFromV2.Db
         }
 
         // Course
+        public static void AddCourseDefinition(CourseDefinition apiCourseDefinition, LearnpointDbContext dbContext)
+        {
+            dbContext.CourseDefinitions.Add(
+            new CourseDefinitionModel()
+            {
+                ExternalId = apiCourseDefinition.Id,
+                Code = apiCourseDefinition.Code,
+                Name = apiCourseDefinition.Name,
+                Description = apiCourseDefinition.Description,
+                IsInternship = apiCourseDefinition.IsInternship,
+                Points = apiCourseDefinition.Points
+
+            });
+        }
+
+        public static void UpdateCourseDefinition(CourseDefinition apiCourseDefinition, LearnpointDbContext dbContext)
+        {
+            var dbCourseDefinition = dbContext.CourseDefinitions.Where(s => s.ExternalId == apiCourseDefinition.Id).SingleOrDefault();
+
+            if (dbCourseDefinition.ExternalId != apiCourseDefinition.Id)
+            {
+                dbCourseDefinition.ExternalId = apiCourseDefinition.Id;
+            }
+            if (dbCourseDefinition.Code != apiCourseDefinition.Code)
+            {
+                dbCourseDefinition.Code = apiCourseDefinition.Code;
+            }
+            if (dbCourseDefinition.Name != apiCourseDefinition.Name)
+            {
+                dbCourseDefinition.Name = apiCourseDefinition.Name;
+            }
+            if (dbCourseDefinition.Description != apiCourseDefinition.Description)
+            {
+                dbCourseDefinition.Description = apiCourseDefinition.Description;
+            }
+            if (dbCourseDefinition.IsInternship != apiCourseDefinition.IsInternship)
+            {
+                dbCourseDefinition.IsInternship = apiCourseDefinition.IsInternship;
+            }
+            if (dbCourseDefinition.Points != apiCourseDefinition.Points)
+            {
+                dbCourseDefinition.Points = apiCourseDefinition.Points;
+            }
+        }
 
         public static void AddCourse(CourseDefinition courseDefinition, CourseInstance courseInstance, LearnpointDbContext dbContext)
         {
@@ -226,7 +270,7 @@ namespace LpApiIntegration.FetchFromV2.Db
 
         public static void UpdateProgramEnrollment(ProgramEnrollment programEnrollment, LearnpointDbContext dbContext)
         {
-            var dbProgramEnrollment = dbContext.ProgramEnrollments.Where(p => p.Id == programEnrollment.Id).SingleOrDefault();
+            var dbProgramEnrollment = dbContext.ProgramEnrollments.Where(p => p.ExternalId == programEnrollment.Id).SingleOrDefault();
 
             if (dbProgramEnrollment.ProgramInstanceId != programEnrollment.ProgramInstanceId)
             {
@@ -258,6 +302,73 @@ namespace LpApiIntegration.FetchFromV2.Db
             }
         }
 
+        //CourseGrades
+
+        //public static void AddCourseGrade(CourseGrade courseGrade, LearnpointDbContext dbContext)
+        //{
+        //    dbContext.Add(
+        //        new CourseGradeModel()
+        //        {
+        //            ExternalId = courseGrade.Id,
+        //            ExternalStudentId = courseGrade.UserId,
+        //            ExternalGradingStaffId = courseGrade.AwardedByUserId,
+        //            ExternalCourseDefinitionId = courseGrade.CourseDefinitionId,
+        //            ExternalProgramEnrollmentId = courseGrade.ProgramEnrollmentId,
+        //            Grade = courseGrade.Name,
+        //            GradeCode = courseGrade.Code,
+        //            GradePoints = courseGrade.Value,
+        //            OfficialGradingDate = courseGrade.OfficialGradingDate,
+        //            Published= courseGrade.Published,
+        //            GradedCourseInstanceId = courseGrade.AwardedInCourseInstanceId
+        //        });
+        //}
+
+        public static void UpdateCourseGrade(CourseGrade grade, int dbStudentId, int dbStaffId, int? dbCourseDefinitionId, int? dbCourseId, int? dbProgramEnrollmentId, LearnpointDbContext dbContext)
+        {
+            var dbCourseGrade = dbContext.Grades.Where(p => p.ExternalId == grade.Id).SingleOrDefault();
+
+            if (dbCourseGrade.GradedStudentId != dbStudentId)
+            {
+                dbCourseGrade.GradedStudentId = dbStudentId;
+            }
+            if (dbCourseGrade.GradingStaffId != dbStaffId)
+            {
+                dbCourseGrade.GradingStaffId = dbStaffId;
+            }
+            if (dbCourseGrade.GradedCourseDefinitionId != dbCourseDefinitionId)
+            {
+                dbCourseGrade.GradedCourseDefinitionId = dbCourseDefinitionId;
+            }
+            if (dbCourseGrade.GradedProgramEnrollmentId != dbProgramEnrollmentId)
+            {
+                dbCourseGrade.GradedProgramEnrollmentId = dbProgramEnrollmentId;
+            }
+            if (dbCourseGrade.Grade != grade.Name)
+            {
+                dbCourseGrade.Grade = grade.Name;
+            }
+            if (dbCourseGrade.GradeCode != grade.Code)
+            {
+                dbCourseGrade.GradeCode = grade.Code;
+            }
+            if (dbCourseGrade.GradePoints != grade.Value)
+            {
+                dbCourseGrade.GradePoints = grade.Value;
+            }
+            if (dbCourseGrade.OfficialGradingDate != grade.OfficialGradingDate)
+            {
+                dbCourseGrade.OfficialGradingDate = grade.OfficialGradingDate;
+            }
+            if (dbCourseGrade.Published != grade.Published)
+            {
+                dbCourseGrade.Published = grade.Published;
+            }
+            if (dbCourseGrade.GradedCourseInstanceId != dbCourseId)
+            {
+                dbCourseGrade.GradedCourseInstanceId = dbCourseId;
+            }
+        }
+
         // Relations
         public static void AddCourseStudentRelation(StudentCourseRelationModel relation, LearnpointDbContext dbContext)
         {
@@ -270,6 +381,11 @@ namespace LpApiIntegration.FetchFromV2.Db
         public static void AddStudentProgramRelation(StudentProgramRelationModel relation, LearnpointDbContext dbContext)
         {
             dbContext.StudentProgramRelations.Add(relation);
+        }
+
+        public static void AddStudentGradeRelation(GradingModel relation, LearnpointDbContext dbContext)
+        {
+            dbContext.Grades.Add(relation);
         }
 
         public static void RemoveCourseStudentRelation(StudentCourseRelationModel relation, LearnpointDbContext dbContext)

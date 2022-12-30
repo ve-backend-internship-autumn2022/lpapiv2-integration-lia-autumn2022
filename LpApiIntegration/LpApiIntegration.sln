@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LpApiIntegration.FetchFromV
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LpApiIntegration.Db", "ClassLibrary\LpApiIntegration.Db.csproj", "{EDB8C60C-7F2F-49FF-B109-7365F9917AFE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CreateProgramEnrollmentDiplomaTextFiles", "CreateProgramEnrollmentDiplomaTextFiles\CreateProgramEnrollmentDiplomaTextFiles.csproj", "{43F4AA3F-3079-4A29-880D-4A8E4AE69245}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{EDB8C60C-7F2F-49FF-B109-7365F9917AFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EDB8C60C-7F2F-49FF-B109-7365F9917AFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EDB8C60C-7F2F-49FF-B109-7365F9917AFE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43F4AA3F-3079-4A29-880D-4A8E4AE69245}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43F4AA3F-3079-4A29-880D-4A8E4AE69245}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43F4AA3F-3079-4A29-880D-4A8E4AE69245}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43F4AA3F-3079-4A29-880D-4A8E4AE69245}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

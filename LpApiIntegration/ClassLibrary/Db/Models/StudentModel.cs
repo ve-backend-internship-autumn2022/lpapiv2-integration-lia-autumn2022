@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LpApiIntegration.Db.Db.Models;
+using System.Security.Cryptography;
 
 namespace LpApiIntegration.Db
 {
@@ -25,6 +26,8 @@ namespace LpApiIntegration.Db
         public bool IsActive { get; set; }
         public ICollection<StudentCourseRelationModel> CourseMemberships { get; set; }
         public ICollection<GradingModel> StudentGrade { get; set; }
+        
+        
         
 
     }

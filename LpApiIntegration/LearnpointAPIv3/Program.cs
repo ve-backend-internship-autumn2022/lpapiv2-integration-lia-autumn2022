@@ -26,6 +26,18 @@ var activeStaffMemberList = FetchFromApi.GetActiveStaff(apiSettings);
 var programInstanceList = FetchFromApi.GetProgramInstances(apiSettings);
 var programEnrollmentList = FetchFromApi.GetProgramEnrollments(apiSettings);
 
+var jsonCourseInstances = FetchFromApi.GetCourseInstances2(apiSettings);
+var jsonCourseDefinitions = FetchFromApi.GetCourseDefinitions2(apiSettings);
+var jsonCourseGrades = FetchFromApi.GetCourseGrades2(apiSettings);
+var jsonProgramEnrollments = FetchFromApi.GetProgramEnrollments2(apiSettings);
+var jsonCourseStaffMemberships = FetchFromApi.GetCourseStaffMemberships2(apiSettings);
+
+//File.WriteAllText("CourseInstances2.json", jsonCourseInstances);
+//File.WriteAllText("CourseDefinitions2.json", jsonCourseDefinitions);
+//File.WriteAllText("CourseGrades2.json", jsonCourseGrades);
+//File.WriteAllText("ProgramEnrollments2.json", jsonProgramEnrollments);
+//File.WriteAllText("CourseStaffMemberships2.json", jsonCourseStaffMemberships);
+
 DbManager.ProgramManager(programInstanceList, programEnrollmentList);
 DbManager.StudentManager(activeStudentList, programEnrollmentList,courseGradeList, apiSettings);
 DbManager.StaffManager(activeStaffMemberList);

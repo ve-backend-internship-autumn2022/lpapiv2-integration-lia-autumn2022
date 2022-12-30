@@ -17,6 +17,8 @@ namespace LpApiIntegration.FetchFromV2.Db
         public DbSet<StudentProgramRelationModel> StudentProgramRelations { get; set; }
         public DbSet<GradingModel> Grades { get; set; }
         public DbSet<ProgramEnrollmentModel> ProgramEnrollments { get; set; }
+        //public DbSet<CourseGradeModel> CourseGrades { get; set; }
+        public DbSet<CourseDefinitionModel> CourseDefinitions { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

@@ -19,6 +19,6 @@ namespace LpApiIntegration.Db
         public int? Points { get; set; }
         public ICollection<StudentCourseRelationModel> StudentMemberships { get; set; }
         public ICollection<StaffCourseRelationModel> StaffMemberships { get; set; }
-        public ICollection<GradingModel> StudentGrade { get; set; }
+        //public ICollection<GradingModel> StudentGrade { get; set; }
     }
 }

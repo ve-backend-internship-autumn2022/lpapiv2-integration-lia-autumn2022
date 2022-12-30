@@ -57,7 +57,6 @@ namespace LpApiIntegration.FetchFromV3.Functions
 
             foreach (var grade in courseGrades)
             {
-                
                 if (!dbContext.Courses.Any(s => s.ExternalId == grade.AwardedInCourseInstanceId))
                 {
                     if (grade.AwardedInCourseInstanceId != null)
@@ -66,7 +65,7 @@ namespace LpApiIntegration.FetchFromV3.Functions
                     }
                     else
                     {
-                        var allCourseInstances = FetchFromApi.GetCourseInstances(apiSettings, "true");
+                        var allCourseInstances = FetchFromApi.GetCourseInstances(apiSettings);
 
                         if (allCourseInstances.Any(c => c.CourseDefinitionId == grade.CourseDefinitionId))
                         {
@@ -81,7 +80,7 @@ namespace LpApiIntegration.FetchFromV3.Functions
                                 courseInstanceIdlist.Add(null);
                             }
 
-                            
+
                         }
                     }
                 }

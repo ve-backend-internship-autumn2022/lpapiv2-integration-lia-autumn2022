@@ -30,9 +30,9 @@ namespace LearnpointAPIv3.API
             return FetchList<CourseEnrollment>(apiSettings, apiRequestLink);
         }
 
-        public static List<CourseInstance> GetCourseInstances(ApiSettings apiSettings, string includePrevious = "false")
+        public static List<CourseInstance> GetCourseInstances(ApiSettings apiSettings)
         {
-            var apiRequestLink = $"{apiSettings.ApiBaseAddress}/v3/{apiSettings.TenantIdentifier}/courseinstances?includePrevious={includePrevious}&includeActive=true&includeFuture=true";
+            var apiRequestLink = $"{apiSettings.ApiBaseAddress}/v3/{apiSettings.TenantIdentifier}/courseinstances?includePrevious=true&includeActive=true&includeFuture=true";
 
             return FetchList<CourseInstance>(apiSettings, apiRequestLink);
         }
@@ -74,7 +74,7 @@ namespace LearnpointAPIv3.API
 
         public static List<ProgramEnrollment> GetProgramEnrollments(ApiSettings apiSettings)
         {
-            var apiRequestLink = $"{apiSettings.ApiBaseAddress}/v3/{apiSettings.TenantIdentifier}/programenrollments?includeActive=true&includeInactive=true&excludeCanceled=true&expandSelectedCourseDefinitions=false&expandSelectedSpecializations=false";
+            var apiRequestLink = $"{apiSettings.ApiBaseAddress}/v3/{apiSettings.TenantIdentifier}/programenrollments?includeActive=true&includeInactive=true&excludeCanceled=false&expandSelectedCourseDefinitions=false&expandSelectedSpecializations=true";
 
             return FetchList<ProgramEnrollment>(apiSettings, apiRequestLink);
         }
@@ -95,6 +95,41 @@ namespace LearnpointAPIv3.API
             var content = new { Ids = courseInstanceIds };
 
             return FetchList<CourseInstance>(apiSettings, apiRequestLink, content);
+        }
+
+        public static string GetCourseInstances2(ApiSettings apiSettings)
+        {
+            var apiRequestLink = $"{apiSettings.ApiBaseAddress}/v3/{apiSettings.TenantIdentifier}/courseinstances?includePrevious=true&includeActive=true&includeFuture=true";
+
+            return GetData(apiSettings, apiRequestLink);
+        }
+
+        public static string GetCourseDefinitions2(ApiSettings apiSettings)
+        {
+            var apiRequestLink = $"{apiSettings.ApiBaseAddress}/v3/{apiSettings.TenantIdentifier}/coursedefinitions";
+
+            return GetData(apiSettings, apiRequestLink);
+        }
+
+        public static string GetCourseGrades2(ApiSettings apiSettings)
+        {
+            var apiRequestLink = $"{apiSettings.ApiBaseAddress}/v3/{apiSettings.TenantIdentifier}/coursegrades";
+
+            return GetData(apiSettings, apiRequestLink);
+        }
+
+        public static string GetProgramEnrollments2(ApiSettings apiSettings)
+        {
+            var apiRequestLink = $"{apiSettings.ApiBaseAddress}/v3/{apiSettings.TenantIdentifier}/programenrollments?includeActive=true&includeInactive=true&excludeCanceled=false&expandSelectedCourseDefinitions=true&expandSelectedSpecializations=true";
+
+            return GetData(apiSettings, apiRequestLink);
+        }
+
+        public static string GetCourseStaffMemberships2(ApiSettings apiSettings)
+        {
+            var apiRequestLink = $"{apiSettings.ApiBaseAddress}/v3/{apiSettings.TenantIdentifier}/coursestaffmemberships";
+
+            return GetData(apiSettings, apiRequestLink);
         }
 
         private static List<T> FetchList<T>(ApiSettings apiSettings, string apiRequestLink, object content = null)
