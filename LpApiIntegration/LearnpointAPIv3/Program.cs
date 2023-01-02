@@ -38,8 +38,8 @@ var jsonCourseStaffMemberships = FetchFromApi.GetCourseStaffMemberships2(apiSett
 //File.WriteAllText("ProgramEnrollments2.json", jsonProgramEnrollments);
 //File.WriteAllText("CourseStaffMemberships2.json", jsonCourseStaffMemberships);
 
+DbManager.StudentManager(activeStudentList, programEnrollmentList, courseGradeList, apiSettings);
 DbManager.ProgramManager(programInstanceList, programEnrollmentList);
-DbManager.StudentManager(activeStudentList, programEnrollmentList,courseGradeList, apiSettings);
 DbManager.StaffManager(activeStaffMemberList);
 DbManager.CourseManager(courseDefinitionList, courseInstanceList, courseGradeList, apiSettings);
 DbManager.RelationshipManager(courseStaffMembershipList, courseInstanceList,

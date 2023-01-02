@@ -257,25 +257,25 @@ namespace LpApiIntegration.FetchFromV2.Db
                 new ProgramEnrollmentModel()
                 {
                     ExternalId = programEnrollment.Id,
-                    StudentId = programEnrollment.UserId,
-                    ProgramInstanceId = programEnrollment.ProgramInstanceId,
+                    StudentId = dbContext.Students.Where(s => s.ExternalId == programEnrollment.UserId).SingleOrDefault().Id,
+                    ProgramInstanceId = dbContext.Programs.Where(p => p.ExternalId == programEnrollment.ProgramInstanceId).SingleOrDefault().Id,
                     Enrolled = programEnrollment.Enrolled,
                     Unenrolled = programEnrollment.Unenrolled,
                     Active = programEnrollment.Active,
                     Canceled = programEnrollment.Canceled,
                     Changed = programEnrollment.Changed,
                     DiplomaDate = programEnrollment.DiplomaDate,
-                });
+                }) ;
         }
 
         public static void UpdateProgramEnrollment(ProgramEnrollment programEnrollment, LearnpointDbContext dbContext)
         {
             var dbProgramEnrollment = dbContext.ProgramEnrollments.Where(p => p.ExternalId == programEnrollment.Id).SingleOrDefault();
 
-            if (dbProgramEnrollment.ProgramInstanceId != programEnrollment.ProgramInstanceId)
-            {
-                dbProgramEnrollment.ProgramInstanceId = programEnrollment.ProgramInstanceId;
-            }
+            //if (dbProgramEnrollment.ProgramInstanceId != programEnrollment.ProgramInstanceId)
+            //{
+            //    dbProgramEnrollment.ProgramInstanceId = programEnrollment.ProgramInstanceId;
+            //}
             if (dbProgramEnrollment.Enrolled != programEnrollment.Enrolled)
             {
                 dbProgramEnrollment.Enrolled = programEnrollment.Enrolled;

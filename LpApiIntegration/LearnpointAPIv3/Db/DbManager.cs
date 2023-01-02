@@ -150,7 +150,7 @@ namespace LpApiIntegration.FetchFromV2.Db
                         DbWorker.UpdateProgramEnrollment(programEnrollment, DbContext); 
                     }
                     else
-                    {
+                    {                  
                         DbWorker.AddProgramEnrollment(programEnrollment, DbContext);
                     }
                 }
