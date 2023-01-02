@@ -16,6 +16,7 @@ namespace LpApiIntegration.Db
         public bool IsActiveStudent { get; set; }
         public string? StateName { get; set; }
         public DateTime? FromDate { get; set; }
+
         public StudentModel Student { get; set; }
         public ProgramModel Program { get; set; }
         

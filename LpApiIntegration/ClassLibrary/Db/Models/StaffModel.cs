@@ -23,6 +23,7 @@ namespace LpApiIntegration.Db
         public bool MayExposeMobilePhoneToStudents { get; set; }
         public string? Phone2 { get; set; }
         public bool MayExposePhone2ToStudents { get; set; }
+
         public ICollection<StaffCourseRelationModel> CourseMemberships { get; set; }
         public ICollection<GradingModel> StudentGrade { get; set; }
 

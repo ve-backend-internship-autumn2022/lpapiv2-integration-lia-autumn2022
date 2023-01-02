@@ -22,14 +22,10 @@ namespace LpApiIntegration.Db.Db.Models
         public string? OfficialGradingDate { get; set; }
         public DateTime Published { get; set; }
         public int? GradedCourseInstanceId { get; set; }
+
         [ForeignKey("GradedStudentId")] public StudentModel Student { get; set; }
         [ForeignKey("GradingStaffId")] public StaffModel StaffMember { get; set; }
-        
-
-
-
-        //[ForeignKey("GradedProgramEnrollmentId")] public ProgramEnrollmentModel ProgramEnrollment { get; set; }
-        //[ForeignKey("GradedCourseId")] public CourseModel Course { get; set; }
-
+        [ForeignKey("GradedCourseDefinitionId")] public CourseDefinitionModel CourseDefinition { get; set; }
+        [ForeignKey("GradedCourseInstanceId")] public CourseModel Course { get; set; }
     }
 }

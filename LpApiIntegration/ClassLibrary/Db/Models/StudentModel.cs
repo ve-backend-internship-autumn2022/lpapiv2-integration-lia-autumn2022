@@ -24,11 +24,9 @@ namespace LpApiIntegration.Db
         public string? HomePhone { get; set; }
         public string? FullName { get; set; }
         public bool IsActive { get; set; }
-        public ICollection<StudentCourseRelationModel> CourseMemberships { get; set; }
-        public ICollection<GradingModel> StudentGrade { get; set; }
-        
-        
-        
 
+        public ICollection<StudentCourseRelationModel> CourseMemberships { get; set; }
+        public ICollection<GradingModel> Gradings { get; set; }
+        public ICollection<ProgramEnrollmentModel> ProgramEnrollments { get; set; }
     }
 }

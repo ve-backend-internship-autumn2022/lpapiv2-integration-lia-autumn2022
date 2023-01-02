@@ -17,5 +17,7 @@ namespace LpApiIntegration.Db.Db.Models
         public string? Description { get; set; }
         public bool IsInternship { get; set; }
         public int Points { get; set; }
+
+        public ICollection<GradingModel> Gradings { get; set; }
     }
 }

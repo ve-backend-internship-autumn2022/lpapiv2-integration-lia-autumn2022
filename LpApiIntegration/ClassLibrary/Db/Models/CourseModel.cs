@@ -17,8 +17,9 @@ namespace LpApiIntegration.Db
         public DateTime? LifespanFrom { get; set; }
         public DateTime? LifespanUntil { get; set; }        
         public int? Points { get; set; }
+
         public ICollection<StudentCourseRelationModel> StudentMemberships { get; set; }
         public ICollection<StaffCourseRelationModel> StaffMemberships { get; set; }
-        //public ICollection<GradingModel> StudentGrade { get; set; }
+        public ICollection<GradingModel> Gradings { get; set; }
     }
 }

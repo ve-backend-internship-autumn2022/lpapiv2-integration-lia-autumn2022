@@ -16,7 +16,7 @@ namespace LpApiIntegration.Db
         public string? Name { get; set; }
         public DateTime? LifespanFrom { get; set; }
         public DateTime? LifespanUntil { get; set; }
-        
-        
+
+        public ICollection<ProgramEnrollmentModel> ProgramEnrollments { get; set; }
     }
 }

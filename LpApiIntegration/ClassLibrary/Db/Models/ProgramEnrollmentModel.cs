@@ -20,7 +20,8 @@ namespace LpApiIntegration.Db.Db.Models
         public bool Canceled { get; set; }
         public DateTime Changed { get; set; }
         public string? DiplomaDate { get; set; }
-        
 
+        public StudentModel Student { get; set; }
+        [ForeignKey("ProgramInstanceId")] public ProgramModel Program { get; set; }
     }
 }
