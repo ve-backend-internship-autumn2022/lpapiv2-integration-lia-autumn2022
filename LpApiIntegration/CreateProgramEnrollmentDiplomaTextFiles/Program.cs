@@ -9,12 +9,27 @@ LearnpointDbContext dbContext = new();
 
 var enrollments = dbContext.ProgramEnrollments.ToList();
 
+
+
 var grades = from programEnrollment in dbContext.ProgramEnrollments
              join studentGrade in dbContext.Grades on programEnrollment.Id equals studentGrade.GradedProgramEnrollmentId
              join program in dbContext.Programs on programEnrollment.ProgramInstanceId equals program.Id
              join student in dbContext.Students on studentGrade.GradedStudentId equals student.Id
              join courseDefinitions in dbContext.CourseDefinitions on studentGrade.GradedCourseDefinitionId equals courseDefinitions.Id
              select new { programEnrollment, program, studentGrade, courseDefinitions, student };
+
+//Console.Write("Student Fullname: ");
+//string? studentName = Console.ReadLine();
+//if (!string.IsNullOrWhiteSpace(studentName))
+//{
+//    grades = from programEnrollment in dbContext.ProgramEnrollments
+//             join studentGrade in dbContext.Grades on programEnrollment.Id equals studentGrade.GradedProgramEnrollmentId
+//             join program in dbContext.Programs on programEnrollment.ProgramInstanceId equals program.Id
+//             join student in dbContext.Students on studentGrade.GradedStudentId equals student.Id
+//             join courseDefinitions in dbContext.CourseDefinitions on studentGrade.GradedCourseDefinitionId equals courseDefinitions.Id
+//             where student.FullName == studentName
+//             select new { programEnrollment, program, studentGrade, courseDefinitions, student };
+//}
 
 grades.ToList();
 
@@ -37,7 +52,7 @@ foreach (var enrollment in enrollments)
         //}
 
 
-        using StreamWriter sw = new StreamWriter($"{studentGrades.student.NationalRegistrationNumber} {studentGrades.student.FullName} {studentGrades.program.Code} {studentGrades.program.Name}.txt");
+        using StreamWriter sw = new StreamWriter(@$"..\..\..\Diplomas\{studentGrades.student.NationalRegistrationNumber} {studentGrades.student.FullName} {studentGrades.program.Code} {studentGrades.program.Name}.txt");
         {
             sw.WriteLine("----------------------------------");
             sw.WriteLine($"Diploma {studentGrades.program.Name}");
