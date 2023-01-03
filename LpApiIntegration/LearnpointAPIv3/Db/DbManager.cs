@@ -442,7 +442,8 @@ namespace LpApiIntegration.FetchFromV2.Db
                             GradePoints = grade.Value,
                             OfficialGradingDate = grade.OfficialGradingDate,
                             Published = grade.Published,
-                            GradedCourseInstanceId = dbCourseId
+                            GradedCourseInstanceId = dbCourseId,
+                            BestCourseSelectionMeritSort = grade.BestCourseSelectionMeritSort
 
                         };
 

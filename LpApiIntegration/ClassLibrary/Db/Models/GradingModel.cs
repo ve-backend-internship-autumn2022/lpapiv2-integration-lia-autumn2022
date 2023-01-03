@@ -22,6 +22,7 @@ namespace LpApiIntegration.Db.Db.Models
         public string? OfficialGradingDate { get; set; }
         public DateTime Published { get; set; }
         public int? GradedCourseInstanceId { get; set; }
+        public int BestCourseSelectionMeritSort { get; set; }
 
         [ForeignKey("GradedStudentId")] public StudentModel Student { get; set; }
         [ForeignKey("GradingStaffId")] public StaffModel StaffMember { get; set; }
