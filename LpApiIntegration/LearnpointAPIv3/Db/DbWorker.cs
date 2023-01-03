@@ -271,11 +271,17 @@ namespace LpApiIntegration.FetchFromV2.Db
         public static void UpdateProgramEnrollment(ProgramEnrollment programEnrollment, LearnpointDbContext dbContext)
         {
             var dbProgramEnrollment = dbContext.ProgramEnrollments.Where(p => p.ExternalId == programEnrollment.Id).SingleOrDefault();
+            var dbStudentId = dbContext.Students.Where(s => s.ExternalId == programEnrollment.UserId).SingleOrDefault().Id;
+            var dbProgramId = dbContext.Programs.Where(p => p.ExternalId == programEnrollment.ProgramInstanceId).SingleOrDefault().Id;
 
-            //if (dbProgramEnrollment.ProgramInstanceId != programEnrollment.ProgramInstanceId)
-            //{
-            //    dbProgramEnrollment.ProgramInstanceId = programEnrollment.ProgramInstanceId;
-            //}
+            if (dbProgramEnrollment.StudentId != dbStudentId)
+            {
+                dbProgramEnrollment.StudentId = dbStudentId;
+            }
+            if (dbProgramEnrollment.ProgramInstanceId != dbProgramId)
+            {
+                dbProgramEnrollment.ProgramInstanceId = dbProgramId;
+            }
             if (dbProgramEnrollment.Enrolled != programEnrollment.Enrolled)
             {
                 dbProgramEnrollment.Enrolled = programEnrollment.Enrolled;
@@ -366,6 +372,10 @@ namespace LpApiIntegration.FetchFromV2.Db
             if (dbCourseGrade.GradedCourseInstanceId != dbCourseId)
             {
                 dbCourseGrade.GradedCourseInstanceId = dbCourseId;
+            }
+            if (dbCourseGrade.BestCourseSelectionMeritSort != grade.BestCourseSelectionMeritSort)
+            {
+                dbCourseGrade.BestCourseSelectionMeritSort = grade.BestCourseSelectionMeritSort;
             }
         }
 
