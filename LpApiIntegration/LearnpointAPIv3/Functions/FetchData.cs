@@ -2,7 +2,6 @@
 using LearnpointAPIv3.API;
 using LpApiIntegration.FetchFromV2.Db;
 using LpApiIntegration.FetchFromV3.API.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace LpApiIntegration.FetchFromV3.Functions
 {
@@ -79,8 +78,6 @@ namespace LpApiIntegration.FetchFromV3.Functions
                             {
                                 courseInstanceIdlist.Add(null);
                             }
-
-
                         }
                     }
                 }

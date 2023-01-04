@@ -125,7 +125,7 @@ namespace LpApiIntegration.FetchFromV2.Db
             new StaffModel()
             {
                 ExternalId = apiStaffMember.Id,
-                ExternalUserId = apiStaffMember.UserId,                
+                ExternalUserId = apiStaffMember.UserId,
                 NationalRegistrationNumber = apiStaffMember.NationalRegistrationNumber,
                 Signature = apiStaffMember.Signature,
                 FullName = apiStaffMember.FirstName + " " + apiStaffMember.LastName,
@@ -252,5 +252,5 @@ namespace LpApiIntegration.FetchFromV2.Db
 }
 
 
-    
+
 

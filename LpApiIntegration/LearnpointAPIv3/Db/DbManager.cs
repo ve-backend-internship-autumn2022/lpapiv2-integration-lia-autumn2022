@@ -1,13 +1,10 @@
 ﻿
 using LearnpointAPIv3;
-using LearnpointAPIv3.API;
 using LpApiIntegration.Db;
 using LpApiIntegration.Db.Db.Models;
 using LpApiIntegration.FetchFromV3.API.Models;
 using LpApiIntegration.FetchFromV3.Functions;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace LpApiIntegration.FetchFromV2.Db
 {
@@ -18,7 +15,7 @@ namespace LpApiIntegration.FetchFromV2.Db
         public static void StudentManager(List<User> students, List<ProgramEnrollment> programEnrollments, List<CourseGrade> courseGrades, ApiSettings apiSettings)
         {
             students.AddRange(FetchData.GetEnrollmentStudents(programEnrollments, apiSettings, DbContext));
-            
+
             foreach (var student in FetchData.GetGradingStudents(courseGrades, apiSettings, DbContext))
             {
                 if (!students.Any(s => s.Id == student.Id))
@@ -26,7 +23,7 @@ namespace LpApiIntegration.FetchFromV2.Db
                     students.Add(student);
                 }
             }
-            
+
 
             var apiStudents = students;
 
@@ -41,7 +38,7 @@ namespace LpApiIntegration.FetchFromV2.Db
                     DbWorker.AddStudent(apiStudent, DbContext);
                 }
 
-                
+
             }
 
             DbWorker.CheckForInactiveStudents(apiStudents, DbContext);
@@ -53,8 +50,8 @@ namespace LpApiIntegration.FetchFromV2.Db
         {
             AddCourseDefinitions(courseDefinitions);
             AddCourses(courseDefinitions, courseGrades, courseInstances, apiSettings);
-            
-            static void AddCourseDefinitions (List<CourseDefinition> courseDefinitions)
+
+            static void AddCourseDefinitions(List<CourseDefinition> courseDefinitions)
             {
                 var apiCourseDefinitions = courseDefinitions;
 
@@ -71,7 +68,7 @@ namespace LpApiIntegration.FetchFromV2.Db
                 }
             }
 
-            static void AddCourses (List<CourseDefinition> courseDefinitions, List<CourseGrade> courseGrades, List<CourseInstance> courseInstances, ApiSettings apiSettings)
+            static void AddCourses(List<CourseDefinition> courseDefinitions, List<CourseGrade> courseGrades, List<CourseInstance> courseInstances, ApiSettings apiSettings)
             {
                 foreach (var courseInstance in FetchData.GetCourses(courseGrades, apiSettings, DbContext))
                 {
@@ -125,7 +122,7 @@ namespace LpApiIntegration.FetchFromV2.Db
         {
             AddProgramInstances(programs);
             AddProgramEnrollments(programEnrollments);
-            
+
             static void AddProgramInstances(List<ProgramInstance> programs)
             {
                 foreach (var programInstance in programs)
@@ -140,17 +137,17 @@ namespace LpApiIntegration.FetchFromV2.Db
                     }
                 }
             }
-            
+
             static void AddProgramEnrollments(List<ProgramEnrollment> programEnrollments)
             {
                 foreach (var programEnrollment in programEnrollments)
                 {
                     if (DbContext.ProgramEnrollments.Any(p => p.ExternalId == programEnrollment.Id))
                     {
-                        DbWorker.UpdateProgramEnrollment(programEnrollment, DbContext); 
+                        DbWorker.UpdateProgramEnrollment(programEnrollment, DbContext);
                     }
                     else
-                    {                  
+                    {
                         DbWorker.AddProgramEnrollment(programEnrollment, DbContext);
                     }
                 }
@@ -249,19 +246,6 @@ namespace LpApiIntegration.FetchFromV2.Db
                 //Add and delete staff-course-relations
                 var relations = new List<CourseStaffMembership>();
 
-                //foreach (var instance in courseInstances)
-                //{
-                //    var dbCourse = DbContext.Courses.Where(c => c.ExternalId == instance.Id).SingleOrDefault();
-
-                //    foreach (var relation in courseStaffRelations)
-                //    {
-                //        if (relation.CourseInstanceId == dbCourse.ExternalId)
-                //        {
-                //            relations.Add(relation);
-                //        }
-                //    }
-                //}
-
                 foreach (var relation in courseStaffRelations)
                 {
                     var dbCourse = DbContext.Courses.Where(c => c.ExternalId == relation.CourseInstanceId).SingleOrDefault();
@@ -272,11 +256,6 @@ namespace LpApiIntegration.FetchFromV2.Db
                     }
 
                 }
-
-                //foreach (var instance in courseInstances)
-                //{
-                //    relations.Add(courseStaffRelations.Where(cs => cs.CourseInstanceId == instance.Id).SingleOrDefault());
-                //}
 
                 foreach (var relation in relations)
                 {
@@ -406,7 +385,7 @@ namespace LpApiIntegration.FetchFromV2.Db
                     var dbStudentId = DbContext.Students.Where(s => s.ExternalId == grade.UserId).SingleOrDefault().Id;
 
                     var dbStaffId = DbContext.StaffMembers.Where(s => s.ExternalId == grade.AwardedByUserId).SingleOrDefault().Id;
-                    
+
                     if (grade.AwardedInCourseInstanceId != null)
                     {
                         dbCourseId = DbContext.Courses.Where(c => c.ExternalId == grade.AwardedInCourseInstanceId).SingleOrDefault().Id;
@@ -450,7 +429,23 @@ namespace LpApiIntegration.FetchFromV2.Db
                         DbWorker.AddStudentGradeRelation(studentGrade, DbContext);
                     }
                 }
-            } 
+
+                HashSet<int> apiIds = new(courseGrade.Select(c => c.Id));
+
+                HashSet<int> dbIds = new(DbContext.Grades.Select(g => g.ExternalId));
+
+                var idDifferences = dbIds.Except(apiIds).ToList();
+
+                if (idDifferences.Count != 0)
+                {
+                    foreach (var externalId in idDifferences)
+                    {
+                        var relation = DbContext.Grades.Where(g => g.ExternalId == externalId).SingleOrDefault();
+
+                        DbWorker.RemoveStudentGrade(relation, DbContext);
+                    }
+                }
+            }
         }
     }
 }

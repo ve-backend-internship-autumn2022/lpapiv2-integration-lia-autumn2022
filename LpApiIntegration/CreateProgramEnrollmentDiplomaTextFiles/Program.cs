@@ -1,15 +1,8 @@
-﻿using CreateProgramEnrollmentDiplomaTextFiles;
-using LpApiIntegration.Db;
-using LpApiIntegration.Db.Db.Models;
-using LpApiIntegration.FetchFromV2.Db;
-using Microsoft.EntityFrameworkCore;
-using System.Diagnostics;
+﻿using LpApiIntegration.FetchFromV2.Db;
 
 LearnpointDbContext dbContext = new();
 
 var enrollments = dbContext.ProgramEnrollments.ToList();
-
-
 
 var grades = from programEnrollment in dbContext.ProgramEnrollments
              join studentGrade in dbContext.Grades on programEnrollment.Id equals studentGrade.GradedProgramEnrollmentId
@@ -70,7 +63,7 @@ foreach (var enrollment in enrollments)
             sw.WriteLine("----------------------------------");
             sw.Close();
         }
-    }    
+    }
 }
 
 

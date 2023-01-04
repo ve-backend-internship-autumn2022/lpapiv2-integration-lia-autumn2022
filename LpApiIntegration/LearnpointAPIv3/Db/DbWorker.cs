@@ -73,6 +73,7 @@ namespace LpApiIntegration.FetchFromV2.Db
         }
 
         // Course
+
         public static void AddCourseDefinition(CourseDefinition apiCourseDefinition, LearnpointDbContext dbContext)
         {
             dbContext.CourseDefinitions.Add(
@@ -265,7 +266,7 @@ namespace LpApiIntegration.FetchFromV2.Db
                     Canceled = programEnrollment.Canceled,
                     Changed = programEnrollment.Changed,
                     DiplomaDate = programEnrollment.DiplomaDate,
-                }) ;
+                });
         }
 
         public static void UpdateProgramEnrollment(ProgramEnrollment programEnrollment, LearnpointDbContext dbContext)
@@ -308,26 +309,7 @@ namespace LpApiIntegration.FetchFromV2.Db
             }
         }
 
-        //CourseGrades
-
-        //public static void AddCourseGrade(CourseGrade courseGrade, LearnpointDbContext dbContext)
-        //{
-        //    dbContext.Add(
-        //        new CourseGradeModel()
-        //        {
-        //            ExternalId = courseGrade.Id,
-        //            ExternalStudentId = courseGrade.UserId,
-        //            ExternalGradingStaffId = courseGrade.AwardedByUserId,
-        //            ExternalCourseDefinitionId = courseGrade.CourseDefinitionId,
-        //            ExternalProgramEnrollmentId = courseGrade.ProgramEnrollmentId,
-        //            Grade = courseGrade.Name,
-        //            GradeCode = courseGrade.Code,
-        //            GradePoints = courseGrade.Value,
-        //            OfficialGradingDate = courseGrade.OfficialGradingDate,
-        //            Published= courseGrade.Published,
-        //            GradedCourseInstanceId = courseGrade.AwardedInCourseInstanceId
-        //        });
-        //}
+        //CourseGrade
 
         public static void UpdateCourseGrade(CourseGrade grade, int dbStudentId, int dbStaffId, int? dbCourseDefinitionId, int? dbCourseId, int? dbProgramEnrollmentId, LearnpointDbContext dbContext)
         {
@@ -392,7 +374,6 @@ namespace LpApiIntegration.FetchFromV2.Db
         {
             dbContext.StudentProgramRelations.Add(relation);
         }
-
         public static void AddStudentGradeRelation(GradingModel relation, LearnpointDbContext dbContext)
         {
             dbContext.Grades.Add(relation);
@@ -409,6 +390,10 @@ namespace LpApiIntegration.FetchFromV2.Db
         public static void RemoveStudentProgramRelation(StudentProgramRelationModel relation, LearnpointDbContext dbContext)
         {
             dbContext.StudentProgramRelations.Remove(relation);
+        }
+        public static void RemoveStudentGrade(GradingModel relation, LearnpointDbContext dbContext)
+        {
+            dbContext.Grades.Remove(relation);
         }
     }
 }

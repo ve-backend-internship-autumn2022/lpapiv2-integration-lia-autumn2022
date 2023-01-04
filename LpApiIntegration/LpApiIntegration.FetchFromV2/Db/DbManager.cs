@@ -210,7 +210,7 @@ namespace LpApiIntegration.FetchFromV2.Db
                     }
                 }
             }
-            
+
             static void StudentProgramRelation(GroupsApiResponse groupReponseExtended, StudentsApiResponse studentResponse)
             {
                 //Add and delete student-program-relations
@@ -239,7 +239,7 @@ namespace LpApiIntegration.FetchFromV2.Db
                                 {
                                     foreach (var part in educationPlan.Parts)
                                     {
-                                        if (part.Code == program.Code )
+                                        if (part.Code == program.Code)
                                         {
                                             var relation = new StudentProgramRelationModel()
                                             {
