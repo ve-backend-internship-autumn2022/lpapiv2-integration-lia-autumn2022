@@ -23,5 +23,6 @@ namespace LpApiIntegration.Db.Db.Models
         [ForeignKey("GradingStaffId")] public StaffModel StaffMember { get; set; }
         [ForeignKey("GradedCourseDefinitionId")] public CourseDefinitionModel CourseDefinition { get; set; }
         [ForeignKey("GradedCourseInstanceId")] public CourseModel Course { get; set; }
+        [ForeignKey("GradedProgramEnrollmentId")] public ProgramEnrollmentModel ProgramEnrollment { get; set; }
     }
 }

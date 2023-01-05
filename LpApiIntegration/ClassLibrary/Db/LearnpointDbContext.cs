@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 
-namespace LpApiIntegration.FetchFromV2.Db
+namespace LpApiIntegration.Db
 {
     public class LearnpointDbContext : DbContext
     {

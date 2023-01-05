@@ -10,12 +10,16 @@ namespace LpApiIntegration.FetchFromV2.Db
 {
     internal class DbManager
     {
-        private static LearnpointDbContext DbContext = new();
+        private static readonly LearnpointDbContext DbContext = new();
 
-        public static void StudentManager(List<User> students, List<ProgramEnrollment> programEnrollments, List<CourseGrade> courseGrades, ApiSettings apiSettings)
+        public static void StudentManager(List<User> students, List<ProgramEnrollment> programEnrollments, List<ProgramInstance> programs, List<CourseGrade> courseGrades, ApiSettings apiSettings)
         {
-            students.AddRange(FetchData.GetEnrollmentStudents(programEnrollments, apiSettings, DbContext));
-
+            students.AddRange(FetchData.GetEnrollmentStudents(programEnrollments, programs, apiSettings, DbContext));
+            //if (DbContext.ProgramEnrollments.Any())
+            //{
+            //    students.AddRange(FetchData.GetEnrollmentStudents(programEnrollments, apiSettings, DbContext));
+            //}
+            
             foreach (var student in FetchData.GetGradingStudents(courseGrades, apiSettings, DbContext))
             {
                 if (!students.Any(s => s.Id == student.Id))
@@ -23,7 +27,6 @@ namespace LpApiIntegration.FetchFromV2.Db
                     students.Add(student);
                 }
             }
-
 
             var apiStudents = students;
 
@@ -37,8 +40,6 @@ namespace LpApiIntegration.FetchFromV2.Db
                 {
                     DbWorker.AddStudent(apiStudent, DbContext);
                 }
-
-
             }
 
             DbWorker.CheckForInactiveStudents(apiStudents, DbContext);
@@ -48,10 +49,10 @@ namespace LpApiIntegration.FetchFromV2.Db
 
         public static void CourseManager(List<CourseDefinition> courseDefinitions, List<CourseInstance> courseInstances, List<CourseGrade> courseGrades, ApiSettings apiSettings)
         {
-            AddCourseDefinitions(courseDefinitions);
-            AddCourses(courseDefinitions, courseGrades, courseInstances, apiSettings);
+            ManageCourseDefinitions(courseDefinitions);
+            ManageCourses(courseDefinitions, courseGrades, courseInstances, apiSettings);
 
-            static void AddCourseDefinitions(List<CourseDefinition> courseDefinitions)
+            static void ManageCourseDefinitions(List<CourseDefinition> courseDefinitions)
             {
                 var apiCourseDefinitions = courseDefinitions;
 
@@ -66,9 +67,11 @@ namespace LpApiIntegration.FetchFromV2.Db
                         DbWorker.AddCourseDefinition(apiCourseDefinition, DbContext);
                     }
                 }
+
+                DbContext.SaveChanges();
             }
 
-            static void AddCourses(List<CourseDefinition> courseDefinitions, List<CourseGrade> courseGrades, List<CourseInstance> courseInstances, ApiSettings apiSettings)
+            static void ManageCourses(List<CourseDefinition> courseDefinitions, List<CourseGrade> courseGrades, List<CourseInstance> courseInstances, ApiSettings apiSettings)
             {
                 foreach (var courseInstance in FetchData.GetCourses(courseGrades, apiSettings, DbContext))
                 {
@@ -94,9 +97,9 @@ namespace LpApiIntegration.FetchFromV2.Db
                         DbWorker.AddCourse(apiCourse, apiCourseInstance, DbContext);
                     }
                 }
-            }
 
-            DbContext.SaveChanges();
+                DbContext.SaveChanges();
+            }
         }
 
         public static void StaffManager(List<User> staffMembers)
@@ -120,10 +123,10 @@ namespace LpApiIntegration.FetchFromV2.Db
 
         public static void ProgramManager(List<ProgramInstance> programs, List<ProgramEnrollment> programEnrollments)
         {
-            AddProgramInstances(programs);
-            AddProgramEnrollments(programEnrollments);
+            ManageProgramInstances(programs);
+            ManageProgramEnrollments(programEnrollments);
 
-            static void AddProgramInstances(List<ProgramInstance> programs)
+            static void ManageProgramInstances(List<ProgramInstance> programs)
             {
                 foreach (var programInstance in programs)
                 {
@@ -136,9 +139,11 @@ namespace LpApiIntegration.FetchFromV2.Db
                         DbWorker.AddProgram(programInstance, DbContext);
                     }
                 }
+
+                DbContext.SaveChanges();
             }
 
-            static void AddProgramEnrollments(List<ProgramEnrollment> programEnrollments)
+            static void ManageProgramEnrollments(List<ProgramEnrollment> programEnrollments)
             {
                 foreach (var programEnrollment in programEnrollments)
                 {
@@ -151,27 +156,10 @@ namespace LpApiIntegration.FetchFromV2.Db
                         DbWorker.AddProgramEnrollment(programEnrollment, DbContext);
                     }
                 }
+
+                DbContext.SaveChanges();
             }
-
-            DbContext.SaveChanges();
         }
-
-        //public static void CourseGradeManager(List<CourseGrade> courseGrades)
-        //{
-        //    foreach (var courseGrade in courseGrades)
-        //    {
-        //        if (DbContext.CourseGrades.Any(c => c.ExternalId == courseGrade.Id))
-        //        {
-        //            //DbWorker.UpdateCourseGrade(courseGrade, DbContext);
-        //        }
-        //        else
-        //        {
-        //            DbWorker.AddCourseGrade(courseGrade, DbContext);
-        //        }
-        //    }
-
-        //    DbContext.SaveChanges();
-        //}
 
         public static void RelationshipManager(List<CourseStaffMembership> courseStaffRelations, List<CourseInstance> courseInstances, List<CourseEnrollment> courseEnrollments, List<ProgramEnrollment> programEnrollments, List<CourseGrade> courseGrades, ApiSettings apiSettings)
         {

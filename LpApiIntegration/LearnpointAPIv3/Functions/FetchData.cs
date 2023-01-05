@@ -1,22 +1,22 @@
 ﻿using LearnpointAPIv3;
 using LearnpointAPIv3.API;
-using LpApiIntegration.FetchFromV2.Db;
+using LpApiIntegration.Db;
 using LpApiIntegration.FetchFromV3.API.Models;
 
 namespace LpApiIntegration.FetchFromV3.Functions
 {
     internal class FetchData
     {
-        public static List<User> GetEnrollmentStudents(List<ProgramEnrollment> programEnrollments, ApiSettings apiSettings, LearnpointDbContext dbContext)
+        public static List<User> GetEnrollmentStudents(List<ProgramEnrollment> programEnrollments, List<ProgramInstance> programs, ApiSettings apiSettings, LearnpointDbContext dbContext)
         {
             var relations = new List<ProgramEnrollment>();
             var userIdslist = new List<int>();
 
             foreach (var enrollment in programEnrollments)
             {
-                var dbProgram = dbContext.Programs.Where(p => p.ExternalId == enrollment.ProgramInstanceId).SingleOrDefault();
+                var program = programs.Where(p => p.Id == enrollment.ProgramInstanceId).SingleOrDefault();
 
-                if (enrollment.ProgramInstanceId == dbProgram.ExternalId)
+                if (enrollment.ProgramInstanceId == program.Id)
                 {
                     relations.Add(enrollment);
                 }

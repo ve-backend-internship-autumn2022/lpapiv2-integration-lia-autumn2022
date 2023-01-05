@@ -85,7 +85,6 @@ namespace LpApiIntegration.FetchFromV2.Db
                 Description = apiCourseDefinition.Description,
                 IsInternship = apiCourseDefinition.IsInternship,
                 Points = apiCourseDefinition.Points
-
             });
         }
 
@@ -254,7 +253,8 @@ namespace LpApiIntegration.FetchFromV2.Db
 
         public static void AddProgramEnrollment(ProgramEnrollment programEnrollment, LearnpointDbContext dbContext)
         {
-            dbContext.Add(
+
+            dbContext.ProgramEnrollments.Add(
                 new ProgramEnrollmentModel()
                 {
                     ExternalId = programEnrollment.Id,
@@ -265,7 +265,7 @@ namespace LpApiIntegration.FetchFromV2.Db
                     Active = programEnrollment.Active,
                     Canceled = programEnrollment.Canceled,
                     Changed = programEnrollment.Changed,
-                    DiplomaDate = programEnrollment.DiplomaDate,
+                    DiplomaDate = programEnrollment.DiplomaDate
                 });
         }
 
