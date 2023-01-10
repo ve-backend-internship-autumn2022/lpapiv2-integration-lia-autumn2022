@@ -73,7 +73,6 @@ namespace LpApiIntegration.FetchFromV2.Db
         }
 
         // Course
-
         public static void AddCourseDefinition(CourseDefinition apiCourseDefinition, LearnpointDbContext dbContext)
         {
             dbContext.CourseDefinitions.Add(
@@ -159,7 +158,6 @@ namespace LpApiIntegration.FetchFromV2.Db
         }
 
         // Staff
-
         public static void AddStaffMember(User apiStaffMember, LearnpointDbContext dbContext)
         {
             dbContext.StaffMembers.Add(
@@ -216,7 +214,6 @@ namespace LpApiIntegration.FetchFromV2.Db
         }
 
         // Program
-
         public static void AddProgram(ProgramInstance apiProgram, LearnpointDbContext dbContext)
         {
             dbContext.Programs.Add(
@@ -310,7 +307,6 @@ namespace LpApiIntegration.FetchFromV2.Db
         }
 
         //CourseGrade
-
         public static void UpdateCourseGrade(CourseGrade grade, int dbStudentId, int dbStaffId, int? dbCourseDefinitionId, int? dbCourseId, int? dbProgramEnrollmentId, LearnpointDbContext dbContext)
         {
             var dbCourseGrade = dbContext.Grades.Where(p => p.ExternalId == grade.Id).SingleOrDefault();
@@ -366,14 +362,17 @@ namespace LpApiIntegration.FetchFromV2.Db
         {
             dbContext.StudentCourseRelations.Add(relation);
         }
+
         public static void AddCourseStaffRelation(StaffCourseRelationModel relation, LearnpointDbContext dbContext)
         {
             dbContext.StaffCourseRelations.Add(relation);
         }
+
         public static void AddStudentProgramRelation(StudentProgramRelationModel relation, LearnpointDbContext dbContext)
         {
             dbContext.StudentProgramRelations.Add(relation);
         }
+
         public static void AddStudentGradeRelation(GradingModel relation, LearnpointDbContext dbContext)
         {
             dbContext.Grades.Add(relation);
@@ -383,10 +382,12 @@ namespace LpApiIntegration.FetchFromV2.Db
         {
             dbContext.StudentCourseRelations.Remove(relation);
         }
+
         public static void RemoveCourseStaffRelation(StaffCourseRelationModel relation, LearnpointDbContext dbContext)
         {
             dbContext.StaffCourseRelations.Remove(relation);
         }
+
         public static void RemoveStudentProgramRelation(StudentProgramRelationModel relation, LearnpointDbContext dbContext)
         {
             dbContext.StudentProgramRelations.Remove(relation);

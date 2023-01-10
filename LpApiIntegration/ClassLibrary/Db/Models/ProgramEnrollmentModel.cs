@@ -18,5 +18,7 @@ namespace LpApiIntegration.Db.Db.Models
 
         public StudentModel Student { get; set; }
         [ForeignKey("ProgramInstanceId")] public ProgramModel Program { get; set; }
+
+        public List<GradingModel> Grades { get; set; }
     }
 }

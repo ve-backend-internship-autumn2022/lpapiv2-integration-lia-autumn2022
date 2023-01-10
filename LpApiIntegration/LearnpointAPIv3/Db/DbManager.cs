@@ -1,5 +1,4 @@
-﻿
-using LearnpointAPIv3;
+﻿using LearnpointAPIv3;
 using LpApiIntegration.Db;
 using LpApiIntegration.Db.Db.Models;
 using LpApiIntegration.FetchFromV3.API.Models;
@@ -15,10 +14,6 @@ namespace LpApiIntegration.FetchFromV2.Db
         public static void StudentManager(List<User> students, List<ProgramEnrollment> programEnrollments, List<ProgramInstance> programs, List<CourseGrade> courseGrades, ApiSettings apiSettings)
         {
             students.AddRange(FetchData.GetEnrollmentStudents(programEnrollments, programs, apiSettings, DbContext));
-            //if (DbContext.ProgramEnrollments.Any())
-            //{
-            //    students.AddRange(FetchData.GetEnrollmentStudents(programEnrollments, apiSettings, DbContext));
-            //}
             
             foreach (var student in FetchData.GetGradingStudents(courseGrades, apiSettings, DbContext))
             {

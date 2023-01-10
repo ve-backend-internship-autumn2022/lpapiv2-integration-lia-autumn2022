@@ -8,51 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Diplomas\19780318-5664 Gertrud Hjertén TRYGG19 Säkerhets- och trygghetskoordinator.txt\**" />
-    <Compile Remove="Diplomas\19780415-3794 Philemon Arthursson TRYGG19 Säkerhets- och trygghetskoordinator.txt\**" />
-    <Compile Remove="Diplomas\19840216-0835 Tryggve Trygg AMB18 Kvalificerad ambulanssjukvårdare - Paramedic.txt\**" />
-    <Compile Remove="Diplomas\19881224-1647 Helga Natt AMB18 Kvalificerad ambulanssjukvårdare - Paramedic.txt\**" />
-    <Compile Remove="Diplomas\19890521-6399 Göte Borg AMB18 Kvalificerad ambulanssjukvårdare - Paramedic.txt\**" />
-    <Compile Remove="Diplomas\19890521-7462 Lise Berg AMB18 Kvalificerad ambulanssjukvårdare - Paramedic.txt\**" />
-    <Compile Remove="Diplomas\19910513-8862 Inger Hopp AMB18 Kvalificerad ambulanssjukvårdare - Paramedic.txt\**" />
-    <Compile Remove="Diplomas\19910813-3753 Gert Startare AMB18 Kvalificerad ambulanssjukvårdare - Paramedic.txt\**" />
-    <Compile Remove="Diplomas\19911118-3928 Inga Gips AMB18 Kvalificerad ambulanssjukvårdare - Paramedic.txt\**" />
-    <Compile Remove="Diplomas\19940216-0791 Sixten Snabb AMB18 Kvalificerad ambulanssjukvårdare - Paramedic.txt\**" />
-    <Compile Remove="Diplomas\19940508-0863 Maj Augustinsson AMB18 Kvalificerad ambulanssjukvårdare - Paramedic.txt\**" />
-    <Compile Remove="Diplomas\19970512-6077 Björn Fredriksson TRYGG19 Säkerhets- och trygghetskoordinator.txt\**" />
-    <Compile Remove="Diplomas\19971123-5482 Fredrika Benberg TRYGG19 Säkerhets- och trygghetskoordinator.txt\**" />
-    <Compile Remove="Diplomas\19991231-9994 Justin Time AMB18 Kvalificerad ambulanssjukvårdare - Paramedic.txt\**" />
-    <EmbeddedResource Remove="Diplomas\19780318-5664 Gertrud Hjertén TRYGG19 Säkerhets- och trygghetskoordinator.txt\**" />
-    <EmbeddedResource Remove="Diplomas\19780415-3794 Philemon Arthursson TRYGG19 Säkerhets- och trygghetskoordinator.txt\**" />
-    <EmbeddedResource Remove="Diplomas\19840216-0835 Tryggve Trygg AMB18 Kvalificerad ambulanssjukvårdare - Paramedic.txt\**" />
-    <EmbeddedResource Remove="Diplomas\19881224-1647 Helga Natt AMB18 Kvalificerad ambulanssjukvårdare - Paramedic.txt\**" />
-    <EmbeddedResource Remove="Diplomas\19890521-6399 Göte Borg AMB18 Kvalificerad ambulanssjukvårdare - Paramedic.txt\**" />
-    <EmbeddedResource Remove="Diplomas\19890521-7462 Lise Berg AMB18 Kvalificerad ambulanssjukvårdare - Paramedic.txt\**" />
-    <EmbeddedResource Remove="Diplomas\19910513-8862 Inger Hopp AMB18 Kvalificerad ambulanssjukvårdare - Paramedic.txt\**" />
-    <EmbeddedResource Remove="Diplomas\19910813-3753 Gert Startare AMB18 Kvalificerad ambulanssjukvårdare - Paramedic.txt\**" />
-    <EmbeddedResource Remove="Diplomas\19911118-3928 Inga Gips AMB18 Kvalificerad ambulanssjukvårdare - Paramedic.txt\**" />
-    <EmbeddedResource Remove="Diplomas\19940216-0791 Sixten Snabb AMB18 Kvalificerad ambulanssjukvårdare - Paramedic.txt\**" />
-    <EmbeddedResource Remove="Diplomas\19940508-0863 Maj Augustinsson AMB18 Kvalificerad ambulanssjukvårdare - Paramedic.txt\**" />
-    <EmbeddedResource Remove="Diplomas\19970512-6077 Björn Fredriksson TRYGG19 Säkerhets- och trygghetskoordinator.txt\**" />
-    <EmbeddedResource Remove="Diplomas\19971123-5482 Fredrika Benberg TRYGG19 Säkerhets- och trygghetskoordinator.txt\**" />
-    <EmbeddedResource Remove="Diplomas\19991231-9994 Justin Time AMB18 Kvalificerad ambulanssjukvårdare - Paramedic.txt\**" />
-    <None Remove="Diplomas\19780318-5664 Gertrud Hjertén TRYGG19 Säkerhets- och trygghetskoordinator.txt\**" />
-    <None Remove="Diplomas\19780415-3794 Philemon Arthursson TRYGG19 Säkerhets- och trygghetskoordinator.txt\**" />
-    <None Remove="Diplomas\19840216-0835 Tryggve Trygg AMB18 Kvalificerad ambulanssjukvårdare - Paramedic.txt\**" />
-    <None Remove="Diplomas\19881224-1647 Helga Natt AMB18 Kvalificerad ambulanssjukvårdare - Paramedic.txt\**" />
-    <None Remove="Diplomas\19890521-6399 Göte Borg AMB18 Kvalificerad ambulanssjukvårdare - Paramedic.txt\**" />
-    <None Remove="Diplomas\19890521-7462 Lise Berg AMB18 Kvalificerad ambulanssjukvårdare - Paramedic.txt\**" />
-    <None Remove="Diplomas\19910513-8862 Inger Hopp AMB18 Kvalificerad ambulanssjukvårdare - Paramedic.txt\**" />
-    <None Remove="Diplomas\19910813-3753 Gert Startare AMB18 Kvalificerad ambulanssjukvårdare - Paramedic.txt\**" />
-    <None Remove="Diplomas\19911118-3928 Inga Gips AMB18 Kvalificerad ambulanssjukvårdare - Paramedic.txt\**" />
-    <None Remove="Diplomas\19940216-0791 Sixten Snabb AMB18 Kvalificerad ambulanssjukvårdare - Paramedic.txt\**" />
-    <None Remove="Diplomas\19940508-0863 Maj Augustinsson AMB18 Kvalificerad ambulanssjukvårdare - Paramedic.txt\**" />
-    <None Remove="Diplomas\19970512-6077 Björn Fredriksson TRYGG19 Säkerhets- och trygghetskoordinator.txt\**" />
-    <None Remove="Diplomas\19971123-5482 Fredrika Benberg TRYGG19 Säkerhets- och trygghetskoordinator.txt\**" />
-    <None Remove="Diplomas\19991231-9994 Justin Time AMB18 Kvalificerad ambulanssjukvårdare - Paramedic.txt\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\ClassLibrary\LpApiIntegration.Db.csproj" />
   </ItemGroup>
 
@@ -60,10 +15,6 @@
 		<None Update="appsettings.Development.json">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Diplomas\" />
 	</ItemGroup>
 
 </Project>
