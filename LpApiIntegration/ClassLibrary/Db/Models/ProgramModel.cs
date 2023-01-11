@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using LpApiIntegration.Db.Db.Models;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LpApiIntegration.Db
 {
@@ -15,5 +11,7 @@ namespace LpApiIntegration.Db
         public string? Name { get; set; }
         public DateTime? LifespanFrom { get; set; }
         public DateTime? LifespanUntil { get; set; }
+
+        public ICollection<ProgramEnrollmentModel> ProgramEnrollments { get; set; }
     }
 }

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.ComponentModel.DataAnnotations;      
+﻿using System.ComponentModel.DataAnnotations;
 
 
 namespace LpApiIntegration.Db
@@ -16,8 +11,9 @@ namespace LpApiIntegration.Db
         public bool IsActiveStudent { get; set; }
         public string? StateName { get; set; }
         public DateTime? FromDate { get; set; }
+
         public StudentModel Student { get; set; }
         public ProgramModel Program { get; set; }
-        
+
     }
 }

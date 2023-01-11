@@ -10,6 +10,24 @@ namespace LpApiIntegration.Db.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "CourseDefinitions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ExternalId = table.Column<int>(type: "int", nullable: false),
+                    Code = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsInternship = table.Column<bool>(type: "bit", nullable: false),
+                    Points = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CourseDefinitions", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Courses",
                 columns: table => new
                 {
@@ -117,6 +135,39 @@ namespace LpApiIntegration.Db.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ProgramEnrollments",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ExternalId = table.Column<int>(type: "int", nullable: false),
+                    StudentId = table.Column<int>(type: "int", nullable: false),
+                    ProgramInstanceId = table.Column<int>(type: "int", nullable: false),
+                    Enrolled = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Unenrolled = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Active = table.Column<bool>(type: "bit", nullable: false),
+                    Canceled = table.Column<bool>(type: "bit", nullable: false),
+                    Changed = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DiplomaDate = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProgramEnrollments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ProgramEnrollments_Programs_ProgramInstanceId",
+                        column: x => x.ProgramInstanceId,
+                        principalTable: "Programs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ProgramEnrollments_Students_StudentId",
+                        column: x => x.StudentId,
+                        principalTable: "Students",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "StudentCourseRelations",
                 columns: table => new
                 {
@@ -171,6 +222,92 @@ namespace LpApiIntegration.Db.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Grades",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ExternalId = table.Column<int>(type: "int", nullable: false),
+                    GradedStudentId = table.Column<int>(type: "int", nullable: false),
+                    GradingStaffId = table.Column<int>(type: "int", nullable: false),
+                    GradedCourseDefinitionId = table.Column<int>(type: "int", nullable: true),
+                    GradedProgramEnrollmentId = table.Column<int>(type: "int", nullable: true),
+                    Grade = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    GradeCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    GradePoints = table.Column<double>(type: "float", nullable: true),
+                    OfficialGradingDate = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Published = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    GradedCourseInstanceId = table.Column<int>(type: "int", nullable: true),
+                    BestCourseSelectionMeritSort = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Grades", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Grades_CourseDefinitions_GradedCourseDefinitionId",
+                        column: x => x.GradedCourseDefinitionId,
+                        principalTable: "CourseDefinitions",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Grades_Courses_GradedCourseInstanceId",
+                        column: x => x.GradedCourseInstanceId,
+                        principalTable: "Courses",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Grades_ProgramEnrollments_GradedProgramEnrollmentId",
+                        column: x => x.GradedProgramEnrollmentId,
+                        principalTable: "ProgramEnrollments",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Grades_StaffMembers_GradingStaffId",
+                        column: x => x.GradingStaffId,
+                        principalTable: "StaffMembers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Grades_Students_GradedStudentId",
+                        column: x => x.GradedStudentId,
+                        principalTable: "Students",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Grades_GradedCourseDefinitionId",
+                table: "Grades",
+                column: "GradedCourseDefinitionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Grades_GradedCourseInstanceId",
+                table: "Grades",
+                column: "GradedCourseInstanceId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Grades_GradedProgramEnrollmentId",
+                table: "Grades",
+                column: "GradedProgramEnrollmentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Grades_GradedStudentId",
+                table: "Grades",
+                column: "GradedStudentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Grades_GradingStaffId",
+                table: "Grades",
+                column: "GradingStaffId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProgramEnrollments_ProgramInstanceId",
+                table: "ProgramEnrollments",
+                column: "ProgramInstanceId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProgramEnrollments_StudentId",
+                table: "ProgramEnrollments",
+                column: "StudentId");
+
             migrationBuilder.CreateIndex(
                 name: "IX_StaffCourseRelations_CourseId",
                 table: "StaffCourseRelations",
@@ -205,6 +342,9 @@ namespace LpApiIntegration.Db.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "Grades");
+
+            migrationBuilder.DropTable(
                 name: "StaffCourseRelations");
 
             migrationBuilder.DropTable(
@@ -212,6 +352,12 @@ namespace LpApiIntegration.Db.Migrations
 
             migrationBuilder.DropTable(
                 name: "StudentProgramRelations");
+
+            migrationBuilder.DropTable(
+                name: "CourseDefinitions");
+
+            migrationBuilder.DropTable(
+                name: "ProgramEnrollments");
 
             migrationBuilder.DropTable(
                 name: "StaffMembers");

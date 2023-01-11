@@ -1,11 +1,5 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using LpApiIntegration.Db.Db.Models;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LpApiIntegration.Db
 {
@@ -22,7 +16,9 @@ namespace LpApiIntegration.Db
         public string? HomePhone { get; set; }
         public string? FullName { get; set; }
         public bool IsActive { get; set; }
-        public ICollection<StudentCourseRelationModel> CourseMemberships { get; set; }
 
+        public ICollection<StudentCourseRelationModel> CourseMemberships { get; set; }
+        public ICollection<GradingModel> Gradings { get; set; }
+        public ICollection<ProgramEnrollmentModel> ProgramEnrollments { get; set; }
     }
 }

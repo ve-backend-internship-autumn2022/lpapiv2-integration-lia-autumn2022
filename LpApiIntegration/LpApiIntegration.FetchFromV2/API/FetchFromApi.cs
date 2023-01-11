@@ -12,12 +12,12 @@
             client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GetAccess.Token(apiSettings));
             return client;
         }
-        
+
         public static string GetStudents(ApiSettings apiSettings)
         {
             return Client(apiSettings).GetStringAsync($"/bulkapi/v2/{apiSettings.TenantIdentifier}/students").Result;
-        }        
-       
+        }
+
         public static string GetGroups(ApiSettings apiSettings)
         {
             return Client(apiSettings).GetStringAsync($"/bulkapi/v2/{apiSettings.TenantIdentifier}/groups").Result;

@@ -18,6 +18,7 @@ var courseEnrollmentList = FetchFromApi.GetCourseEnrollments(apiSettings);
 
 var courseInstanceList = FetchFromApi.GetCourseInstances(apiSettings);
 var courseStaffMembershipList = FetchFromApi.GetCourseStaffMembership(apiSettings);
+var courseGradeList = FetchFromApi.GetCourseGrades(apiSettings);
 
 var activeStudentList = FetchFromApi.GetActiveStudents(apiSettings);
 var activeStaffMemberList = FetchFromApi.GetActiveStaff(apiSettings);
@@ -25,11 +26,11 @@ var activeStaffMemberList = FetchFromApi.GetActiveStaff(apiSettings);
 var programInstanceList = FetchFromApi.GetProgramInstances(apiSettings);
 var programEnrollmentList = FetchFromApi.GetProgramEnrollments(apiSettings);
 
-DbManager.ProgramManager(programInstanceList);
-DbManager.StudentManager(activeStudentList, programEnrollmentList, apiSettings);
+DbManager.StudentManager(activeStudentList, programEnrollmentList, programInstanceList, courseGradeList, apiSettings);
+DbManager.ProgramManager(programInstanceList, programEnrollmentList);
 DbManager.StaffManager(activeStaffMemberList);
-DbManager.CourseManager(courseDefinitionList, courseInstanceList);
+DbManager.CourseManager(courseDefinitionList, courseInstanceList, courseGradeList, apiSettings);
 DbManager.RelationshipManager(courseStaffMembershipList, courseInstanceList,
-    courseEnrollmentList, programEnrollmentList, apiSettings);
+    courseEnrollmentList, programEnrollmentList, courseGradeList, apiSettings);
 
 await host.RunAsync();

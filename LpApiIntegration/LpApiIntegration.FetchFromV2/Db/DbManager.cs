@@ -1,5 +1,4 @@
-﻿
-using LpApiIntegration.Db;
+﻿using LpApiIntegration.Db;
 using LpApiIntegration.FetchFromV2.GroupModel;
 using LpApiIntegration.FetchFromV2.StaffMemberModels;
 using LpApiIntegration.FetchFromV2.StudentModels;
@@ -33,10 +32,8 @@ namespace LpApiIntegration.FetchFromV2.Db
 
         public static void CourseManager(GroupsApiResponse groupsResponse)
         {
-            //Search for courses with category-code "CourseInstance"
             var apiCourses = groupsResponse.Data.Groups.Where(c => c.Category.Code == "CourseInstance");
 
-            //Search coursedefinitions
             var courseDefinitions = groupsResponse.Data.ReferenceData.CourseDefinitions;
 
             foreach (var apiCourse in apiCourses)
@@ -210,7 +207,7 @@ namespace LpApiIntegration.FetchFromV2.Db
                     }
                 }
             }
-            
+
             static void StudentProgramRelation(GroupsApiResponse groupReponseExtended, StudentsApiResponse studentResponse)
             {
                 //Add and delete student-program-relations
@@ -239,7 +236,7 @@ namespace LpApiIntegration.FetchFromV2.Db
                                 {
                                     foreach (var part in educationPlan.Parts)
                                     {
-                                        if (part.Code == program.Code )
+                                        if (part.Code == program.Code)
                                         {
                                             var relation = new StudentProgramRelationModel()
                                             {

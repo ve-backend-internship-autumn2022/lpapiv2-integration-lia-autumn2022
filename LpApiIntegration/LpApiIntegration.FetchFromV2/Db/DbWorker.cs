@@ -76,7 +76,6 @@ namespace LpApiIntegration.FetchFromV2.Db
         }
 
         // Course
-
         public static void AddCourse(FullGroup apiCourse, IEnumerable<CourseDefinition> courseDefinitions, LearnpointDbContext dbContext)
         {
             dbContext.Courses.Add(
@@ -118,14 +117,13 @@ namespace LpApiIntegration.FetchFromV2.Db
         }
 
         // Staff
-
         public static void AddStaffMember(FullStaffMember apiStaffMember, LearnpointDbContext dbContext)
         {
             dbContext.StaffMembers.Add(
             new StaffModel()
             {
                 ExternalId = apiStaffMember.Id,
-                ExternalUserId = apiStaffMember.UserId,                
+                ExternalUserId = apiStaffMember.UserId,
                 NationalRegistrationNumber = apiStaffMember.NationalRegistrationNumber,
                 Signature = apiStaffMember.Signature,
                 FullName = apiStaffMember.FirstName + " " + apiStaffMember.LastName,
@@ -187,7 +185,6 @@ namespace LpApiIntegration.FetchFromV2.Db
         }
 
         // Program
-
         public static void AddProgram(FullGroup apiProgram, LearnpointDbContext dbContext)
         {
             dbContext.Programs.Add(
@@ -227,6 +224,7 @@ namespace LpApiIntegration.FetchFromV2.Db
         {
             dbContext.StudentCourseRelations.Add(relation);
         }
+
         public static void AddCourseStaffRelation(StaffCourseRelationModel relation, LearnpointDbContext dbContext)
         {
             dbContext.StaffCourseRelations.Add(relation);
@@ -240,10 +238,12 @@ namespace LpApiIntegration.FetchFromV2.Db
         {
             dbContext.StudentCourseRelations.Remove(relation);
         }
+
         public static void RemoveCourseStaffRelation(StaffCourseRelationModel relation, LearnpointDbContext dbContext)
         {
             dbContext.StaffCourseRelations.Remove(relation);
         }
+
         public static void RemoveStudentProgramRelation(StudentProgramRelationModel relation, LearnpointDbContext dbContext)
         {
             dbContext.StudentProgramRelations.Remove(relation);
@@ -252,5 +252,5 @@ namespace LpApiIntegration.FetchFromV2.Db
 }
 
 
-    
+
 
