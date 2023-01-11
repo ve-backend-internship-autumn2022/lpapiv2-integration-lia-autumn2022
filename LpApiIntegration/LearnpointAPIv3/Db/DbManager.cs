@@ -13,7 +13,13 @@ namespace LpApiIntegration.FetchFromV2.Db
 
         public static void StudentManager(List<User> students, List<ProgramEnrollment> programEnrollments, List<ProgramInstance> programs, List<CourseGrade> courseGrades, ApiSettings apiSettings)
         {
-            students.AddRange(FetchData.GetEnrollmentStudents(programEnrollments, programs, apiSettings, DbContext));
+            foreach (var student in FetchData.GetEnrollmentStudents(programEnrollments, programs, apiSettings, DbContext))
+            {
+                if (!students.Any(s => s.Id == student.Id))
+                {
+                    students.Add(student);
+                }
+            }
             
             foreach (var student in FetchData.GetGradingStudents(courseGrades, apiSettings, DbContext))
             {

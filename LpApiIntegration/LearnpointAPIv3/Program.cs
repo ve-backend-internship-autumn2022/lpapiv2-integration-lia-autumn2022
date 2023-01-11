@@ -27,8 +27,8 @@ var programInstanceList = FetchFromApi.GetProgramInstances(apiSettings);
 var programEnrollmentList = FetchFromApi.GetProgramEnrollments(apiSettings);
 
 DbManager.StudentManager(activeStudentList, programEnrollmentList, programInstanceList, courseGradeList, apiSettings);
-DbManager.ProgramManager(programInstanceList, programEnrollmentList);
 DbManager.StaffManager(activeStaffMemberList);
+DbManager.ProgramManager(programInstanceList, programEnrollmentList);
 DbManager.CourseManager(courseDefinitionList, courseInstanceList, courseGradeList, apiSettings);
 DbManager.RelationshipManager(courseStaffMembershipList, courseInstanceList,
     courseEnrollmentList, programEnrollmentList, courseGradeList, apiSettings);
